@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>lil.bet — Калькулятор партнёра</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2236;
+  --border:rgba(255,255,255,0.07);
+  --green:#00d4aa;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--purple:#8b5cf6;
+  --text:#e2e8f0;--muted:#64748b;--label:#94a3b8;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+
+/* Header */
+.header{border-bottom:1px solid rgba(0,212,170,0.15);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:100;background:var(--bg);backdrop-filter:blur(10px)}
+.brand{font-size:19px;font-weight:800;letter-spacing:-.3px}
+.brand span{color:var(--green)}
+.brand-sub{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
+.tabs-nav{display:flex;gap:6px;flex-wrap:wrap}
+.tab-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:7px 14px;cursor:pointer;font-size:12px;transition:all .15s;white-space:nowrap}
+.tab-btn.active{background:var(--green);border-color:var(--green);color:#000;font-weight:600}
+.tab-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text)}
+
+/* Layout */
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px}
+.cols{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}
+@media(max-width:780px){.cols{grid-template-columns:1fr}}
+.col-inputs{display:flex;flex-direction:column;gap:12px}
+.col-results{display:flex;flex-direction:column;gap:12px}
+
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px}
+.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:12px}
+.sec{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Form */
+label.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:.04em}
+input[type=number],select{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px 10px;font-size:13px;width:100%;outline:none;-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button{display:none}
+input[type=number]:focus,select:focus{border-color:var(--green)}
+select{cursor:pointer}
+select option{background:#1a2236}
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+@media(max-width:500px){.row4{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr 1fr}}
+
+/* Slider */
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:2px;background:rgba(255,255,255,.1);outline:none;cursor:pointer;margin-top:6px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 0 8px rgba(0,212,170,.4)}
+.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:#374151;margin-top:3px}
+
+/* GEO grid */
+.geo-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.geo-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:6px 8px;cursor:pointer;font-size:12px;text-align:left;transition:all .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.geo-btn.active{background:rgba(0,212,170,.12);border-color:var(--green);color:var(--green)}
+
+/* Model buttons */
+.model-btns{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.model-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:5px 10px;cursor:pointer;font-size:11px;transition:all .12s}
+.model-btn.m-rs.active{background:rgba(0,212,170,.15);border-color:var(--green);color:var(--green)}
+.model-btn.m-cpa.active{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
+.model-btn.m-hybrid.active{background:rgba(245,158,11,.15);border-color:var(--yellow);color:var(--yellow)}
+.model-btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* Metrics */
+.metric-xl{font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1}
+.metric-lg{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.metric-md{font-size:17px;font-weight:600}
+.metric-sm{font-size:14px;font-weight:600}
+
+/* Alert boxes */
+.alert{border-radius:7px;padding:9px 12px;font-size:12px;margin-bottom:10px}
+.alert-warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#fbbf24}
+.alert-info{background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.2);color:#6ee7b7}
+.alert-red{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
+
+/* RS tier */
+.tier-table{width:100%;border-collapse:collapse;font-size:12px}
+.tier-table th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:4px 8px;border-bottom:1px solid var(--border)}
+.tier-table td{padding:6px 8px;border-bottom:1px solid rgba(37,40,71,.5)}
+.tier-table tr.cur td{background:rgba(0,212,170,.1);color:var(--green);font-weight:600}
+.tier-table tr:last-child td{border-bottom:none}
+
+/* Compare table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:12px}
+.cmp-table th{padding:9px 12px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);text-align:right}
+.cmp-table th:first-child{text-align:left}
+.cmp-table td{padding:9px 12px;border-bottom:1px solid rgba(37,40,71,.4);text-align:right}
+.cmp-table td:first-child{text-align:left;color:var(--muted);font-size:11px}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-table .win{font-weight:700}
+
+/* Chart bars */
+.chart-wrap{position:relative;height:160px;margin:16px 0 28px}
+.chart-inner{position:absolute;inset:0 0 0 44px;display:flex;align-items:flex-end;gap:6px}
+.chart-col{flex:1;display:flex;gap:2px;align-items:flex-end;height:100%}
+.chart-bar{flex:1;border-radius:3px 3px 0 0;transition:height .4s ease;position:relative}
+.chart-bar .tip{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap}
+.chart-x{position:absolute;bottom:-18px;left:44px;right:0;display:flex;gap:6px}
+.chart-x span{flex:1;text-align:center;font-size:9px;color:var(--muted)}
+.chart-gridlines{position:absolute;inset:0 0 0 44px;pointer-events:none}
+.chart-gridline{position:absolute;left:0;right:0;border-top:1px dashed rgba(255,255,255,.05)}
+.chart-gridline span{position:absolute;left:-44px;font-size:9px;color:#374151;transform:translateY(-50%)}
+
+/* Payout row */
+.p-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.p-row:last-child{border-bottom:none}
+.p-key{color:var(--muted)}
+.p-val{font-weight:600}
+
+/* USP list */
+.usp-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.usp-item:last-child{border-bottom:none}
+.usp-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.usp-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.usp-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.usp-badge{display:inline-block;font-size:10px;padding:1px 7px;border-radius:20px;background:rgba(0,212,170,.15);color:var(--green);border:1px solid rgba(0,212,170,.3);margin-left:6px;vertical-align:middle}
+/* Competitor table */
+.comp-table{width:100%;border-collapse:collapse;font-size:11px}
+.comp-table th{padding:6px 10px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}
+.comp-table th:first-child{text-align:left}
+.comp-table td{padding:7px 10px;border-bottom:1px solid rgba(37,40,71,.4);text-align:center;white-space:nowrap}
+.comp-table td:first-child{text-align:left;font-weight:600;color:var(--text)}
+.comp-table tr.us td:first-child{color:var(--green)}
+.comp-table tr.us td{background:rgba(0,212,170,.05)}
+.comp-table .win{color:var(--green);font-weight:700}
+.comp-table .lose{color:var(--red)}
+.comp-table .neutral{color:var(--muted)}
+
+/* Funnel */
+.funnel{display:flex;gap:0;align-items:stretch;border-radius:8px;overflow:hidden;margin-top:10px}
+.funnel-step{flex:1;padding:10px 8px;text-align:center;position:relative}
+.funnel-step+.funnel-step::before{content:'›';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.2);font-size:14px;z-index:1}
+.funnel-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;opacity:.6;margin-bottom:3px}
+.funnel-val{font-size:15px;font-weight:700}
+.funnel-pct{font-size:9px;opacity:.5;margin-top:1px}
+
+/* Source note */
+.src-note{font-size:11px;color:var(--muted);margin-top:6px;font-style:italic}
+
+/* Tab panels */
+.panel{display:none}.panel.active{display:block}
+
+/* Tag */
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;letter-spacing:.04em;vertical-align:middle}
+
+/* Breakeven highlight */
+.be-box{border-radius:8px;padding:12px 16px;margin-top:12px;border:1px solid rgba(0,212,170,.2);background:rgba(0,212,170,.05);font-size:12px;color:#6ee7b7}
+
+/* Mode toggle */
+.mode-toggle{display:flex;gap:4px;margin-bottom:12px}
+.mode-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:4px 12px;cursor:pointer;font-size:11px;transition:all .12s}
+.mode-btn.active{background:rgba(59,130,246,.15);border-color:var(--blue);color:var(--blue);font-weight:600}
+
+/* ROI badge */
+.roi-positive{color:#34d399;font-weight:700}
+.roi-negative{color:var(--red);font-weight:700}
+.roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.roi-cell{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px;text-align:center}
+.roi-cell.highlight{border-color:rgba(0,212,170,.3);background:rgba(0,212,170,.06)}
+.roi-cell .rc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.roi-cell .rc-val{font-size:18px;font-weight:700}
+
+/* Rolling chart */
+.roll-chart{position:relative;height:140px;margin:14px 0 24px}
+.roll-bars{position:absolute;inset:0 0 0 44px;display:flex;gap:3px;align-items:flex-end}
+.roll-col{flex:1;display:flex;gap:1px;align-items:flex-end;height:100%}
+.roll-bar{flex:1;border-radius:2px 2px 0 0;transition:height .3s ease}
+.roll-x{position:absolute;bottom:-18px;left:44px;right:0;display:flex;gap:3px}
+.roll-x span{flex:1;text-align:center;font-size:9px;color:var(--muted)}
+.roll-gridlines{position:absolute;inset:0 0 0 44px;pointer-events:none}
+.roll-gridline{position:absolute;left:0;right:0;border-top:1px dashed rgba(255,255,255,.05)}
+.roll-gridline span{position:absolute;left:-44px;font-size:9px;color:#374151;transform:translateY(-50%)}
+
+/* Footer */
+footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="brand"><span>lil</span>.bet <span style="color:var(--muted);font-weight:400;font-size:15px">/ калькулятор партнёра</span></div>
+  </div>
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('calc')">⚡ Калькулятор</button>
+    <button class="tab-btn" onclick="switchTab('compare')">📊 RS vs CPA</button>
+    <button class="tab-btn" onclick="switchTab('subaff')">🔗 Суб-аффилейт</button>
+    <button class="tab-btn" onclick="switchTab('why')">✅ Почему lil.bet</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════════════════ TAB: CALCULATOR ═══════════════════ -->
+<div id="panel-calc" class="panel active">
+<div class="cols">
+
+  <!-- LEFT INPUTS -->
+  <div class="col-inputs">
+
+    <!-- GEO -->
+    <div class="card">
+      <div class="sec">ГЕО</div>
+      <div class="geo-grid" id="geoGrid"></div>
+    </div>
+
+    <!-- Source -->
+    <div class="card">
+      <div class="sec">Источник трафика</div>
+      <div class="field">
+        <select id="srcSelect" onchange="onSrcChange()">
+          <option value="facebook">Facebook / Meta (PWA, APK)</option>
+          <option value="telegram">Telegram-каналы / боты</option>
+          <option value="seo">SEO / Контент-сайты</option>
+          <option value="google">Google UAC / App</option>
+          <option value="tiktok">TikTok / Reels</option>
+          <option value="push">Push / In-Page Push</option>
+          <option value="influencer">Инфлюенсер / Стример</option>
+          <option value="aso">ASO / Стор-трафик</option>
+          <option value="email">Email / SMS</option>
+          <option value="native">Нативная реклама</option>
+          <option value="other">Другой (вручную)</option>
+        </select>
+      </div>
+      <div class="src-note" id="srcNote"></div>
+      <div class="row3" style="margin-top:10px">
+        <div class="card-sm" style="text-align:center">
+          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">C→Рег</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green)" id="statC2R">—</div>
+          <div style="font-size:9px;color:var(--muted)">клик→рег</div>
+        </div>
+        <div class="card-sm" style="text-align:center">
+          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Рег→FTD</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green)" id="statR2D">—</div>
+          <div style="font-size:9px;color:var(--muted)">рег→депозит</div>
+        </div>
+        <div class="card-sm" style="text-align:center">
+          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">LTV-кач.</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green)" id="statQual">—</div>
+          <div style="font-size:9px;color:var(--muted)">мультипл. NGR</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;display:flex;justify-content:flex-end">
+        <button onclick="toggleSrcEdit()" id="srcEditBtn" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;transition:all .15s">✎ Изменить метрики</button>
+      </div>
+      <div id="srcEditPanel" style="display:none;margin-top:10px;padding:14px;background:var(--bg3);border:1px solid rgba(0,212,170,.2);border-radius:8px">
+
+        <!-- QUALITY — affects revenue -->
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Качество трафика → влияет на LTV и доход</div>
+        <div class="field" style="margin-bottom:14px">
+          <label class="lbl">LTV мультипликатор: <strong style="color:var(--green)" id="srcEditQualLbl">—</strong></label>
+          <input type="range" id="srcEditQual" min="0.30" max="1.50" step="0.05" oninput="onSrcCustom()">
+          <div class="slider-labels"><span>0.30× слабый</span><span>1.00× норм</span><span>1.50× топ</span></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">Низкое качество = игроки быстро уходят, меньше NGR. Высокое = возвращаются, долгий LTV.</div>
+        </div>
+
+        <!-- FUNNEL — affects clicks/regs display, and FTD in clicks mode -->
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Конверсия воронки → влияет на трафик</div>
+        <div class="field">
+          <label class="lbl">Клик → Регистрация: <strong style="color:var(--blue)" id="srcEditC2RLbl">—</strong></label>
+          <input type="range" id="srcEditC2R" min="1" max="40" step="0.5" oninput="onSrcCustom()">
+        </div>
+        <div class="field" style="margin-bottom:4px">
+          <label class="lbl">Регистрация → FTD: <strong style="color:var(--blue)" id="srcEditR2DLbl">—</strong></label>
+          <input type="range" id="srcEditR2D" min="1" max="50" step="0.5" oninput="onSrcCustom()">
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:12px" id="funnelModeNote">
+          В режиме «Знаю FTD» — только меняет расчёт кликов. В режиме «Знаю клики» — меняет FTD и весь расчёт.
+        </div>
+
+        <div style="display:flex;gap:8px">
+          <button onclick="resetSrcCustom()" style="flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:6px;cursor:pointer;font-size:11px">↩ Сбросить</button>
+          <button onclick="toggleSrcEdit()" style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);color:var(--green);border-radius:5px;padding:6px;cursor:pointer;font-size:11px">Закрыть ✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Traffic volume -->
+    <div class="card">
+      <div class="sec">Объём трафика</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeFtdBtn" onclick="setInputMode('ftd')">Знаю FTD</button>
+        <button class="mode-btn" id="modeClicksBtn" onclick="setInputMode('clicks')">Знаю клики</button>
+      </div>
+
+      <!-- FTD mode -->
+      <div id="inputFtdBlock">
+        <div class="field">
+          <label class="lbl">FTD в месяц: <strong style="color:var(--green)" id="ftdLabel">100</strong></label>
+          <input type="range" id="ftdSlider" min="5" max="1000" step="5" value="100" oninput="onFtdSlider()">
+          <div class="slider-labels"><span>5 micro</span><span>250 team</span><span>1 000+</span></div>
+        </div>
+      </div>
+
+      <!-- Clicks mode -->
+      <div id="inputClicksBlock" style="display:none">
+        <div class="field">
+          <label class="lbl">Кликов в месяц: <strong style="color:var(--blue)" id="clicksLabel">5 000</strong></label>
+          <input type="range" id="clicksSlider" min="100" max="200000" step="100" value="5000" oninput="onClicksSlider()">
+          <div class="slider-labels"><span>100</span><span>50 000</span><span>200 000</span></div>
+        </div>
+        <div class="card-sm" style="margin-bottom:10px;font-size:12px">
+          <span style="color:var(--muted)">FTD (расчётно): </span>
+          <strong style="color:var(--green)" id="calcFtdDisplay">—</strong>
+          <span style="color:var(--muted);font-size:10px"> = клики × C2R × R2D</span>
+        </div>
+      </div>
+
+      <div class="funnel" id="funnelBlock">
+        <div class="funnel-step" style="background:#1e293b">
+          <div class="funnel-lbl">Кликов</div>
+          <div class="funnel-val" id="fClicks">—</div>
+          <div class="funnel-pct">оценка</div>
+        </div>
+        <div class="funnel-step" style="background:#1e3a5f">
+          <div class="funnel-lbl">Регистраций</div>
+          <div class="funnel-val" id="fRegs">—</div>
+          <div class="funnel-pct" id="fRegPct">—</div>
+        </div>
+        <div class="funnel-step" style="background:rgba(0,212,170,.2)">
+          <div class="funnel-lbl">FTD</div>
+          <div class="funnel-val" id="fFtd" style="color:var(--green)">—</div>
+          <div class="funnel-pct" id="fFtdPct">—</div>
+        </div>
+      </div>
+
+      <!-- ROI toggle -->
+      <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleBudget()">
+          <span style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">💰 ROI-расчёт (учесть расходы)</span>
+          <span style="font-size:11px;color:var(--green)" id="budgetToggleIcon">+ развернуть</span>
+        </div>
+        <div id="budgetBlock" style="display:none;margin-top:10px">
+          <div class="field">
+            <label class="lbl">Рекламный бюджет в месяц: <strong style="color:var(--yellow)" id="budgetLabel">$500</strong></label>
+            <input type="range" id="budgetSlider" min="100" max="50000" step="100" value="500" oninput="onBudgetSlider()">
+            <div class="slider-labels"><span>$100</span><span>$5 000</span><span>$50 000</span></div>
+          </div>
+          <div id="roiCards"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model -->
+    <div class="card">
+      <div class="sec">Модель выплат</div>
+      <div class="model-btns">
+        <button class="model-btn m-rs active" id="btnRS" onclick="setModel('rs')">RevShare</button>
+        <button class="model-btn m-cpa" id="btnCPA" onclick="setModel('cpa')">CPA</button>
+        <button class="model-btn m-hybrid" id="btnHybrid" onclick="setModel('hybrid')">Hybrid</button>
+      </div>
+      <div id="modelBlock"></div>
+      <div id="geoAlerts" style="margin-top:10px"></div>
+    </div>
+
+  </div><!-- /col-inputs -->
+
+  <!-- RIGHT RESULTS -->
+  <div class="col-results">
+
+    <!-- Hero -->
+    <div class="card" style="border-color:rgba(0,212,170,.25);background:linear-gradient(135deg,#0d1929,#0a1622)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">NGR бренда / мес</div>
+          <div class="metric-xl" style="color:var(--green)" id="heroNgr">$0</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:5px" id="heroSub">—</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Выплата партнёру / мес</div>
+          <div class="metric-xl" id="heroEarn" style="color:var(--green)">$0</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:5px" id="heroFormula">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card">
+      <div class="sec">Доход с когорты — <span style="text-transform:none;font-size:10px;color:var(--muted);letter-spacing:0" id="timelineLabel">RS растёт по мере возврата игроков</span></div>
+      <div class="row4" id="timeline"></div>
+    </div>
+
+    <!-- Player metrics -->
+    <div class="card">
+      <div class="sec">Метрики игрока · <span id="geoNameLabel">—</span></div>
+      <div class="row4" id="playerMetrics"></div>
+    </div>
+
+    <!-- RS Tier (shown for rs/hybrid) -->
+    <div id="tierCard" class="card">
+      <div class="sec">Лестница RevShare · <span id="tierGeoLabel">—</span></div>
+      <table class="tier-table">
+        <thead><tr><th>FTD / мес</th><th>RS %</th><th></th></tr></thead>
+        <tbody id="tierBody"></tbody>
+      </table>
+      <div id="tierNote" style="margin-top:10px;font-size:11px;color:var(--muted)"></div>
+    </div>
+
+    <!-- CPA options (shown for cpa) -->
+    <div id="cpaCard" class="card" style="display:none">
+      <div class="sec">CPA условия</div>
+      <div id="cpaBody"></div>
+    </div>
+
+    <!-- Payout conditions -->
+    <div class="card">
+      <div class="sec">Условия выплат</div>
+      <div class="p-row"><span class="p-key">Периодичность</span><span class="p-val">Еженедельно или ежемесячно — на выбор</span></div>
+      <div class="p-row"><span class="p-key">Минимум (неделя)</span><span class="p-val">$30</span></div>
+      <div class="p-row"><span class="p-key">Минимум (месяц)</span><span class="p-val">$100</span></div>
+      <div class="p-row"><span class="p-key">Еженедельная выплата</span><span class="p-val" style="color:var(--green)" id="weeklyPay">—</span></div>
+      <div class="p-row"><span class="p-key">Методы</span><span class="p-val">USDT / Игровой аккаунт</span></div>
+      <div class="p-row"><span class="p-key">Отрицательный баланс</span><span class="p-val" style="color:var(--green)">Не переносится на след. месяц</span></div>
+    </div>
+
+  </div><!-- /col-results -->
+
+</div><!-- /cols -->
+</div><!-- /panel-calc -->
+
+
+<!-- ═══════════════════ TAB: RS vs CPA ═══════════════════ -->
+<div id="panel-compare" class="panel">
+  <div style="display:flex;flex-direction:column;gap:14px">
+
+    <div class="card" style="border-color:rgba(0,212,170,.2);background:rgba(0,212,170,.03)">
+      <div style="font-size:13px;color:var(--label);line-height:1.7">
+        <strong style="color:var(--green)">Как работает сравнение:</strong> за каждый FTD по CPA партнёр получает фиксированную выплату один раз.
+        По RS — процент от каждого проигрыша игрока: через неделю, через месяц, через год. Таблица показывает накопленный доход с одной когорты игроков (привлечённых за один месяц).
+      </div>
+    </div>
+
+    <!-- Hero cards -->
+    <div class="row3" id="cmpHero"></div>
+
+    <!-- Chart -->
+    <div class="card">
+      <div class="sec">Доход с одной когорты по месяцам (накопленно)</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px" id="cmpLegend"></div>
+      <div class="chart-wrap" id="chartWrap">
+        <div class="chart-gridlines" id="chartGrid"></div>
+        <div class="chart-inner" id="chartBars"></div>
+        <div class="chart-x" id="chartX"></div>
+      </div>
+      <div id="beBox"></div>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+      <div class="sec">Детальная таблица сравнения</div>
+      <div style="overflow-x:auto">
+        <table class="cmp-table" id="cmpTable"></table>
+      </div>
+    </div>
+
+    <!-- Rolling 12m forecast -->
+    <div class="card" style="border-color:rgba(139,92,246,.25);background:rgba(139,92,246,.03)">
+      <div class="sec">📈 12-месячный прогноз — постоянный поток трафика</div>
+      <div style="font-size:12px;color:var(--label);line-height:1.6;margin-bottom:12px" id="rollingDesc"></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px" id="rollingLegend"></div>
+      <div class="roll-chart">
+        <div class="roll-gridlines" id="rollGrid"></div>
+        <div class="roll-bars" id="rollBars"></div>
+        <div class="roll-x" id="rollX"></div>
+      </div>
+      <div class="row4" id="rollingStats" style="margin-top:28px"></div>
+      <div id="rollingInsight" style="margin-top:12px"></div>
+    </div>
+
+    <!-- Why RS wins -->
+    <div class="card" style="border-color:rgba(0,212,170,.15)">
+      <div class="sec">Почему RS выгоднее в долгосрочной перспективе</div>
+      <div id="rsArgsList"></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════ TAB: SUB-AFF ═══════════════════ -->
+<div id="panel-subaff" class="panel">
+  <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start" class="cols">
+    <div class="col-inputs">
+
+      <div class="card">
+        <div class="sec">Ваша суб-сеть</div>
+        <div class="field">
+          <label class="lbl">Количество суб-партнёров: <strong style="color:var(--purple)" id="subCountLabel">3</strong></label>
+          <input type="range" id="subCountSlider" min="1" max="50" value="3" oninput="onSubSlider()">
+          <div class="slider-labels"><span>1</span><span>25</span><span>50</span></div>
+        </div>
+        <div class="field">
+          <label class="lbl">Среднее FTD у каждого: <strong style="color:var(--purple)" id="subFtdLabel">80</strong></label>
+          <input type="range" id="subFtdSlider" min="10" max="500" step="10" value="80" oninput="onSubSlider()">
+          <div class="slider-labels"><span>10</span><span>250</span><span>500</span></div>
+        </div>
+        <div class="field">
+          <label class="lbl">Ваш % от NGR суб-партнёров: <strong style="color:var(--purple)" id="subPctLabel">7%</strong></label>
+          <input type="range" id="subPctSlider" min="1" max="15" value="7" oninput="onSubSlider()">
+          <div class="slider-labels"><span>1%</span><span style="color:var(--purple)">7% рек.</span><span>15%</span></div>
+        </div>
+        <div class="alert alert-info" style="margin-top:4px">Стандартная рекомендация: 7%. Устанавливается индивидуально через комиссионную группу «Referral».</div>
+      </div>
+
+      <div class="card">
+        <div class="sec">ГЕО суб-партнёров</div>
+        <div style="font-size:12px;color:var(--muted)">Используется ГЕО из основного калькулятора: <strong style="color:var(--text)" id="subGeoLabel">—</strong></div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted)">NGR / игрок (мес 1): <strong style="color:var(--green)" id="subNgrLabel">—</strong></div>
+      </div>
+
+    </div>
+
+    <div class="col-results">
+
+      <div class="card" style="border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.04)">
+        <div class="row3" id="subHero"></div>
+      </div>
+
+      <div class="card">
+        <div class="sec">Масштаб сети</div>
+        <div style="overflow-x:auto">
+          <table class="cmp-table" id="subTable"></table>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:rgba(245,158,11,.2)">
+        <div class="sec">Как строить суб-партнёрскую сеть</div>
+        <div id="subTips"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════ TAB: WHY ═══════════════════ -->
+<div id="panel-why" class="panel">
+  <div style="display:flex;flex-direction:column;gap:14px">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+      <div class="card" style="border-color:rgba(0,212,170,.2)">
+        <div class="sec">Ключевые преимущества</div>
+        <div id="uspList"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="sec">Условия выплат — кратко</div>
+          <div class="p-row"><span class="p-key">RS по умолчанию</span><span class="p-val" style="color:var(--green)">25%</span></div>
+          <div class="p-row"><span class="p-key">RS максимум (объём)</span><span class="p-val" style="color:var(--green)">35–40%</span></div>
+          <div class="p-row"><span class="p-key">RS для топов</span><span class="p-val" style="color:var(--green)">до 65%</span></div>
+          <div class="p-row"><span class="p-key">Admin fee</span><span class="p-val" style="color:var(--green)">0% <span style="font-size:10px;color:var(--muted)">(у Pin-Up 20%, Vavada 14%)</span></span></div>
+          <div class="p-row"><span class="p-key">CPA</span><span class="p-val">По ГЕО, от $16</span></div>
+          <div class="p-row"><span class="p-key">Выплаты</span><span class="p-val">Вт. еженед. / ежемес.</span></div>
+          <div class="p-row"><span class="p-key">Минимум</span><span class="p-val">$30 / нед <span style="font-size:10px;color:var(--muted)">(у Parimatch $100)</span></span></div>
+          <div class="p-row"><span class="p-key">Cookie</span><span class="p-val">30 дней, Last Win</span></div>
+          <div class="p-row"><span class="p-key">Sub-aff</span><span class="p-val" style="color:var(--green)">~7% от NGR <span style="font-size:10px;color:var(--muted)">(рынок: 3–10%)</span></span></div>
+          <div class="p-row"><span class="p-key">Отриц. баланс</span><span class="p-val" style="color:var(--green)">Не переносится</span></div>
+        </div>
+
+        <div class="card">
+          <div class="sec">Что принимаем</div>
+          <div id="acceptSources"></div>
+        </div>
+
+        <div class="card" style="border-color:rgba(239,68,68,.2)">
+          <div class="sec">Ограничения</div>
+          <div id="restrictList"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Competitor comparison -->
+    <div class="card" style="border-color:rgba(59,130,246,.2)">
+      <div class="sec">lil.bet vs конкуренты — ключевые метрики</div>
+      <div style="overflow-x:auto">
+        <table class="comp-table" id="competitorTable"></table>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:10px" id="competitorNote"></div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  Данные NGR/игрок — бенчмарки по ГЕО. CPA для KZ, RU, NG, KE, PK, TJ, KG, AZ — уточняйте у менеджера.
+  Статистика обновляется раз в сутки. Cookie 30 дней (Last Win).
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════════════════════════════
+
+const GEO_DATA = {
+  UZ:{label:'🇺🇿 Узбекистан', avgFtd:23, ngr1m:35, ngr3m:70, ngr6m:110, ngr12m:150, reg2dep:16, ltMonths:6,
+    cpaAllowed:false, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:1,max:19,rate:15},{min:20,max:49,rate:20},{min:50,max:149,rate:25},{min:150,max:199,rate:30},{min:200,max:Infinity,rate:35}],
+    warn:'CPA запрещена. Доступен только RevShare.'},
+  BD:{label:'🇧🇩 Бангладеш', avgFtd:20, ngr1m:25, ngr3m:50, ngr6m:80, ngr12m:110, reg2dep:15, ltMonths:6,
+    cpaAllowed:true, hybridAllowed:false,
+    cpaRates:[{label:'Mindep (wager > 0)', rate:16},{label:'BL5 (wager ≥ $5)', rate:20}], hybridRate:null,
+    rsTable:[{min:0,max:99,rate:25},{min:100,max:299,rate:30},{min:300,max:Infinity,rate:35}],
+    warn:null},
+  EG:{label:'🇪🇬 Египет', avgFtd:25, ngr1m:30, ngr3m:65, ngr6m:110, ngr12m:155, reg2dep:18, ltMonths:7,
+    cpaAllowed:true, hybridAllowed:true,
+    cpaRates:[{label:'Mindep ($20)', rate:20},{label:'BL1 (wager ≥ $5)', rate:25}],
+    hybridRate:{cpa:10, rs:25},
+    rsTable:[{min:1,max:50,rate:25},{min:51,max:100,rate:30},{min:101,max:350,rate:35},{min:351,max:Infinity,rate:40}],
+    brandTrafficSources:['seo','google'],
+    warn:null},
+  SO:{label:'🇸🇴 Сомали', avgFtd:15, ngr1m:20, ngr3m:38, ngr6m:58, ngr12m:75, reg2dep:12, ltMonths:5,
+    cpaAllowed:false, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}],
+    warn:'Только RS 25%. Лестница не применяется, CPA недоступна.'},
+  KZ:{label:'🇰🇿 Казахстан', avgFtd:28, ngr1m:90, ngr3m:170, ngr6m:270, ngr12m:380, reg2dep:20, ltMonths:8,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  RU:{label:'🇷🇺 Россия', avgFtd:22, ngr1m:95, ngr3m:160, ngr6m:240, ngr12m:320, reg2dep:20, ltMonths:8,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  AZ:{label:'🇦🇿 Азербайджан', avgFtd:25, ngr1m:80, ngr3m:140, ngr6m:210, ngr12m:280, reg2dep:18, ltMonths:7,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  KG:{label:'🇰🇬 Кыргызстан', avgFtd:15, ngr1m:45, ngr3m:80, ngr6m:120, ngr12m:160, reg2dep:14, ltMonths:6,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  TJ:{label:'🇹🇯 Таджикистан', avgFtd:12, ngr1m:35, ngr3m:65, ngr6m:100, ngr12m:135, reg2dep:13, ltMonths:6,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  PK:{label:'🇵🇰 Пакистан', avgFtd:15, ngr1m:50, ngr3m:90, ngr6m:140, ngr12m:185, reg2dep:15, ltMonths:6,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  NG:{label:'🇳🇬 Нигерия', avgFtd:12, ngr1m:55, ngr3m:90, ngr6m:140, ngr12m:185, reg2dep:15, ltMonths:6,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  KE:{label:'🇰🇪 Кения', avgFtd:10, ngr1m:45, ngr3m:75, ngr6m:115, ngr12m:155, reg2dep:14, ltMonths:6,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  TR:{label:'🇹🇷 Турция', avgFtd:40, ngr1m:150, ngr3m:270, ngr6m:420, ngr12m:580, reg2dep:22, ltMonths:9,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  MA:{label:'🇲🇦 Марокко', avgFtd:20, ngr1m:60, ngr3m:105, ngr6m:160, ngr12m:215, reg2dep:16, ltMonths:7,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+  DZ:{label:'🇩🇿 Алжир', avgFtd:18, ngr1m:55, ngr3m:95, ngr6m:145, ngr12m:195, reg2dep:15, ltMonths:7,
+    cpaAllowed:true, hybridAllowed:false, cpaRates:null, hybridRate:null,
+    rsTable:[{min:0,max:Infinity,rate:25}], warn:null},
+};
+
+const SRC_DATA = {
+  facebook:  {label:'Facebook / Meta',    c2r:11, r2d:20, qual:0.85, cpc:0.18, note:'Авторег / агентские кабинеты, PWA, APK'},
+  telegram:  {label:'Telegram-каналы',    c2r:13, r2d:21, qual:0.95, cpc:0.08, note:'Тематические каналы, рассылки — тёплый трафик'},
+  seo:       {label:'SEO / Органика',     c2r:18, r2d:28, qual:1.10, cpc:0,    note:'Обзорники, бонусные сайты — лучшее качество игрока'},
+  google:    {label:'Google UAC / App',   c2r:14, r2d:22, qual:0.90, cpc:0.22, note:'iOS/Android приложения'},
+  tiktok:    {label:'TikTok / Reels',     c2r:8,  r2d:14, qual:0.75, cpc:0.10, note:'Широкий охват, качество ниже SEO'},
+  push:      {label:'Push / In-Page',     c2r:7,  r2d:16, qual:0.70, cpc:0.04, note:'RichAds, PropellerAds — объём, низкое качество'},
+  influencer:{label:'Инфлюенсер / Стрим',c2r:9,  r2d:24, qual:1.15, cpc:0.12, note:'YouTube, Twitch, Telegram — высокий LTV игрока'},
+  aso:       {label:'ASO / Стор',         c2r:22, r2d:25, qual:1.05, cpc:0.05, note:'Google Play / iOS — высокая конверсия в FTD'},
+  email:     {label:'Email / SMS',        c2r:16, r2d:18, qual:0.80, cpc:0.03, note:'Ретаргетинг, реактивация базы'},
+  native:    {label:'Нативная реклама',   c2r:8,  r2d:17, qual:0.75, cpc:0.09, note:'MGID, Taboola — широкий охват'},
+  other:     {label:'Другой',             c2r:12, r2d:18, qual:1.00, cpc:0,    note:'Укажите данные самостоятельно'},
+};
+
+// ══════════════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════════════
+
+let state = {
+  geo: 'RU',
+  src: 'facebook',
+  ftd: 100,
+  model: 'rs',
+  rsRate: 30,
+  cpaRateIdx: 0,
+  cpaCustom: 30,
+  subCount: 3,
+  subFtd: 80,
+  subPct: 7,
+  srcCustom: { c2r: null, r2d: null, qual: null },
+  inputMode: 'ftd',   // 'ftd' | 'clicks'
+  clicks: 5000,
+  adBudget: 500,      // рекламный бюджет в $
+  showBudget: false,  // показывать ли ROI-блок
+};
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════════════════════
+
+function getSrcMetrics() {
+  const s = SRC_DATA[state.src];
+  const sc = state.srcCustom;
+  return {
+    label: s.label,
+    note: s.note,
+    c2r:  sc.c2r  !== null ? sc.c2r  : s.c2r,
+    r2d:  sc.r2d  !== null ? sc.r2d  : s.r2d,
+    qual: sc.qual !== null ? sc.qual : s.qual,
+    isCustom: sc.c2r !== null,
+  };
+}
+
+const fmt = (n,d=0) => n==null||isNaN(n)?'—':n.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtU = (n,d=0) => isNaN(n)||n==null?'—':'$'+fmt(n,d);
+const fmtP = (n,d=1) => isNaN(n)||n==null?'—':fmt(n,d)+'%';
+
+function getTierRate(geo, ftd) {
+  for (const t of geo.rsTable) if (ftd >= t.min && ftd <= t.max) return t.rate;
+  return geo.rsTable[geo.rsTable.length-1].rate;
+}
+
+function getEffectiveRS(geo, ftd, manualRS) {
+  const tierRS = getTierRate(geo, ftd);
+  return Math.max(tierRS, manualRS);
+}
+
+// NGR interpolation: get incremental per-player NGR for a given lifetime month
+function incrNgr(geo, age) {
+  const {ngr1m, ngr3m, ngr6m, ngr12m} = geo;
+  if (age === 1) return ngr1m;
+  if (age <= 3)  return (ngr3m - ngr1m) / 2;
+  if (age <= 6)  return (ngr6m - ngr3m) / 3;
+  if (age <= 12) return (ngr12m - ngr6m) / 6;
+  return (ngr12m - ngr6m) / 6 * 0.7; // decay after 12m
+}
+
+// Cumulative NGR from a cohort at given months
+function cohortNgr(geo, months) {
+  if (months <= 1) return geo.ngr1m;
+  if (months <= 3) return geo.ngr3m;
+  if (months <= 6) return geo.ngr6m;
+  if (months <= 12) return geo.ngr12m;
+  return geo.ngr12m;
+}
+
+// Monthly RS income in month M, summing all cohorts acquired months 1..M
+function rsIncomeMonth(geo, ftd, rsRate, M) {
+  let sum = 0;
+  for (let k = 1; k <= M; k++) {
+    const age = M - k + 1;
+    sum += ftd * incrNgr(geo, age) * (rsRate/100);
+  }
+  return sum;
+}
+
+function cpaIncome(geo, ftd, cpaRate) { return ftd * cpaRate; }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CALCULATE
+// ══════════════════════════════════════════════════════════════════════════════
+
+function calc() {
+  const geo = GEO_DATA[state.geo];
+  const src = getSrcMetrics();
+  const qual = src.qual;
+
+  // Determine FTD based on input mode
+  let ftd, regs, clicks;
+  if (state.inputMode === 'clicks') {
+    clicks = state.clicks;
+    regs   = Math.round(clicks * (src.c2r / 100));
+    ftd    = Math.max(1, Math.round(regs * (src.r2d / 100)));
+  } else {
+    ftd    = state.ftd;
+    regs   = ftd / (src.r2d / 100);
+    clicks = Math.round(regs / (src.c2r / 100));
+  }
+
+  // Adjusted NGR: source quality multiplies per-player LTV
+  const aNgr1m  = geo.ngr1m  * qual;
+  const aNgr3m  = geo.ngr3m  * qual;
+  const aNgr6m  = geo.ngr6m  * qual;
+  const aNgr12m = geo.ngr12m * qual;
+
+  // Effective RS — tier OR manual, whichever higher
+  // Egypt brand traffic (SEO/Google) is capped at 10% per program rules
+  let effectiveRS = getEffectiveRS(geo, ftd, state.rsRate);
+  const brandPenalty = geo.brandTrafficSources && geo.brandTrafficSources.includes(state.src);
+  if (brandPenalty) effectiveRS = Math.min(effectiveRS, 10);
+
+  // NGR for brand (1 month cohort)
+  const monthNgr = ftd * aNgr1m;
+
+  // Partner earnings by model
+  let earn1m=0, earn3m=0, earn6m=0, earn12m=0, formula='';
+
+  if (state.model === 'rs') {
+    earn1m  = ftd * aNgr1m  * (effectiveRS/100);
+    earn3m  = ftd * aNgr3m  * (effectiveRS/100);
+    earn6m  = ftd * aNgr6m  * (effectiveRS/100);
+    earn12m = ftd * aNgr12m * (effectiveRS/100);
+    formula = `${ftd} FTD × NGR/игрок × ${effectiveRS}% RS`;
+  } else if (state.model === 'cpa') {
+    const rate = getCpaRate();
+    earn1m  = ftd * rate;
+    earn3m  = earn1m;   // CPA is one-time per cohort — no repeat income
+    earn6m  = earn1m;
+    earn12m = earn1m;
+    formula = `${ftd} FTD × $${rate} — разовая выплата за когорту`;
+  } else if (state.model === 'hybrid' && geo.hybridAllowed && geo.hybridRate) {
+    const h = geo.hybridRate;
+    const cpaP = ftd * h.cpa;  // CPA paid once for this cohort
+    earn1m  = cpaP + ftd * aNgr1m  * (h.rs/100);
+    earn3m  = cpaP + ftd * aNgr3m  * (h.rs/100);
+    earn6m  = cpaP + ftd * aNgr6m  * (h.rs/100);
+    earn12m = cpaP + ftd * aNgr12m * (h.rs/100);
+    formula = `$${h.cpa}/FTD (разово) + ${h.rs}% RS`;
+  }
+
+  return {geo, src, ftd, qual, aNgr1m, aNgr3m, aNgr6m, aNgr12m,
+    monthNgr, regs, clicks, effectiveRS, brandPenalty,
+    earn1m, earn3m, earn6m, earn12m, formula};
+}
+
+function getCpaRate() {
+  const geo = GEO_DATA[state.geo];
+  if (geo.cpaRates && geo.cpaRates[state.cpaRateIdx])
+    return geo.cpaRates[state.cpaRateIdx].rate;
+  return state.cpaCustom;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════════════════════════════
+
+function renderAll() {
+  const c = calc();
+  renderCalc(c);
+  renderCompare(c);
+  renderSubAff(c);
+  renderROI(c);
+}
+
+function renderCalc(c) {
+  const {geo, src, ftd, monthNgr, earn1m, earn3m, earn6m, earn12m, formula,
+         regs, clicks, effectiveRS, aNgr1m, aNgr3m, aNgr6m, aNgr12m} = c;
+
+  // Source stats
+  document.getElementById('statC2R').textContent = fmtP(src.c2r);
+  document.getElementById('statR2D').textContent = fmtP(src.r2d);
+  document.getElementById('statQual').textContent = src.qual.toFixed(2) + 'x';
+  document.getElementById('srcNote').textContent = src.note + (src.isCustom ? ' · ✎ метрики изменены' : '');
+  const editBtn = document.getElementById('srcEditBtn');
+  if (editBtn) editBtn.style.borderColor = src.isCustom ? 'var(--green)' : 'var(--border)';
+  if (editBtn) editBtn.style.color = src.isCustom ? 'var(--green)' : 'var(--muted)';
+
+  // Hero
+  document.getElementById('heroNgr').textContent = fmtU(monthNgr);
+  document.getElementById('heroSub').textContent = `${geo.label} · ${src.label}`;
+  document.getElementById('heroEarn').textContent = fmtU(earn1m);
+  document.getElementById('heroFormula').textContent = formula;
+
+  // Weekly payout
+  const weekly = earn1m / 4.3;
+  document.getElementById('weeklyPay').textContent = weekly >= 30 ? fmtU(weekly)+' / нед.' : '⚠ Ниже порога $30';
+
+  // Clicks mode: show calculated FTD
+  if (state.inputMode === 'clicks') {
+    const el = document.getElementById('calcFtdDisplay');
+    if (el) el.textContent = fmt(ftd) + ' FTD';
+    const lbl = document.getElementById('clicksLabel');
+    if (lbl) lbl.textContent = fmt(state.clicks);
+  }
+
+  // Funnel
+  document.getElementById('fClicks').textContent = fmt(Math.round(clicks));
+  document.getElementById('fRegs').textContent = fmt(Math.round(regs));
+  document.getElementById('fRegPct').textContent = fmtP(src.c2r)+' CR';
+  document.getElementById('fFtd').textContent = fmt(ftd);
+  document.getElementById('fFtdPct').textContent = fmtP(src.r2d)+' CR';
+
+  // Timeline label
+  const tlLabel = document.getElementById('timelineLabel');
+  if (tlLabel) {
+    if (state.model === 'rs') tlLabel.textContent = 'RS растёт по мере возврата игроков';
+    else if (state.model === 'cpa') tlLabel.textContent = 'CPA — разовая выплата, не растёт';
+    else tlLabel.textContent = 'Hybrid: CPA разово + RS за возвраты';
+  }
+
+  // Timeline
+  const periods = [
+    ['1 мес', earn1m, monthNgr],
+    ['3 мес', earn3m, ftd * c.aNgr3m],
+    ['6 мес', earn6m, ftd * c.aNgr6m],
+    ['12 мес', earn12m, ftd * c.aNgr12m],
+  ];
+  document.getElementById('timeline').innerHTML = periods.map(([per, e, n]) => `
+    <div class="card-sm" style="text-align:center">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">${per}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:2px">NGR бренда</div>
+      <div style="font-size:14px;font-weight:700;color:var(--green)">${fmtU(n)}</div>
+      <div style="height:1px;background:var(--border);margin:6px 0"></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Партнёру</div>
+      <div style="font-size:14px;font-weight:700;color:#fff">${fmtU(e)}</div>
+    </div>`).join('');
+
+  // Player metrics
+  document.getElementById('geoNameLabel').textContent = geo.label;
+  document.getElementById('playerMetrics').innerHTML = `
+    <div class="card-sm" style="text-align:center">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Avg FTD</div>
+      <div style="font-size:16px;font-weight:700;color:var(--blue);margin-top:4px">${fmtU(geo.avgFtd)}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">первый депозит</div>
+    </div>
+    <div class="card-sm" style="text-align:center">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">NGR / 1мес</div>
+      <div style="font-size:16px;font-weight:700;color:var(--green);margin-top:4px">${fmtU(c.aNgr1m,0)}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">на игрока</div>
+    </div>
+    <div class="card-sm" style="text-align:center">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">NGR / 6мес</div>
+      <div style="font-size:16px;font-weight:700;color:var(--green);margin-top:4px">${fmtU(c.aNgr6m,0)}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">когортный</div>
+    </div>
+    <div class="card-sm" style="text-align:center">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">LTV / 12мес</div>
+      <div style="font-size:16px;font-weight:700;color:var(--yellow);margin-top:4px">${fmtU(c.aNgr12m,0)}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">на игрока</div>
+    </div>`;
+
+  // Model block
+  renderModelBlock(c);
+
+  // RS tier
+  renderTierBlock(c);
+
+  // GEO alerts
+  renderGeoAlerts();
+}
+
+function renderModelBlock(c) {
+  const geo = GEO_DATA[state.geo];
+  let html = '';
+
+  if (state.model === 'rs') {
+    const tierRate = getTierRate(geo, state.ftd);
+    const note = tierRate > state.rsRate
+      ? `<div style="font-size:11px;color:var(--green);margin-top:4px">Тир по объёму: ${tierRate}% — применяется автоматически</div>`
+      : tierRate < state.rsRate
+      ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">Тир по объёму: ${tierRate}%. Применяется согласованная ставка ${state.rsRate}%</div>`
+      : `<div style="font-size:11px;color:var(--muted);margin-top:4px">Тир совпадает со ставкой: ${state.rsRate}%</div>`;
+    html = `
+      <label class="lbl">RevShare % (согласованный): <strong style="color:var(--green)">${state.rsRate}%</strong></label>
+      <input type="range" id="rsSlider" min="15" max="65" value="${state.rsRate}" oninput="onRsSlider()">
+      <div class="slider-labels"><span>15% старт</span><span style="color:var(--green)">25–40% основная</span><span>65% топы</span></div>
+      ${note}`;
+  } else if (state.model === 'cpa') {
+    if (!geo.cpaAllowed) {
+      html = `<div class="alert alert-red">⛔ CPA недоступна для этого ГЕО</div>`;
+    } else if (geo.cpaRates) {
+      html = geo.cpaRates.map((r,i) => `
+        <label onclick="state.cpaRateIdx=${i};renderAll()" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:${i===state.cpaRateIdx?'rgba(239,68,68,.1)':'var(--bg3)'};border:1px solid ${i===state.cpaRateIdx?'var(--red)':'var(--border)'};border-radius:7px;cursor:pointer;margin-bottom:6px">
+          <input type="radio" ${i===state.cpaRateIdx?'checked':''} style="accent-color:var(--red)">
+          <span style="flex:1;font-size:13px;color:var(--label)">${r.label}</span>
+          <span style="font-size:17px;font-weight:700;color:var(--red)">$${r.rate}</span>
+        </label>`).join('');
+    } else {
+      html = `
+        <div class="alert alert-warn">Ставка CPA для ${geo.label} уточняйте у менеджера</div>
+        <label class="lbl">Ставка CPA, $</label>
+        <input type="number" value="${state.cpaCustom}" min="0" oninput="state.cpaCustom=+this.value;renderAll()">`;
+    }
+  } else if (state.model === 'hybrid') {
+    if (!geo.hybridAllowed || !geo.hybridRate) {
+      html = `<div class="alert alert-red">⛔ Hybrid недоступен для этого ГЕО</div>`;
+    } else {
+      const h = geo.hybridRate;
+      html = `<div class="alert alert-info">Модель: $${h.cpa} за каждый квалифицирующий FTD + ${h.rs}% RS от NGR (BL2)</div>`;
+    }
+  }
+
+  document.getElementById('modelBlock').innerHTML = html;
+}
+
+function renderTierBlock(c) {
+  const geo = GEO_DATA[state.geo];
+  const ftd = state.ftd;
+  const show = state.model !== 'cpa';
+
+  document.getElementById('tierCard').style.display = show ? '' : 'none';
+  document.getElementById('cpaCard').style.display = state.model === 'cpa' ? '' : 'none';
+
+  if (show) {
+    document.getElementById('tierGeoLabel').textContent = geo.label;
+    const currentTier = geo.rsTable.find(t => ftd >= t.min && ftd <= t.max) || geo.rsTable[geo.rsTable.length-1];
+    const nextTier = geo.rsTable[geo.rsTable.indexOf(currentTier)+1];
+    document.getElementById('tierBody').innerHTML = geo.rsTable.map(t => {
+      const isCur = t === currentTier;
+      return `<tr class="${isCur?'cur':''}">
+        <td>${t.label || t.min+' – '+(t.max===Infinity?'∞':t.max)}</td>
+        <td>${t.rate}%</td>
+        <td>${isCur?'← текущий':''}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('tierNote').textContent = nextTier
+      ? `До уровня ${nextTier.rate}% — ещё ${nextTier.min - ftd} FTD`
+      : 'Максимальный тир достигнут';
+  }
+
+  if (state.model === 'cpa') {
+    const geo2 = GEO_DATA[state.geo];
+    document.getElementById('cpaCard').innerHTML = `<div class="sec">CPA условия</div>` +
+      (geo2.cpaRates ? geo2.cpaRates.map(r=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:var(--muted)">${r.label}</span><strong style="color:var(--red)">$${r.rate}</strong></div>`).join('')+
+      `<div style="font-size:11px;color:var(--muted);margin-top:8px">Hold: 14 дней</div>`
+      : `<div style="font-size:12px;color:var(--muted)">Ставка уточняется у менеджера. Hold: 14 дней.</div>`);
+  }
+}
+
+function renderGeoAlerts() {
+  const geo = GEO_DATA[state.geo];
+  const src = getSrcMetrics();
+  let html = '';
+  if (geo.warn) html += `<div class="alert alert-warn">${geo.warn}</div>`;
+  if (geo.brandTrafficSources && geo.brandTrafficSources.includes(state.src)) {
+    html += `<div class="alert alert-red">⚠️ Бренд-трафик (${src.label}) для Египта: RS применяется как 10% — ограничение программы. Используйте небрендовые ключи или другой источник.</div>`;
+  }
+  document.getElementById('geoAlerts').innerHTML = html;
+}
+
+// ── Compare tab ──────────────────────────────────────────────────────────────
+
+function renderCompare(c) {
+  const geo = GEO_DATA[state.geo];
+  const ftd = state.ftd;
+  const rsRate = c.effectiveRS;
+  const cpaRate = getCpaRate();
+  const qual = c.qual;
+
+  // Cohort: partner earns RS on cumulative NGR from single FTD batch
+  const rsC1  = ftd * geo.ngr1m  * qual * (rsRate/100);
+  const rsC3  = ftd * geo.ngr3m  * qual * (rsRate/100);
+  const rsC6  = ftd * geo.ngr6m  * qual * (rsRate/100);
+  const rsC12 = ftd * geo.ngr12m * qual * (rsRate/100);
+
+  // CPA: paid once per FTD batch (and then nothing for that cohort)
+  const cpaPaid = ftd * cpaRate;
+
+  // Monthly model (cumulative, constant FTD flow)
+  // RS grows because retained players accumulate
+  const rsM = [0,1,3,6,12].map(m => {
+    let sum = 0;
+    for (let i=1;i<=m;i++) sum += rsIncomeMonth({...geo, ngr1m:geo.ngr1m*qual, ngr3m:geo.ngr3m*qual, ngr6m:geo.ngr6m*qual, ngr12m:geo.ngr12m*qual}, ftd, rsRate, i);
+    return sum;
+  });
+  const cpaM = [0,1,3,6,12].map(m => m * ftd * cpaRate);
+
+  // Breakeven month (cohort model)
+  let beMonth = null;
+  for (let m=1;m<=12;m++) {
+    const rsV = ftd * cohortNgr(geo, m) * qual * (rsRate/100);
+    if (rsV >= cpaPaid) { beMonth = m; break; }
+  }
+
+  // Hero
+  document.getElementById('cmpHero').innerHTML = [
+    {label:'RS партнёру / год', val:fmtU(rsC12), color:'var(--green)', sub:`${rsRate}% × LTV когорты`},
+    {label:'CPA партнёру разово', val:fmtU(cpaPaid), color:'var(--red)', sub:`$${cpaRate} × ${ftd} FTD`},
+    {label:'Разница за год', val:fmtU(rsC12-cpaPaid), color:rsC12>cpaPaid?'var(--green)':'var(--yellow)', sub:rsC12>cpaPaid?'RS выгоднее за год':'CPA даёт больше — игроки не задерживаются долго'},
+  ].map(m=>`
+    <div class="card" style="border-color:${m.color}33;text-align:center">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">${m.label}</div>
+      <div style="font-size:24px;font-weight:800;color:${m.color}">${m.val}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${m.sub}</div>
+    </div>`).join('');
+
+  // Legend
+  document.getElementById('cmpLegend').innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:3px;background:var(--green);border-radius:2px"></div><span style="font-size:11px;color:var(--muted)">RS ${rsRate}% (накопленно с когорты)</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:3px;background:var(--red);border-radius:2px"></div><span style="font-size:11px;color:var(--muted)">CPA $${cpaRate} (одноразово)</span></div>`;
+
+  // Chart bars (months 1–12, cohort cumulative)
+  const months = [1,2,3,4,5,6,7,8,9,10,11,12];
+  const rsVals = months.map(m => ftd * cohortNgr(geo, m) * qual * (rsRate/100));
+  const cpaVals = months.map(() => cpaPaid);
+  const maxVal = Math.max(...rsVals, ...cpaVals, 1);
+
+  const gridLines = [0,25,50,75,100];
+  document.getElementById('chartGrid').innerHTML = gridLines.map(p=>`
+    <div class="chart-gridline" style="bottom:${p}%"><span>${fmtU(maxVal*p/100)}</span></div>`).join('');
+
+  document.getElementById('chartBars').innerHTML = months.map((m,i)=>`
+    <div class="chart-col">
+      <div class="chart-bar" style="height:${rsVals[i]/maxVal*100}%;background:rgba(0,212,170,.3);border:1px solid rgba(0,212,170,.5)">
+        ${m===12?`<span class="tip" style="color:var(--green)">${fmtU(rsVals[i])}</span>`:''}
+      </div>
+      <div class="chart-bar" style="height:${cpaVals[i]/maxVal*100}%;background:rgba(239,68,68,.25);border:1px solid rgba(239,68,68,.4)">
+        ${m===12?`<span class="tip" style="color:var(--red)">${fmtU(cpaVals[i])}</span>`:''}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('chartX').innerHTML = months.map(m=>`<span>${m}м</span>`).join('');
+
+  // Breakeven box
+  document.getElementById('beBox').innerHTML = beMonth
+    ? `<div class="be-box">💡 RS окупает CPA на <strong>${beMonth}-м месяце</strong> — после этого каждый месяц приносит дополнительный доход. Игрок возвращается и проигрывает снова — партнёр получает % каждый раз.</div>`
+    : `<div style="margin-top:12px;padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;font-size:12px;color:#fbbf24">
+       ⚠️ При текущих параметрах CPA даёт больше за 12 месяцев. RS становится выгоднее при повышении ставки до ${Math.ceil(cpaRate/geo.ngr12m/qual*100)}%+ или при объёме FTD от ${Math.ceil(cpaRate/geo.ngr12m/qual*100) > 35 ? '—' : '300+'}.
+     </div>`;
+
+  // Table
+  document.getElementById('cmpTable').innerHTML = `
+    <thead><tr>
+      <th style="text-align:left">Период</th>
+      <th style="color:var(--green)">RS (накопленно)</th>
+      <th style="color:var(--red)">CPA (разово)</th>
+      <th>Разница</th>
+      <th>NGR бренда</th>
+    </tr></thead>
+    <tbody>${[[1,'1 мес'],[3,'3 мес'],[6,'6 мес'],[12,'12 мес']].map(([m,lbl])=>{
+      const rs = ftd * cohortNgr(geo, m) * qual * (rsRate/100);
+      const diff = rs - cpaPaid;
+      const ngrV = ftd * cohortNgr(geo, m) * qual;
+      return `<tr>
+        <td>${lbl}</td>
+        <td class="${rs>cpaPaid?'win':''}" style="color:var(--green)">${fmtU(rs)}</td>
+        <td style="color:var(--red)">${fmtU(cpaPaid)}</td>
+        <td style="color:${diff>0?'var(--green)':'var(--yellow)'}">${diff>0?'+':''}${fmtU(diff)}</td>
+        <td style="color:var(--muted)">${fmtU(ngrV)}</td>
+      </tr>`;
+    }).join('')}
+    <tr style="border-top:2px solid var(--border)">
+      <td colspan="5" style="padding-top:10px;font-size:11px;color:var(--muted);text-align:left">
+        * RS считается от накопленного NGR когорты (игроки возвращаются, продолжают играть). CPA выплачивается один раз за FTD.
+      </td>
+    </tr>
+    </tbody>`;
+
+  // Rolling 12-month forecast
+  renderRolling(c);
+
+  // RS args
+  const rsPct = (rsRate/100);
+  document.getElementById('rsArgsList').innerHTML = [
+    ['♾️','Пассивный доход с каждого возврата', `Игрок вернулся через 3 недели и проиграл снова — по CPA партнёр не получит ничего, по RS получит ещё ${fmtP(rsRate)} от его проигрыша.`],
+    ['📈','Whale-эффект', `Крупный игрок с NGR $500/мес даст RS ${fmtU(500*rsPct)}/мес. По CPA он стоил бы столько же, сколько игрок с минимальным депозитом.`],
+    ['🔒','Нет риска шейва', `RS считается от реального NGR — всё видно в статистике. CPA легче занижать.`],
+    ['📊','Накопительный эффект', `При стабильном трафике база игроков растёт. К 12-му месяцу ${ftd} FTD ежемесячно дают накопленный пул ~${fmt(Math.round(ftd * geo.ltMonths * 0.4))} активных игроков.`],
+    ['⚡','CPA лучше при коротком горизонте', `Если партнёр планирует работать 1–3 месяца — CPA выгоднее. RS раскрывается на 6–12+ месяцах.`],
+  ].map(([icon,title,desc])=>`
+    <div class="usp-item">
+      <div class="usp-icon">${icon}</div>
+      <div><div class="usp-title">${title}</div><div class="usp-desc">${desc}</div></div>
+    </div>`).join('');
+}
+
+// ── Sub-aff tab ──────────────────────────────────────────────────────────────
+
+function renderSubAff(c) {
+  const geo = GEO_DATA[state.geo];
+  const {subCount, subFtd, subPct} = state;
+  const ngrPerPlayer = c.aNgr1m;
+  const totalFtd = subCount * subFtd;
+  const totalNgr = totalFtd * ngrPerPlayer;
+  const myMonth = totalNgr * (subPct/100);
+  const myYear = myMonth * 12;
+
+  document.getElementById('subGeoLabel').textContent = geo.label;
+  document.getElementById('subNgrLabel').textContent = fmtU(ngrPerPlayer, 0);
+
+  document.getElementById('subHero').innerHTML = [
+    {label:'FTD всей сети / мес', val:fmt(totalFtd), color:'var(--purple)'},
+    {label:'Ваш доход / мес', val:fmtU(myMonth), color:'var(--purple)'},
+    {label:'Ваш доход / год', val:fmtU(myYear), color:'var(--purple)'},
+  ].map(m=>`<div class="card-sm" style="text-align:center">
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">${m.label}</div>
+    <div style="font-size:20px;font-weight:700;color:${m.color}">${m.val}</div>
+  </div>`).join('');
+
+  document.getElementById('subTable').innerHTML = `
+    <thead><tr>
+      <th style="text-align:right">Партнёров</th>
+      <th style="text-align:right">FTD total</th>
+      <th style="text-align:right">NGR сети / мес</th>
+      <th style="text-align:right">Ваш ${subPct}% / мес</th>
+      <th style="text-align:right">Ваш / год</th>
+    </tr></thead>
+    <tbody>${[2,5,10,20,50].map(n=>{
+      const f=n*subFtd, ng=f*ngrPerPlayer, mm=ng*(subPct/100);
+      const active = Math.abs(n-subCount) <= 2;
+      return `<tr style="background:${active?'rgba(139,92,246,.08)':'transparent'}">
+        <td style="color:${active?'var(--purple)':'var(--muted)'};font-weight:${active?700:400}">${n}</td>
+        <td>${fmt(f)}</td>
+        <td>${fmtU(ng)}</td>
+        <td style="color:var(--purple);font-weight:600">${fmtU(mm)}</td>
+        <td style="color:var(--purple);font-weight:600">${fmtU(mm*12)}</td>
+      </tr>`;
+    }).join('')}</tbody>`;
+
+  document.getElementById('subTips').innerHTML = [
+    ['🎯','Качество > количество', 'Один партнёр с 200 FTD выгоднее десяти с 20. Фокусируйся на командах и медиабайерах.'],
+    ['📊','Показывай этот калькулятор', 'Партнёр видит реальные цифры — не проценты, а деньги. Это ускоряет принятие решения.'],
+    ['🔗','Суб-аффилейт как якорь', 'Партнёр, строящий свою сеть через тебя, не уйдёт — у него двойная мотивация оставаться.'],
+    ['📈','Рост ставки как стимул', 'Предлагай повышение RS при масштабировании: 25% → 30% → 35%. Стимул лить больше.'],
+  ].map(([i,t,d])=>`<div class="usp-item"><div class="usp-icon">${i}</div><div><div class="usp-title">${t}</div><div class="usp-desc">${d}</div></div></div>`).join('');
+}
+
+// ── ROI block ────────────────────────────────────────────────────────────────
+
+function toggleBudget() {
+  state.showBudget = !state.showBudget;
+  document.getElementById('budgetBlock').style.display = state.showBudget ? '' : 'none';
+  document.getElementById('budgetToggleIcon').textContent = state.showBudget ? '− свернуть' : '+ развернуть';
+  if (state.showBudget) renderROI(calc());
+}
+
+function onBudgetSlider() {
+  state.adBudget = +document.getElementById('budgetSlider').value;
+  document.getElementById('budgetLabel').textContent = fmtU(state.adBudget);
+  renderROI(calc());
+}
+
+function renderROI(c) {
+  if (!state.showBudget) return;
+  const earn = c.earn1m;
+  const budget = state.adBudget;
+  const net = earn - budget;
+  const roi = budget > 0 ? ((net / budget) * 100) : 0;
+  const cpaFtd = budget > 0 ? (budget / Math.max(c.ftd, 1)) : 0; // cost per FTD
+
+  const netClass = net >= 0 ? 'roi-positive' : 'roi-negative';
+  const roiClass = roi >= 0 ? 'roi-positive' : 'roi-negative';
+
+  // Break-even: how many months until cumulative RS earnings cover the budget
+  let beMonth = null;
+  for (let m = 1; m <= 24; m++) {
+    const cumulEarn = [c.earn1m, c.earn3m, c.earn6m, c.earn12m];
+    const interp = m <= 1 ? c.earn1m : m <= 3 ? c.earn3m * (m/3) : m <= 6 ? c.earn6m * (m/6) : c.earn12m * (m/12);
+    if (interp >= budget) { beMonth = m; break; }
+  }
+
+  document.getElementById('roiCards').innerHTML = `
+    <div class="roi-grid">
+      <div class="roi-cell">
+        <div class="rc-label">Рекламный бюджет</div>
+        <div class="rc-val" style="color:var(--yellow)">${fmtU(budget)}</div>
+      </div>
+      <div class="roi-cell">
+        <div class="rc-label">Доход партнёра / мес</div>
+        <div class="rc-val" style="color:var(--green)">${fmtU(earn)}</div>
+      </div>
+      <div class="roi-cell highlight">
+        <div class="rc-label">Чистая прибыль</div>
+        <div class="rc-val ${netClass}">${net >= 0 ? '+' : ''}${fmtU(net)}</div>
+      </div>
+      <div class="roi-cell highlight">
+        <div class="rc-label">ROI</div>
+        <div class="rc-val ${roiClass}">${roi >= 0 ? '+' : ''}${fmt(roi, 0)}%</div>
+      </div>
+    </div>
+    <div class="roi-grid" style="margin-top:8px">
+      <div class="roi-cell">
+        <div class="rc-label">Стоимость 1 FTD</div>
+        <div class="rc-val" style="color:var(--muted);font-size:14px">${fmtU(cpaFtd, 1)}</div>
+      </div>
+      <div class="roi-cell">
+        <div class="rc-label">Окупаемость бюджета</div>
+        <div class="rc-val" style="color:var(--blue);font-size:14px">${beMonth ? beMonth + ' мес' : '> 24 мес'}</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">
+      ${net >= 0
+        ? `✅ Кампания прибыльная. На каждый вложенный $1 вы зарабатываете $${(earn/budget).toFixed(2)}.`
+        : `⚠️ Кампания убыточная при текущих параметрах. Нужно снизить CPC, повысить конверсию или увеличить FTD.`}
+    </div>`;
+}
+
+// ── Rolling 12-month forecast ─────────────────────────────────────────────────
+
+function renderRolling(c) {
+  const geo = GEO_DATA[state.geo];
+  const ftd = c.ftd;
+  const rsRate = c.effectiveRS;
+  const qual = c.qual;
+  const cpaRate = getCpaRate();
+
+  // Each month: add new cohort + existing cohorts generate income
+  // rsM[m] = total RS income in calendar month m (sum of all cohorts' income that month)
+  const months = 12;
+  const rsMonthly = [];
+  const cpaMonthly = [];
+
+  for (let M = 1; M <= months; M++) {
+    // RS: sum of incremental NGR from cohorts 1..M at their respective ages
+    let rsSum = 0;
+    const adjGeo = {ngr1m: geo.ngr1m * qual, ngr3m: geo.ngr3m * qual,
+                    ngr6m: geo.ngr6m * qual, ngr12m: geo.ngr12m * qual};
+    for (let cohort = 1; cohort <= M; cohort++) {
+      const age = M - cohort + 1;
+      rsSum += ftd * incrNgr(adjGeo, age) * (rsRate / 100);
+    }
+    rsMonthly.push(rsSum);
+    // CPA: only new FTDs this month get paid
+    cpaMonthly.push(ftd * cpaRate);
+  }
+
+  // Cumulative
+  const rsCumul = rsMonthly.reduce((acc, v) => { acc.push((acc[acc.length-1]||0) + v); return acc; }, []);
+  const cpaCumul = cpaMonthly.reduce((acc, v) => { acc.push((acc[acc.length-1]||0) + v); return acc; }, []);
+
+  const maxVal = Math.max(...rsMonthly, ...cpaMonthly, 1);
+
+  document.getElementById('rollingDesc').innerHTML =
+    `Вы стабильно приводите <strong style="color:var(--green)">${fmt(ftd)} FTD каждый месяц</strong>. ` +
+    `Игроки предыдущих месяцев возвращаются и продолжают играть — ` +
+    `RS-доход <strong>растёт каждый месяц</strong>, даже если объём трафика не меняется. ` +
+    `CPA — фиксирован: сколько новых FTD, столько и заплатят.`;
+
+  document.getElementById('rollingLegend').innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:12px;height:3px;background:rgba(0,212,170,.7);border-radius:2px"></div>
+      <span style="font-size:11px;color:var(--muted)">RS ${rsRate}% / мес (доход за месяц)</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="width:12px;height:3px;background:rgba(239,68,68,.6);border-radius:2px"></div>
+      <span style="font-size:11px;color:var(--muted)">CPA $${cpaRate} / мес (новые FTD × ставка)</span>
+    </div>`;
+
+  // Grid lines
+  const gridPcts = [0, 25, 50, 75, 100];
+  document.getElementById('rollGrid').innerHTML = gridPcts.map(p => `
+    <div class="roll-gridline" style="bottom:${p}%">
+      <span>${fmtU(maxVal * p / 100)}</span>
+    </div>`).join('');
+
+  // Bars
+  document.getElementById('rollBars').innerHTML = Array.from({length: months}, (_, i) => `
+    <div class="roll-col">
+      <div class="roll-bar" style="height:${rsMonthly[i]/maxVal*100}%;background:rgba(0,212,170,.35);border:1px solid rgba(0,212,170,.6)"
+           title="RS мес ${i+1}: ${fmtU(rsMonthly[i])}"></div>
+      <div class="roll-bar" style="height:${cpaMonthly[i]/maxVal*100}%;background:rgba(239,68,68,.25);border:1px solid rgba(239,68,68,.5)"
+           title="CPA мес ${i+1}: ${fmtU(cpaMonthly[i])}"></div>
+    </div>`).join('');
+
+  document.getElementById('rollX').innerHTML = Array.from({length: months}, (_, i) =>
+    `<span>${i+1}м</span>`).join('');
+
+  // Key stats
+  const rsM12 = rsMonthly[11];
+  const rsGrowth = rsMonthly[11] / Math.max(rsMonthly[0], 1);
+  const crossMonth = rsMonthly.findIndex((v, i) => v > cpaMonthly[i]) + 1;
+
+  document.getElementById('rollingStats').innerHTML = [
+    {label: 'RS в мес. 1',  val: fmtU(rsMonthly[0]),  color: 'var(--green)', sub: 'только новые игроки'},
+    {label: 'RS в мес. 6',  val: fmtU(rsMonthly[5]),  color: 'var(--green)', sub: '6 когорт работают'},
+    {label: 'RS в мес. 12', val: fmtU(rsMonthly[11]), color: 'var(--green)', sub: '12 когорт работают'},
+    {label: 'Рост ×',       val: rsGrowth.toFixed(1)+'×', color: 'var(--purple)', sub: 'мес 1 → мес 12'},
+  ].map(s => `
+    <div class="card-sm" style="text-align:center">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">${s.label}</div>
+      <div style="font-size:16px;font-weight:700;color:${s.color}">${s.val}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">${s.sub}</div>
+    </div>`).join('');
+
+  // Cumul comparison insight
+  const cumulRs12 = rsCumul[11];
+  const cumulCpa12 = cpaCumul[11];
+  document.getElementById('rollingInsight').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div class="card-sm" style="text-align:center;border-color:rgba(0,212,170,.3)">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">RS за 12 мес (суммарно)</div>
+        <div style="font-size:18px;font-weight:700;color:var(--green)">${fmtU(cumulRs12)}</div>
+      </div>
+      <div class="card-sm" style="text-align:center;border-color:rgba(239,68,68,.3)">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">CPA за 12 мес (суммарно)</div>
+        <div style="font-size:18px;font-weight:700;color:var(--red)">${fmtU(cumulCpa12)}</div>
+      </div>
+    </div>
+    <div class="be-box">
+      ${crossMonth > 0
+        ? `📈 С <strong>${crossMonth}-го месяца</strong> ежемесячный RS-доход превышает CPA-выплату. К 12-му месяцу RS приносит <strong>${fmtU(rsM12)}/мес</strong> — в ${(rsM12 / Math.max(ftd * cpaRate, 1)).toFixed(1)}× больше, чем CPA за тот же месяц.`
+        : `RS растёт, но при текущих параметрах CPA остаётся выгоднее помесячно. Попробуйте повысить RS ставку или выбрать ГЕО с высоким LTV.`}
+    </div>`;
+}
+
+// ── Why lil.bet tab ──────────────────────────────────────────────────────────
+
+function renderWhy() {
+  document.getElementById('uspList').innerHTML = [
+    ['0️⃣','0% Admin fee — получаешь полный RS','Pin-Up берёт 20%, Vavada — 14% от NGR до выплаты. У нас admin fee 0%: RS 25% здесь = RS 25% у конкурентов с fee 20% это как 31%.','#1'],
+    ['🚫','Нет переноса отрицательного баланса','Плохой месяц не вычитается из следующего. Большинство конкурентов (Mostbet, 1xPartners, Melbet) переносят минус — у нас он сгорает.','USP'],
+    ['🪙','$30 с еженедельной выплатой по вторникам','Минимальный порог ниже Mostbet ($50), Pin-Up ($50), Parimatch ($100). Крипто-выплата без задержек.','🔥'],
+    ['🔗','Sub-affiliate 7% — выше рынка','Рыночный диапазон: 3–10%. Mostbet даёт 2%, Pin-Up 3%. Наши 7% — топ-2 среди конкурентов (выше только 888Starz).'],
+    ['🍪','Cookie 30 дней Last Win','Vavada — только сессия, Mostbet — сессия. Наш cookie работает 30 дней: партнёр получает кредит, даже если игрок вернулся через неделю.'],
+    ['⚡','Прямой менеджер, живое общение','Никаких тикетов. Условия, промо, выплаты — решается в чате напрямую.'],
+    ['📱','Telegram без ограничений','Каналы, боты, mini-apps, APK, PWA — всё принимаем без ограничений.'],
+    ['🚀','Нет FTD кэпа при тесте','Работаем на любой объём сразу — без пробных 50 FTD.'],
+  ].map(([i,t,d,badge])=>`
+    <div class="usp-item">
+      <div class="usp-icon">${i}</div>
+      <div>
+        <div class="usp-title">${t}${badge?`<span class="usp-badge">${badge}</span>`:''}</div>
+        <div class="usp-desc">${d}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('acceptSources').innerHTML = [
+    '✅ SEO / Контент','✅ Telegram (каналы, боты, mini-apps)','✅ Facebook / Instagram (PWA, APK)',
+    '✅ Google UAC / ASO','✅ TikTok / Reels','✅ Инфлюенсеры / Стримеры',
+    '✅ Push / Native','✅ Email / SMS','✅ Арбитраж любого типа',
+  ].map(s=>`<div style="font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);color:var(--label)">${s}</div>`).join('');
+
+  document.getElementById('restrictList').innerHTML = [
+    '⛔ Брендовый PPC (контекст по ключу lil.bet)',
+    '⛔ Cookie stuffing',
+    '⛔ Спам-рассылки',
+    '⛔ Клоакинг / маскировка трафика',
+    '⛔ Сайты-имитаторы бренда',
+    '⛔ Египет: SEO/ASO/Google по бренду → RS 10%',
+    '⛔ USA, UK, France, Spain, Ukraine — блок',
+  ].map(s=>`<div style="font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);color:var(--label)">${s}</div>`).join('');
+
+  // Competitor comparison table
+  const competitors = [
+    {name:'lil.bet ✦', rs:'25–65%', adminFee:'0%', nnco:'Нет ✓', subaff:'7%', minPay:'$30/нед', cookie:'30 дн ✓', us:true},
+    {name:'Vavada',     rs:'25–50%', adminFee:'14%', nnco:'Есть',   subaff:'5%', minPay:'$50',    cookie:'Сессия'},
+    {name:'1WIN',       rs:'25–60%', adminFee:'0%',  nnco:'Есть',   subaff:'5%', minPay:'$30/нед',cookie:'30 дн'},
+    {name:'Mostbet',    rs:'25–50%', adminFee:'0%',  nnco:'Есть',   subaff:'2%', minPay:'$50',    cookie:'Сессия'},
+    {name:'Pin-Up',     rs:'25–50%', adminFee:'20%', nnco:'Есть',   subaff:'3%', minPay:'$50',    cookie:'30 дн'},
+    {name:'1xPartners', rs:'25–40%', adminFee:'0%',  nnco:'Есть',   subaff:'5%', minPay:'$30/нед',cookie:'30 дн'},
+    {name:'Parimatch',  rs:'25–50%', adminFee:'н/д', nnco:'Есть',   subaff:'3%', minPay:'$100',   cookie:'30 дн'},
+    {name:'888Starz',   rs:'20–45%', adminFee:'н/д', nnco:'Нет ✓',  subaff:'10%',minPay:'$50',    cookie:'30 дн'},
+  ];
+
+  const headers = ['Партнёрка','RS диапазон','Admin fee','Отриц. баланс','Sub-aff','Мин. выплата','Cookie'];
+  const fields  = ['rs','adminFee','nnco','subaff','minPay','cookie'];
+
+  // Which values for each field are "wins" for a given competitor
+  const winVal = {adminFee:['0%'], nnco:['Нет ✓'], minPay:['$30/нед'], cookie:['30 дн','30 дн ✓']};
+  const loseVal = {adminFee:['14%','20%'], nnco:['Есть'], minPay:['$100','$50'], cookie:['Сессия']};
+
+  document.getElementById('competitorTable').innerHTML = `
+    <thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${competitors.map(c=>`
+      <tr class="${c.us?'us':''}">
+        <td>${c.name}</td>
+        ${fields.map(f=>{
+          const v = c[f];
+          let cls = '';
+          if (c.us) cls = 'win';
+          else if (winVal[f] && winVal[f].includes(v)) cls = 'win';
+          else if (loseVal[f] && loseVal[f].includes(v)) cls = 'lose';
+          else cls = 'neutral';
+          return `<td class="${cls}">${v}</td>`;
+        }).join('')}
+      </tr>`).join('')}
+    </tbody>`;
+
+  document.getElementById('competitorNote').textContent =
+    'Данные — публичные условия партнёрских программ на май 2026. Admin fee снимается с NGR до расчёта RS: при fee 20% и RS 25% реальная ставка = 25% × 0.8 = 20% эффективно.';
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// INIT & EVENTS
+// ══════════════════════════════════════════════════════════════════════════════
+
+function buildGeoGrid() {
+  document.getElementById('geoGrid').innerHTML = Object.entries(GEO_DATA).map(([k,v])=>
+    `<button class="geo-btn ${k===state.geo?'active':''}" onclick="setGeo('${k}')">${v.label}</button>`
+  ).join('');
+}
+
+function setGeo(k) {
+  state.geo = k;
+  // If model not allowed for new GEO, switch to RS
+  const geo = GEO_DATA[k];
+  if (state.model === 'cpa' && !geo.cpaAllowed) state.model = 'rs';
+  if (state.model === 'hybrid' && !geo.hybridAllowed) state.model = 'rs';
+  buildGeoGrid();
+  updateModelBtns();
+  renderAll();
+}
+
+function setModel(m) {
+  const geo = GEO_DATA[state.geo];
+  if (m === 'cpa' && !geo.cpaAllowed) return;
+  if (m === 'hybrid' && !geo.hybridAllowed) return;
+  state.model = m;
+  updateModelBtns();
+  renderAll();
+}
+
+function updateModelBtns() {
+  const geo = GEO_DATA[state.geo];
+  const idMap = {rs:'btnRS', cpa:'btnCPA', hybrid:'btnHybrid'};
+  ['rs','cpa','hybrid'].forEach(m => {
+    const btn = document.getElementById(idMap[m]);
+    if (!btn) return;
+    btn.classList.toggle('active', m === state.model);
+    if (m === 'cpa') btn.disabled = !geo.cpaAllowed;
+    if (m === 'hybrid') btn.disabled = !geo.hybridAllowed;
+  });
+}
+
+function onSrcChange() {
+  state.src = document.getElementById('srcSelect').value;
+  state.srcCustom = { c2r: null, r2d: null, qual: null };
+  const panel = document.getElementById('srcEditPanel');
+  if (panel) panel.style.display = 'none';
+  renderAll();
+}
+
+function toggleSrcEdit() {
+  const panel = document.getElementById('srcEditPanel');
+  const isOpen = panel.style.display !== 'none';
+  if (!isOpen) {
+    const m = getSrcMetrics();
+    document.getElementById('srcEditQual').value = m.qual;
+    document.getElementById('srcEditC2R').value  = m.c2r;
+    document.getElementById('srcEditR2D').value  = m.r2d;
+    document.getElementById('srcEditQualLbl').textContent = m.qual.toFixed(2) + 'x';
+    document.getElementById('srcEditC2RLbl').textContent  = fmtP(m.c2r);
+    document.getElementById('srcEditR2DLbl').textContent  = fmtP(m.r2d);
+    // Update funnel mode note
+    const note = document.getElementById('funnelModeNote');
+    if (note) note.style.color = state.inputMode === 'clicks' ? 'var(--green)' : 'var(--muted)';
+  }
+  panel.style.display = isOpen ? 'none' : '';
+}
+
+function onSrcCustom() {
+  const c2r  = +document.getElementById('srcEditC2R').value;
+  const r2d  = +document.getElementById('srcEditR2D').value;
+  const qual = +document.getElementById('srcEditQual').value;
+  state.srcCustom = { c2r, r2d, qual };
+  document.getElementById('srcEditC2RLbl').textContent  = fmtP(c2r);
+  document.getElementById('srcEditR2DLbl').textContent  = fmtP(r2d);
+  document.getElementById('srcEditQualLbl').textContent = qual.toFixed(2) + 'x';
+  renderAll();
+}
+
+function resetSrcCustom() {
+  state.srcCustom = { c2r: null, r2d: null, qual: null };
+  document.getElementById('srcEditPanel').style.display = 'none';
+  renderAll();
+}
+
+function setInputMode(mode) {
+  // When switching to clicks mode, seed clicks from current FTD + metrics
+  if (mode === 'clicks' && state.inputMode === 'ftd') {
+    const src = getSrcMetrics();
+    const regsEst = state.ftd / (src.r2d / 100);
+    const clicksEst = Math.round(regsEst / (src.c2r / 100));
+    state.clicks = Math.min(Math.max(clicksEst, 100), 200000);
+    const sl = document.getElementById('clicksSlider');
+    if (sl) sl.value = state.clicks;
+  }
+  state.inputMode = mode;
+  document.getElementById('inputFtdBlock').style.display    = mode === 'ftd'    ? '' : 'none';
+  document.getElementById('inputClicksBlock').style.display = mode === 'clicks' ? '' : 'none';
+  document.getElementById('modeFtdBtn').classList.toggle('active', mode === 'ftd');
+  document.getElementById('modeClicksBtn').classList.toggle('active', mode === 'clicks');
+  renderAll();
+}
+
+function onClicksSlider() {
+  state.clicks = +document.getElementById('clicksSlider').value;
+  document.getElementById('clicksLabel').textContent = fmt(state.clicks);
+  renderAll();
+}
+
+function onFtdSlider() {
+  state.ftd = +document.getElementById('ftdSlider').value;
+  document.getElementById('ftdLabel').textContent = state.ftd;
+  renderAll();
+}
+
+function onRsSlider() {
+  state.rsRate = +document.getElementById('rsSlider').value;
+  renderAll();
+}
+
+function onSubSlider() {
+  state.subCount = +document.getElementById('subCountSlider').value;
+  state.subFtd   = +document.getElementById('subFtdSlider').value;
+  state.subPct   = +document.getElementById('subPctSlider').value;
+  document.getElementById('subCountLabel').textContent = state.subCount;
+  document.getElementById('subFtdLabel').textContent   = state.subFtd;
+  document.getElementById('subPctLabel').textContent   = state.subPct + '%';
+  renderSubAff(calc());
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+  renderAll();
+  renderWhy();
+}
+
+// Init — script is at bottom of body, DOM is already ready
+(function init() {
+  buildGeoGrid();
+  updateModelBtns();
+  state.src = document.getElementById('srcSelect').value;
+  renderAll();
+  renderWhy();
+})();
+</script>
+</body>
+</html>
