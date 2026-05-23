@@ -243,9 +243,9 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
           <div style="font-size:9px;color:var(--muted)">рег→депозит</div>
         </div>
         <div class="card-sm" style="text-align:center">
-          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">LTV-кач.</div>
+          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Качество</div>
           <div style="font-size:16px;font-weight:700;color:var(--green)" id="statQual">—</div>
-          <div style="font-size:9px;color:var(--muted)">мультипл. NGR</div>
+          <div style="font-size:9px;color:var(--muted)">игроки задержатся?</div>
         </div>
       </div>
       <div style="margin-top:8px;display:flex;justify-content:flex-end">
@@ -254,9 +254,9 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
       <div id="srcEditPanel" style="display:none;margin-top:10px;padding:14px;background:var(--bg3);border:1px solid rgba(0,212,170,.2);border-radius:8px">
 
         <!-- QUALITY — affects revenue -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Качество трафика → влияет на LTV и доход</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Качество трафика → влияет на доход</div>
         <div class="field" style="margin-bottom:14px">
-          <label class="lbl">LTV мультипликатор: <strong style="color:var(--green)" id="srcEditQualLbl">—</strong></label>
+          <label class="lbl">Качество игроков: <strong style="color:var(--green)" id="srcEditQualLbl">—</strong> <span style="color:var(--muted);font-weight:400">(1.0 = норма, выше = дольше играют)</span></label>
           <input type="range" id="srcEditQual" min="0.30" max="1.50" step="0.05" oninput="onSrcCustom()">
           <div class="slider-labels"><span>0.30× слабый</span><span>1.00× норм</span><span>1.50× топ</span></div>
           <div style="font-size:10px;color:var(--muted);margin-top:4px">Низкое качество = игроки быстро уходят, меньше NGR. Высокое = возвращаются, долгий LTV.</div>
