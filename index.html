@@ -690,10 +690,12 @@ let state = {
   subFtd: 80,
   subPct: 7,
   srcCustom: { c2r: null, r2d: null, qual: null },
-  inputMode: 'ftd',   // 'ftd' | 'clicks'
+  inputMode: 'ftd',
   clicks: 5000,
-  adBudget: 500,      // рекламный бюджет в $
-  showBudget: false,  // показывать ли ROI-блок
+  adBudget: 500,
+  showBudget: false,
+  hybridCpa: 15,   // ручная CPA-часть гибрида ($)
+  hybridRs: 20,    // ручная RS-часть гибрида (%)
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -810,9 +812,12 @@ function calc() {
     earn6m  = earn1m;
     earn12m = earn1m;
     formula = `${ftd} FTD × $${rate} — разовая выплата за когорту`;
-  } else if (state.model === 'hybrid' && geo.hybridAllowed && geo.hybridRate) {
-    const h = geo.hybridRate;
-    const cpaP = ftd * h.cpa;  // CPA paid once for this cohort
+  } else if (state.model === 'hybrid') {
+    // Use official rates if geo has them, otherwise use manually set rates
+    const h = (geo.hybridAllowed && geo.hybridRate)
+      ? geo.hybridRate
+      : { cpa: state.hybridCpa, rs: state.hybridRs };
+    const cpaP = ftd * h.cpa;
     earn1m  = cpaP + ftd * aNgr1m  * (h.rs/100);
     earn3m  = cpaP + ftd * aNgr3m  * (h.rs/100);
     earn6m  = cpaP + ftd * aNgr6m  * (h.rs/100);
@@ -943,20 +948,42 @@ function renderCalc(c) {
 
 function renderModelBlock(c) {
   const geo = GEO_DATA[state.geo];
+  const realFtd = c.ftd; // use actual FTD (works in both clicks and FTD mode)
   let html = '';
 
   if (state.model === 'rs') {
-    const tierRate = getTierRate(geo, state.ftd);
-    const note = tierRate > state.rsRate
-      ? `<div style="font-size:11px;color:var(--green);margin-top:4px">Тир по объёму: ${tierRate}% — применяется автоматически</div>`
-      : tierRate < state.rsRate
-      ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">Тир по объёму: ${tierRate}%. Применяется согласованная ставка ${state.rsRate}%</div>`
-      : `<div style="font-size:11px;color:var(--muted);margin-top:4px">Тир совпадает со ставкой: ${state.rsRate}%</div>`;
+    const tierRate = getTierRate(geo, realFtd);
+    const applied  = Math.max(tierRate, state.rsRate);
+    const hasLadder = geo.rsTable.length > 1;
+
+    let tierNote = '';
+    if (hasLadder) {
+      if (tierRate > state.rsRate) {
+        tierNote = `<div style="font-size:11px;color:var(--green);margin-top:6px">
+          📈 Тир по объёму: <strong>${tierRate}%</strong> — применяется автоматически (выше согласованного)
+        </div>`;
+      } else if (tierRate < state.rsRate) {
+        tierNote = `<div style="font-size:11px;color:var(--muted);margin-top:6px">
+          Тир по объёму: ${tierRate}%. Применяется согласованная ставка <strong style="color:var(--green)">${state.rsRate}%</strong>
+        </div>`;
+      } else {
+        tierNote = `<div style="font-size:11px;color:var(--muted);margin-top:6px">Тир совпадает со ставкой: ${applied}%</div>`;
+      }
+      // Ladder explanation
+      tierNote += `<div style="font-size:10px;color:var(--muted);margin-top:6px;padding:8px;background:var(--bg3);border-radius:6px;line-height:1.6">
+        <strong>Как работает лесенка:</strong> ставка определяется по количеству FTD <em>в текущем месяце</em>
+        и применяется <em>ко всем FTD</em> этого месяца целиком — не к части.<br>
+        Приведи ${realFtd} FTD → ставка <strong>${applied}%</strong>.
+        В следующем месяце считается заново.
+      </div>`;
+    }
+
     html = `
       <label class="lbl">RevShare % (согласованный): <strong style="color:var(--green)">${state.rsRate}%</strong></label>
       <input type="range" id="rsSlider" min="15" max="65" value="${state.rsRate}" oninput="onRsSlider()">
       <div class="slider-labels"><span>15% старт</span><span style="color:var(--green)">25–40% основная</span><span>65% топы</span></div>
-      ${note}`;
+      ${tierNote}`;
+
   } else if (state.model === 'cpa') {
     if (!geo.cpaAllowed) {
       html = `<div class="alert alert-red">⛔ CPA недоступна для этого ГЕО</div>`;
@@ -973,12 +1000,49 @@ function renderModelBlock(c) {
         <label class="lbl">Ставка CPA, $</label>
         <input type="number" value="${state.cpaCustom}" min="0" oninput="state.cpaCustom=+this.value;renderAll()">`;
     }
+
   } else if (state.model === 'hybrid') {
-    if (!geo.hybridAllowed || !geo.hybridRate) {
-      html = `<div class="alert alert-red">⛔ Hybrid недоступен для этого ГЕО</div>`;
-    } else {
+    if (geo.hybridAllowed && geo.hybridRate) {
+      // Official hybrid rates for this GEO
       const h = geo.hybridRate;
-      html = `<div class="alert alert-info">Модель: $${h.cpa} за каждый квалифицирующий FTD + ${h.rs}% RS от NGR (BL2)</div>`;
+      html = `
+        <div class="alert alert-info" style="margin-bottom:10px">
+          Официальная гибридная модель: <strong>$${h.cpa}/FTD</strong> разово + <strong>${h.rs}% RS</strong> от NGR
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
+          <div class="card-sm" style="text-align:center">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:3px">CPA часть</div>
+            <div style="font-size:18px;font-weight:700;color:var(--red)">$${h.cpa}</div>
+            <div style="font-size:9px;color:var(--muted)">за каждый FTD (разово)</div>
+          </div>
+          <div class="card-sm" style="text-align:center">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:3px">RS часть</div>
+            <div style="font-size:18px;font-weight:700;color:var(--green)">${h.rs}%</div>
+            <div style="font-size:9px;color:var(--muted)">от NGR игрока ежемесячно</div>
+          </div>
+        </div>`;
+    } else {
+      // Manual hybrid for any GEO
+      html = `
+        <div class="alert alert-info" style="margin-bottom:10px">
+          Ручной гибрид: CPA-выплата разово за FTD + RS от NGR каждый месяц
+        </div>
+        <div class="field">
+          <label class="lbl">CPA за каждый FTD: <strong style="color:var(--red)">$${state.hybridCpa}</strong></label>
+          <input type="range" id="hybridCpaSlider" min="5" max="100" step="1" value="${state.hybridCpa}"
+            oninput="state.hybridCpa=+this.value;document.getElementById('hybridCpaLbl').textContent='$'+this.value;renderAll()">
+          <div class="slider-labels"><span>$5</span><span>$50</span><span>$100</span></div>
+        </div>
+        <div class="field">
+          <label class="lbl">RS от NGR: <strong style="color:var(--green)" id="hybridRsLbl">${state.hybridRs}%</strong></label>
+          <input type="range" id="hybridRsSlider" min="5" max="40" step="1" value="${state.hybridRs}"
+            oninput="state.hybridRs=+this.value;document.getElementById('hybridRsLbl').textContent=this.value+'%';renderAll()">
+          <div class="slider-labels"><span>5%</span><span>20%</span><span>40%</span></div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5">
+          CPA выплачивается <strong>один раз</strong> при привлечении FTD.
+          RS начисляется <strong>ежемесячно</strong> пока игрок активен.
+        </div>`;
     }
   }
 
@@ -987,8 +1051,8 @@ function renderModelBlock(c) {
 
 function renderTierBlock(c) {
   const geo = GEO_DATA[state.geo];
-  const ftd = state.ftd;
-  const show = state.model !== 'cpa';
+  const ftd  = c.ftd;  // ← use real FTD (fixes clicks-mode bug)
+  const show = state.model === 'rs' || state.model === 'hybrid';
 
   document.getElementById('tierCard').style.display = show ? '' : 'none';
   document.getElementById('cpaCard').style.display = state.model === 'cpa' ? '' : 'none';
@@ -997,26 +1061,35 @@ function renderTierBlock(c) {
     document.getElementById('tierGeoLabel').textContent = geo.label;
     const currentTier = geo.rsTable.find(t => ftd >= t.min && ftd <= t.max) || geo.rsTable[geo.rsTable.length-1];
     const nextTier = geo.rsTable[geo.rsTable.indexOf(currentTier)+1];
-    document.getElementById('tierBody').innerHTML = geo.rsTable.map(t => {
-      const isCur = t === currentTier;
-      return `<tr class="${isCur?'cur':''}">
-        <td>${t.label || t.min+' – '+(t.max===Infinity?'∞':t.max)}</td>
-        <td>${t.rate}%</td>
-        <td>${isCur?'← текущий':''}</td>
-      </tr>`;
-    }).join('');
 
-    document.getElementById('tierNote').textContent = nextTier
-      ? `До уровня ${nextTier.rate}% — ещё ${nextTier.min - ftd} FTD`
-      : 'Максимальный тир достигнут';
+    // Hide tier card when GEO has only one flat tier
+    const hasTiers = geo.rsTable.length > 1;
+    document.getElementById('tierCard').style.display = (show && hasTiers) ? '' : 'none';
+
+    if (hasTiers) {
+      document.getElementById('tierBody').innerHTML = geo.rsTable.map(t => {
+        const isCur = t === currentTier;
+        return `<tr class="${isCur?'cur':''}">
+          <td>${t.min} – ${t.max===Infinity?'∞':t.max} FTD</td>
+          <td>${t.rate}%</td>
+          <td style="font-size:11px">${isCur ? `← текущий (${ftd} FTD этот месяц)` : ''}</td>
+        </tr>`;
+      }).join('');
+
+      const toNext = nextTier ? nextTier.min - ftd : 0;
+      document.getElementById('tierNote').innerHTML = nextTier
+        ? `Ещё <strong>${toNext} FTD</strong> в этом месяце — и ставка вырастет до <strong style="color:var(--green)">${nextTier.rate}%</strong> на весь месяц`
+        : `<span style="color:var(--green)">✓ Максимальный тир достигнут</span>`;
+    }
   }
 
   if (state.model === 'cpa') {
     const geo2 = GEO_DATA[state.geo];
     document.getElementById('cpaCard').innerHTML = `<div class="sec">CPA условия</div>` +
-      (geo2.cpaRates ? geo2.cpaRates.map(r=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:var(--muted)">${r.label}</span><strong style="color:var(--red)">$${r.rate}</strong></div>`).join('')+
-      `<div style="font-size:11px;color:var(--muted);margin-top:8px">Hold: 14 дней</div>`
-      : `<div style="font-size:12px;color:var(--muted)">Ставка уточняется у менеджера. Hold: 14 дней.</div>`);
+      (geo2.cpaRates
+        ? geo2.cpaRates.map(r=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:var(--muted)">${r.label}</span><strong style="color:var(--red)">$${r.rate}</strong></div>`).join('')+
+          `<div style="font-size:11px;color:var(--muted);margin-top:8px">Hold: 14 дней</div>`
+        : `<div style="font-size:12px;color:var(--muted)">Ставка уточняется у менеджера. Hold: 14 дней.</div>`);
   }
 }
 
@@ -1035,7 +1108,7 @@ function renderGeoAlerts() {
 
 function renderCompare(c) {
   const geo = GEO_DATA[state.geo];
-  const ftd = state.ftd;
+  const ftd = c.ftd;  // use real FTD (fixes clicks-mode bug)
   const rsRate = c.effectiveRS;
   const cpaRate = getCpaRate();
   const qual = c.qual;
@@ -1475,10 +1548,9 @@ function buildGeoGrid() {
 
 function setGeo(k) {
   state.geo = k;
-  // If model not allowed for new GEO, switch to RS
   const geo = GEO_DATA[k];
+  // Only switch away from CPA if not allowed; hybrid stays (uses manual rates)
   if (state.model === 'cpa' && !geo.cpaAllowed) state.model = 'rs';
-  if (state.model === 'hybrid' && !geo.hybridAllowed) state.model = 'rs';
   buildGeoGrid();
   updateModelBtns();
   renderAll();
@@ -1487,7 +1559,7 @@ function setGeo(k) {
 function setModel(m) {
   const geo = GEO_DATA[state.geo];
   if (m === 'cpa' && !geo.cpaAllowed) return;
-  if (m === 'hybrid' && !geo.hybridAllowed) return;
+  // Hybrid always allowed — uses official or manual rates
   state.model = m;
   updateModelBtns();
   renderAll();
@@ -1501,7 +1573,8 @@ function updateModelBtns() {
     if (!btn) return;
     btn.classList.toggle('active', m === state.model);
     if (m === 'cpa') btn.disabled = !geo.cpaAllowed;
-    if (m === 'hybrid') btn.disabled = !geo.hybridAllowed;
+    // Hybrid always available — official rates when geo supports it, manual otherwise
+    if (m === 'hybrid') btn.disabled = false;
   });
 }
 
