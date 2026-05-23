@@ -339,10 +339,36 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
           <span style="font-size:11px;color:var(--green)" id="budgetToggleIcon">+ развернуть</span>
         </div>
         <div id="budgetBlock" style="display:none;margin-top:10px">
-          <div class="field">
-            <label class="lbl">Рекламный бюджет в месяц: <strong style="color:var(--yellow)" id="budgetLabel">$500</strong></label>
-            <input type="range" id="budgetSlider" min="100" max="50000" step="100" value="500" oninput="onBudgetSlider()">
-            <div class="slider-labels"><span>$100</span><span>$5 000</span><span>$50 000</span></div>
+          <!-- FTD mode: manual budget slider -->
+          <div id="roiBudgetManual">
+            <div class="field">
+              <label class="lbl">Рекламный бюджет в месяц: <strong style="color:var(--yellow)" id="budgetLabel">$500</strong></label>
+              <input type="range" id="budgetSlider" min="100" max="50000" step="100" value="500" oninput="onBudgetSlider()">
+              <div class="slider-labels"><span>$100</span><span>$5 000</span><span>$50 000</span></div>
+            </div>
+            <div class="field">
+              <label class="lbl">CPC (цена клика): <strong style="color:var(--yellow)" id="cpcLabel">$0.18</strong>
+                <span style="color:var(--muted);font-weight:400"> — из источника</span></label>
+              <input type="range" id="cpcSlider" min="0.01" max="2" step="0.01" value="0.18" oninput="onCpcSlider()">
+              <div class="slider-labels"><span>$0.01</span><span>$0.50</span><span>$2.00</span></div>
+            </div>
+          </div>
+          <!-- Clicks mode: budget auto = clicks × CPC, only CPC is editable -->
+          <div id="roiBudgetAuto" style="display:none">
+            <div class="field">
+              <label class="lbl">CPC (цена клика): <strong style="color:var(--yellow)" id="cpcLabelAuto">$0.18</strong>
+                <span style="color:var(--muted);font-weight:400"> — настрой под свой источник</span></label>
+              <input type="range" id="cpcSliderAuto" min="0.01" max="2" step="0.01" value="0.18" oninput="onCpcSliderAuto()">
+              <div class="slider-labels"><span>$0.01</span><span>$0.50</span><span>$2.00</span></div>
+            </div>
+            <div class="card-sm" style="font-size:12px;margin-bottom:8px">
+              <span style="color:var(--muted)">Бюджет = </span>
+              <strong id="autoBudgetClicks">—</strong>
+              <span style="color:var(--muted)"> кликов × </span>
+              <strong id="autoBudgetCpc">—</strong>
+              <span style="color:var(--muted)"> CPC = </span>
+              <strong style="color:var(--yellow)" id="autoBudgetTotal">—</strong>
+            </div>
           </div>
           <div id="roiCards"></div>
         </div>
@@ -692,10 +718,11 @@ let state = {
   srcCustom: { c2r: null, r2d: null, qual: null },
   inputMode: 'ftd',
   clicks: 5000,
-  adBudget: 500,
+  adBudget: 500,   // только для FTD-режима
+  cpc: null,       // null = берём из SRC_DATA, иначе ручной
   showBudget: false,
-  hybridCpa: 15,   // ручная CPA-часть гибрида ($)
-  hybridRs: 20,    // ручная RS-часть гибрида (%)
+  hybridCpa: 15,
+  hybridRs: 20,
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1283,11 +1310,37 @@ function renderSubAff(c) {
 
 // ── ROI block ────────────────────────────────────────────────────────────────
 
+function getEffectiveCpc() {
+  // If user manually set CPC use it, otherwise use source default
+  if (state.cpc !== null) return state.cpc;
+  return SRC_DATA[state.src].cpc || 0.10;
+}
+
+function getEffectiveBudget(c) {
+  if (state.inputMode === 'clicks') {
+    // Budget is derived: clicks × CPC — no manual slider
+    return c.clicks * getEffectiveCpc();
+  }
+  return state.adBudget;
+}
+
+function syncCpcSliders() {
+  const cpc = getEffectiveCpc();
+  const sl  = document.getElementById('cpcSlider');
+  const sl2 = document.getElementById('cpcSliderAuto');
+  const lbl  = document.getElementById('cpcLabel');
+  const lbl2 = document.getElementById('cpcLabelAuto');
+  if (sl)  sl.value  = cpc;
+  if (sl2) sl2.value = cpc;
+  if (lbl)  lbl.textContent  = fmtU(cpc, 2);
+  if (lbl2) lbl2.textContent = fmtU(cpc, 2);
+}
+
 function toggleBudget() {
   state.showBudget = !state.showBudget;
   document.getElementById('budgetBlock').style.display = state.showBudget ? '' : 'none';
   document.getElementById('budgetToggleIcon').textContent = state.showBudget ? '− свернуть' : '+ развернуть';
-  if (state.showBudget) renderROI(calc());
+  if (state.showBudget) { syncCpcSliders(); renderROI(calc()); }
 }
 
 function onBudgetSlider() {
@@ -1296,24 +1349,55 @@ function onBudgetSlider() {
   renderROI(calc());
 }
 
+function onCpcSlider() {
+  state.cpc = +document.getElementById('cpcSlider').value;
+  document.getElementById('cpcLabel').textContent = fmtU(state.cpc, 2);
+  renderROI(calc());
+}
+
+function onCpcSliderAuto() {
+  state.cpc = +document.getElementById('cpcSliderAuto').value;
+  document.getElementById('cpcLabelAuto').textContent = fmtU(state.cpc, 2);
+  renderROI(calc());
+}
+
 function renderROI(c) {
   if (!state.showBudget) return;
-  const earn = c.earn1m;
-  const budget = state.adBudget;
-  const net = earn - budget;
-  const roi = budget > 0 ? ((net / budget) * 100) : 0;
-  const cpaFtd = budget > 0 ? (budget / Math.max(c.ftd, 1)) : 0; // cost per FTD
+
+  const isClicksMode = state.inputMode === 'clicks';
+
+  // Show correct input panel
+  const manualEl = document.getElementById('roiBudgetManual');
+  const autoEl   = document.getElementById('roiBudgetAuto');
+  if (manualEl) manualEl.style.display = isClicksMode ? 'none' : '';
+  if (autoEl)   autoEl.style.display   = isClicksMode ? '' : 'none';
+
+  const cpc    = getEffectiveCpc();
+  const budget = getEffectiveBudget(c);
+  const earn   = c.earn1m;
+  const net    = earn - budget;
+  const roi    = budget > 0 ? ((net / budget) * 100) : 0;
+  const costPerFtd = budget > 0 ? (budget / Math.max(c.ftd, 1)) : 0;
+
+  // Update auto-budget display in clicks mode
+  if (isClicksMode) {
+    const el1 = document.getElementById('autoBudgetClicks');
+    const el2 = document.getElementById('autoBudgetCpc');
+    const el3 = document.getElementById('autoBudgetTotal');
+    if (el1) el1.textContent = fmt(c.clicks);
+    if (el2) el2.textContent = fmtU(cpc, 2);
+    if (el3) el3.textContent = fmtU(budget);
+  }
+
+  // Break-even months
+  let beMonth = null;
+  for (let m = 1; m <= 24; m++) {
+    const interp = m <= 1 ? c.earn1m : m <= 3 ? c.earn3m*(m/3) : m <= 6 ? c.earn6m*(m/6) : c.earn12m*(m/12);
+    if (interp >= budget) { beMonth = m; break; }
+  }
 
   const netClass = net >= 0 ? 'roi-positive' : 'roi-negative';
   const roiClass = roi >= 0 ? 'roi-positive' : 'roi-negative';
-
-  // Break-even: how many months until cumulative RS earnings cover the budget
-  let beMonth = null;
-  for (let m = 1; m <= 24; m++) {
-    const cumulEarn = [c.earn1m, c.earn3m, c.earn6m, c.earn12m];
-    const interp = m <= 1 ? c.earn1m : m <= 3 ? c.earn3m * (m/3) : m <= 6 ? c.earn6m * (m/6) : c.earn12m * (m/12);
-    if (interp >= budget) { beMonth = m; break; }
-  }
 
   document.getElementById('roiCards').innerHTML = `
     <div class="roi-grid">
@@ -1337,7 +1421,7 @@ function renderROI(c) {
     <div class="roi-grid" style="margin-top:8px">
       <div class="roi-cell">
         <div class="rc-label">Стоимость 1 FTD</div>
-        <div class="rc-val" style="color:var(--muted);font-size:14px">${fmtU(cpaFtd, 1)}</div>
+        <div class="rc-val" style="color:var(--muted);font-size:14px">${fmtU(costPerFtd, 1)}</div>
       </div>
       <div class="roi-cell">
         <div class="rc-label">Окупаемость бюджета</div>
@@ -1346,8 +1430,8 @@ function renderROI(c) {
     </div>
     <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">
       ${net >= 0
-        ? `✅ Кампания прибыльная. На каждый вложенный $1 вы зарабатываете $${(earn/budget).toFixed(2)}.`
-        : `⚠️ Кампания убыточная при текущих параметрах. Нужно снизить CPC, повысить конверсию или увеличить FTD.`}
+        ? `✅ Кампания прибыльная. На каждый $1 расходов — $${(earn/budget).toFixed(2)} дохода.`
+        : `⚠️ Убыток при текущих параметрах. Попробуй снизить CPC, повысить конверсию или объём.`}
     </div>`;
 }
 
@@ -1581,8 +1665,10 @@ function updateModelBtns() {
 function onSrcChange() {
   state.src = document.getElementById('srcSelect').value;
   state.srcCustom = { c2r: null, r2d: null, qual: null };
+  state.cpc = null; // reset to source default CPC
   const panel = document.getElementById('srcEditPanel');
   if (panel) panel.style.display = 'none';
+  syncCpcSliders();
   renderAll();
 }
 
@@ -1636,6 +1722,7 @@ function setInputMode(mode) {
   document.getElementById('inputClicksBlock').style.display = mode === 'clicks' ? '' : 'none';
   document.getElementById('modeFtdBtn').classList.toggle('active', mode === 'ftd');
   document.getElementById('modeClicksBtn').classList.toggle('active', mode === 'clicks');
+  syncCpcSliders();
   renderAll();
 }
 
