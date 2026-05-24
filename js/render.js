@@ -20,7 +20,7 @@ function renderCalc(c) {
   document.getElementById('statC2R').textContent = fmtP(src.c2r);
   document.getElementById('statR2D').textContent = fmtP(src.r2d);
   document.getElementById('statQual').textContent = src.qual.toFixed(2) + 'x';
-  document.getElementById('srcNote').textContent = src.note + (src.isCustom ? ' · ' + t('metricsChanged') : '');
+  document.getElementById('srcNote').textContent = srcNote(state.src) + (src.isCustom ? ' · ' + t('metricsChanged') : '');
   var editBtn = document.getElementById('srcEditBtn');
   if (editBtn) editBtn.style.borderColor = src.isCustom ? 'var(--green)' : 'var(--border)';
   if (editBtn) editBtn.style.color = src.isCustom ? 'var(--green)' : 'var(--muted)';
@@ -36,7 +36,7 @@ function renderCalc(c) {
 
   // Hero
   document.getElementById('heroNgr').textContent = fmtU(monthNgr);
-  document.getElementById('heroSub').textContent = geo.label + ' · ' + src.label + ' · ' + t('promoLabel') + ' ' + state.promoLoad + '%';
+  document.getElementById('heroSub').textContent = geoLabel(state.geo) + ' · ' + srcLabel(state.src) + ' · ' + t('promoLabel') + ' ' + state.promoLoad + '%';
   document.getElementById('heroEarn').textContent = fmtU(earn1m);
   document.getElementById('heroFormula').textContent = formula;
 
@@ -44,9 +44,10 @@ function renderCalc(c) {
   var snEl = document.getElementById('seasonNote');
   if (snEl) { snEl.textContent = t('seasonNote'); }
 
-  // Weekly payout
+  // Weekly payout (element may not exist in all layouts)
   var weekly = earn1m / 4.3;
-  document.getElementById('weeklyPay').textContent = weekly >= 30 ? fmtU(weekly) + ' ' + t('perWeek') : t('belowThreshold');
+  var wpEl = document.getElementById('weeklyPay');
+  if (wpEl) wpEl.textContent = weekly >= 30 ? fmtU(weekly) + ' ' + t('perWeek') : t('belowThreshold');
 
   // Clicks mode
   if (state.inputMode === 'clicks') {
@@ -91,7 +92,7 @@ function renderCalc(c) {
   }).join('');
 
   // Player metrics
-  document.getElementById('geoNameLabel').textContent = geo.label;
+  document.getElementById('geoNameLabel').textContent = geoLabel(state.geo);
   document.getElementById('playerMetrics').innerHTML =
     '<div class="card-sm" style="text-align:center">' +
       '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Avg FTD</div>' +
@@ -166,7 +167,7 @@ function renderModelBlock(c) {
           '</label>';
       }).join('');
     } else {
-      html = '<div class="alert alert-warn">' + t('cpaAskManager') + ' ' + geo.label + ' ' + t('cpaAskManager2') + '</div>' +
+      html = '<div class="alert alert-warn">' + t('cpaAskManager') + ' ' + geoLabel(state.geo) + ' ' + t('cpaAskManager2') + '</div>' +
         '<label class="lbl">' + t('cpaCustomLabel') + '</label>' +
         '<input type="number" value="' + state.cpaCustom + '" min="0" oninput="state.cpaCustom=+this.value;renderAll()">';
     }
@@ -224,7 +225,7 @@ function renderTierBlock(c) {
   document.getElementById('cpaCard').style.display = state.model === 'cpa' ? '' : 'none';
 
   if (show) {
-    document.getElementById('tierGeoLabel').textContent = geo.label;
+    document.getElementById('tierGeoLabel').textContent = geoLabel(state.geo);
     var currentTier = null;
     for (var i=0;i<geo.rsTable.length;i++) {
       if (ftd >= geo.rsTable[i].min && ftd <= geo.rsTable[i].max) { currentTier = geo.rsTable[i]; break; }
@@ -270,7 +271,7 @@ function renderGeoAlerts() {
   var html = '';
   if (geo.warn) html += '<div class="alert alert-warn">' + geo.warn + '</div>';
   if (geo.brandTrafficSources && geo.brandTrafficSources.indexOf(state.src) !== -1) {
-    html += '<div class="alert alert-red">' + t('egyptWarn') + ' (' + src.label + ') ' + t('egyptWarn2') + '</div>';
+    html += '<div class="alert alert-red">' + t('egyptWarn') + ' (' + srcLabel(state.src) + ') ' + t('egyptWarn2') + '</div>';
   }
   document.getElementById('geoAlerts').innerHTML = html;
 }
@@ -344,7 +345,7 @@ function renderCompare(c) {
     '</div>';
   }).join('');
 
-  document.getElementById('chartX').innerHTML = months.map(function(m) { return '<span>' + m + 'м</span>'; }).join('');
+  document.getElementById('chartX').innerHTML = months.map(function(m) { return '<span>' + m + t('moSuffix') + '</span>'; }).join('');
 
   // Breakeven box
   document.getElementById('beBox').innerHTML = beMonth
@@ -411,7 +412,7 @@ function renderSubAff(c) {
   var myMonth = totalNgr * (subPct/100);
   var myYear = myMonth * 12;
 
-  document.getElementById('subGeoLabel').textContent = geo.label;
+  document.getElementById('subGeoLabel').textContent = geoLabel(state.geo);
   document.getElementById('subNgrLabel').textContent = fmtU(ngrPerPlayer, 0);
 
   document.getElementById('subHero').innerHTML = [
@@ -603,14 +604,14 @@ function renderRolling(c) {
   document.getElementById('rollBars').innerHTML = Array.from({length: months}, function(_, i) {
     return '<div class="roll-col">' +
       '<div class="roll-bar" style="height:' + (rsMonthly[i]/maxVal*100) + '%;background:rgba(0,212,170,.35);border:1px solid rgba(0,212,170,.6)"' +
-           ' title="RS мес ' + (i+1) + ': ' + fmtU(rsMonthly[i]) + '"></div>' +
+           ' title="RS ' + t('moSuffix') + ' ' + (i+1) + ': ' + fmtU(rsMonthly[i]) + '"></div>' +
       '<div class="roll-bar" style="height:' + (cpaMonthly[i]/maxVal*100) + '%;background:rgba(239,68,68,.25);border:1px solid rgba(239,68,68,.5)"' +
-           ' title="CPA мес ' + (i+1) + ': ' + fmtU(cpaMonthly[i]) + '"></div>' +
+           ' title="CPA ' + t('moSuffix') + ' ' + (i+1) + ': ' + fmtU(cpaMonthly[i]) + '"></div>' +
     '</div>';
   }).join('');
 
   document.getElementById('rollX').innerHTML = Array.from({length: months}, function(_, i) {
-    return '<span>' + (i+1) + 'м</span>';
+    return '<span>' + (i+1) + t('moSuffix') + '</span>';
   }).join('');
 
   var rsM12 = rsMonthly[11];
@@ -678,21 +679,22 @@ function renderWhy() {
     return '<div style="font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);color:var(--label)">' + s + '</div>';
   }).join('');
 
+  var cYes = t('compNncoYes'), cNo = t('compNncoNo'), cWk = t('compWk'), cDay = t('compDay'), cSess = t('compSession'), cNa = t('compNa');
   var competitors = [
-    {name:'lil.bet ✦', rs:'25–65%', adminFee:'0%', nnco:'Нет ✓', subaff:'7%', minPay:'$30/нед', cookie:'30 дн ✓', us:true},
-    {name:'Vavada',     rs:'25–50%', adminFee:'14%', nnco:'Есть',   subaff:'5%', minPay:'$50',    cookie:'Сессия'},
-    {name:'1WIN',       rs:'25–60%', adminFee:'0%',  nnco:'Есть',   subaff:'5%', minPay:'$30/нед',cookie:'30 дн'},
-    {name:'Mostbet',    rs:'25–50%', adminFee:'0%',  nnco:'Есть',   subaff:'2%', minPay:'$50',    cookie:'Сессия'},
-    {name:'Pin-Up',     rs:'25–50%', adminFee:'20%', nnco:'Есть',   subaff:'3%', minPay:'$50',    cookie:'30 дн'},
-    {name:'1xPartners', rs:'25–40%', adminFee:'0%',  nnco:'Есть',   subaff:'5%', minPay:'$30/нед',cookie:'30 дн'},
-    {name:'Parimatch',  rs:'25–50%', adminFee:'н/д', nnco:'Есть',   subaff:'3%', minPay:'$100',   cookie:'30 дн'},
-    {name:'888Starz',   rs:'20–45%', adminFee:'н/д', nnco:'Нет ✓',  subaff:'10%',minPay:'$50',    cookie:'30 дн'},
+    {name:'lil.bet ✦', rs:'25–65%', adminFee:'0%', nnco:cNo,  subaff:'7%', minPay:'$30/'+cWk, cookie:'30 '+cDay+' ✓', us:true},
+    {name:'Vavada',     rs:'25–50%', adminFee:'14%', nnco:cYes, subaff:'5%', minPay:'$50',       cookie:cSess},
+    {name:'1WIN',       rs:'25–60%', adminFee:'0%',  nnco:cYes, subaff:'5%', minPay:'$30/'+cWk, cookie:'30 '+cDay},
+    {name:'Mostbet',    rs:'25–50%', adminFee:'0%',  nnco:cYes, subaff:'2%', minPay:'$50',       cookie:cSess},
+    {name:'Pin-Up',     rs:'25–50%', adminFee:'20%', nnco:cYes, subaff:'3%', minPay:'$50',       cookie:'30 '+cDay},
+    {name:'1xPartners', rs:'25–40%', adminFee:'0%',  nnco:cYes, subaff:'5%', minPay:'$30/'+cWk, cookie:'30 '+cDay},
+    {name:'Parimatch',  rs:'25–50%', adminFee:cNa,   nnco:cYes, subaff:'3%', minPay:'$100',      cookie:'30 '+cDay},
+    {name:'888Starz',   rs:'20–45%', adminFee:cNa,   nnco:cNo,  subaff:'10%',minPay:'$50',       cookie:'30 '+cDay},
   ];
 
   var headers = t('competitorHeaders') || ['Program','RS','Admin fee','Neg.balance','Sub-aff','Min payout','Cookie'];
   var fields  = ['rs','adminFee','nnco','subaff','minPay','cookie'];
-  var winVal = {adminFee:['0%'], nnco:['Нет ✓'], minPay:['$30/нед'], cookie:['30 дн','30 дн ✓']};
-  var loseVal = {adminFee:['14%','20%'], nnco:['Есть'], minPay:['$100','$50'], cookie:['Сессия']};
+  var winVal = {adminFee:['0%'], nnco:[cNo], minPay:['$30/'+cWk], cookie:['30 '+cDay,'30 '+cDay+' ✓']};
+  var loseVal = {adminFee:['14%','20%'], nnco:[cYes], minPay:['$100','$50'], cookie:[cSess]};
 
   document.getElementById('competitorTable').innerHTML =
     '<thead><tr>' + headers.map(function(h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead>' +
@@ -733,7 +735,7 @@ function renderScenarios() {
 
     document.getElementById('sc' + ab + 'Results').innerHTML =
       '<div class="sc-result-hero" style="background:' + bg + ';border:1px solid ' + bdr + '">' +
-        '<div style="font-size:10px;color:var(--muted);margin-bottom:4px">' + rr.geo.label + ' · ' + rr.src.label + '</div>' +
+        '<div style="font-size:10px;color:var(--muted);margin-bottom:4px">' + geoLabel(scState[ab].geo) + ' · ' + srcLabel(scState[ab].src) + '</div>' +
         '<div style="font-size:26px;font-weight:800;color:' + color + '">' + fmtU(rr.earn1m) + '</div>' +
         '<div style="font-size:10px;color:var(--muted);margin-top:2px">' + rr.modelLabel + ' · ' + t('scMoSuffix') + '</div>' +
       '</div>' +
@@ -751,10 +753,10 @@ function renderScenarios() {
   var rB = calcScenario(scState['B']);
 
   var rows = [
-    [L.earn1m  || '1 мес',  rA.earn1m,  rB.earn1m],
-    [L.earn3m  || '3 мес',  rA.earn3m,  rB.earn3m],
-    [L.earn6m  || '6 мес',  rA.earn6m,  rB.earn6m],
-    [L.earn12m || '12 мес', rA.earn12m, rB.earn12m],
+    [L.earn1m  || ('1 ' + t('moSuffix')),  rA.earn1m,  rB.earn1m],
+    [L.earn3m  || ('3 ' + t('moSuffix')),  rA.earn3m,  rB.earn3m],
+    [L.earn6m  || ('6 ' + t('moSuffix')),  rA.earn6m,  rB.earn6m],
+    [L.earn12m || ('12 ' + t('moSuffix')), rA.earn12m, rB.earn12m],
   ];
 
   document.getElementById('scDiffTable').innerHTML =
@@ -783,6 +785,6 @@ function renderScenarios() {
   var winner = diff12 > 100 ? 'A' : diff12 < -100 ? 'B' : null;
   var winRes = winner === 'A' ? rA : rB;
   document.getElementById('scDiffInsight').innerHTML = winner
-    ? '<div class="be-box">💡 ' + t('scInsightWin') + ' <strong>' + winner + '</strong> ' + t('scInsightWinMid') + ' <strong>' + fmtU(Math.abs(diff12)) + '</strong> — ' + winRes.geo.label + ' + ' + winRes.modelLabel + ' ' + t('scInsightWinEnd') + '</div>'
+    ? '<div class="be-box">💡 ' + t('scInsightWin') + ' <strong>' + winner + '</strong> ' + t('scInsightWinMid') + ' <strong>' + fmtU(Math.abs(diff12)) + '</strong> — ' + geoLabel(scState[winner].geo) + ' + ' + winRes.modelLabel + ' ' + t('scInsightWinEnd') + '</div>'
     : '<div class="be-box">' + t('scInsightEqual') + '</div>';
 }

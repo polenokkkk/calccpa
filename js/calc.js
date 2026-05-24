@@ -132,14 +132,14 @@ function calc() {
     earn3m  = ftd * aNgr3m  * (effectiveRS/100);
     earn6m  = ftd * aNgr6m  * (effectiveRS/100);
     earn12m = ftd * aNgr12m * (effectiveRS/100);
-    formula = ftd + ' FTD × NGR/игрок × ' + effectiveRS + '% RS';
+    formula = ftd + ' FTD × NGR/' + t('playerShort') + ' × ' + effectiveRS + '% RS';
   } else if (state.model === 'cpa') {
     var rate = getCpaRate();
     earn1m  = ftd * rate;
     earn3m  = earn1m;
     earn6m  = earn1m;
     earn12m = earn1m;
-    formula = ftd + ' FTD × $' + rate + ' — разовая выплата за когорту';
+    formula = ftd + ' FTD × $' + rate + ' — ' + t('formulaCpaSuffix');
   } else if (state.model === 'hybrid') {
     var h = (geo.hybridAllowed && geo.hybridRate)
       ? geo.hybridRate
@@ -149,7 +149,7 @@ function calc() {
     earn3m  = cpaP + ftd * aNgr3m  * (h.rs/100);
     earn6m  = cpaP + ftd * aNgr6m  * (h.rs/100);
     earn12m = cpaP + ftd * aNgr12m * (h.rs/100);
-    formula = '$' + h.cpa + '/FTD (разово) + ' + h.rs + '% RS';
+    formula = '$' + h.cpa + '/FTD ' + t('formulaHybridOnce') + ' + ' + h.rs + '% RS';
   }
 
   return {geo:geo, src:src, ftd:ftd, qual:qual, aNgr1m:aNgr1m, aNgr3m:aNgr3m, aNgr6m:aNgr6m, aNgr12m:aNgr12m,

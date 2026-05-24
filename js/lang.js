@@ -97,7 +97,7 @@ const LANG = {
     // Compare tab
     rsByYear:'RS партнёру / год', cpaOncePay:'CPA партнёру разово', diffYear:'Разница за год',
     rsWins:'RS выгоднее за год', cpaWins:'CPA даёт больше — игроки не задерживаются долго',
-    cmpLegendRs:'RS % (накопленно с когорты)', cmpLegendCpa:'CPA $ (одноразово)',
+    cmpLegendRs:'(накопленно с когорты)', cmpLegendCpa:'(одноразово)',
     beCross:'RS окупает CPA на', beMonth:'-м месяце', beAfter:'— после этого каждый месяц приносит дополнительный доход. Игрок возвращается и проигрывает снова — партнёр получает % каждый раз.',
     beWarnPre:'⚠️ При текущих параметрах CPA даёт больше за 12 месяцев. RS становится выгоднее при повышении ставки до', beWarnOr:'% или при объёме FTD от',
     cmpPeriod:'Период', rsCumulHeader:'RS (накопленно)', cpaHeader:'CPA (разово)', diffHeader:'Разница', ngrBrandHeader:'NGR бренда',
@@ -168,6 +168,46 @@ const LANG = {
     // Payout section
     payMin:'Мин. выплата:', payFreq:'Периодичность:', payMethod:'Метод:', payHold:'Hold (CPA):',
     payMinVal:'$30', payFreqVal:'Еженедельно (вторник)', payMethodVal:'Крипто (USDT, BTC, ETH)', payHoldVal:'14 дней',
+    // UI labels
+    tourBtnLabel:'Тур',
+    tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарии', tabSubaffShort:'Суб-аффилейт', tabWhyShort:'Почему lil.bet',
+    promoLbl:'Промо нагрузка (бонусы игрокам):', promoOfGgr:'от GGR',
+    promoSlider0:'0% (нет бонусов)', promoSlider20:'20% типично', promoSlider50:'50% агрессивно',
+    statC2RLabel:'C→Рег', statC2RSub:'клик→рег', statR2DLabel:'Рег→FTD', statR2DSub:'рег→депозит',
+    statQualLabel:'Качество', statQualSub:'задержатся?',
+    editMetrics:'✎ Изменить метрики',
+    qualHeader:'Качество трафика → влияет на доход', qualLabel:'Качество игроков:',
+    qualNote:'(1.0 = норма, выше = дольше играют)',
+    qualSlider030:'0.30× слабый', qualSlider100:'1.00× норм', qualSlider150:'1.50× топ',
+    qualDesc:'Низкое качество = игроки быстро уходят, меньше NGR. Высокое = возвращаются, долгий LTV.',
+    funnelHeader:'Конверсия воронки → влияет на трафик',
+    c2rLabel:'Клик → Регистрация:', r2dLabel:'Регистрация → FTD:',
+    funnelModeNote:'В режиме «Знаю FTD» — только меняет расчёт кликов. В режиме «Знаю клики» — меняет FTD и весь расчёт.',
+    resetBtn:'↩ Сбросить', closeBtn:'Закрыть ✓',
+    ftdMonthLabel:'FTD в месяц:', clicksMonthLabel:'Кликов в месяц:',
+    calcFtdLabel:'FTD (расчётно):', calcFtdFormula:' = клики × C2R × R2D',
+    funnelClicks:'Кликов', funnelEst:'оценка', funnelRegs:'Регистраций',
+    roiExpand:'+ развернуть', roiCollapse:'− свернуть', adBudgetMonth:'Рекламный бюджет в месяц:',
+    cpcLbl:'CPC (цена клика):', cpcFromSrc:' — из источника', cpcFromSrcAuto:' — настрой под свой источник',
+    budgetCalc:'Бюджет =', clicksWord:' кликов ×',
+    tierFtdMo:'FTD / мес',
+    srcTelegram:'Telegram-каналы / боты', srcSeo:'SEO / Контент-сайты', srcPush:'Push / In-Page Push',
+    srcInfluencer:'Инфлюенсер / Стример', srcAso:'ASO / Стор-трафик', srcNative:'Нативная реклама', srcOther:'Другой (вручную)',
+    scSrcLabel:'Источник',
+    subCountLbl:'Количество суб-партнёров:', subFtdAvgLbl:'Среднее FTD у каждого:',
+    subPctLbl:'Ваш % от NGR суб-партнёров:', subPctRec:'7% рек.',
+    subAlert:'Стандартная рекомендация: 7%. Устанавливается индивидуально через комиссионную группу «Referral».',
+    subGeoSec:'ГЕО суб-партнёров', subGeoUsing:'Используется ГЕО из основного калькулятора:',
+    subNgrPerPlayer:'NGR / игрок (мес 1):', subScaleSec:'Масштаб сети', subBuildSec:'Как строить суб-партнёрскую сеть',
+    brandChannel:'Канал бренда', affChannel:'Канал партнёрки',
+    ctaReg:'🚀 Зарегистрироваться в партнёрской программе',
+    footerText:'lil.bet — партнёрский калькулятор', footerManager:'Менеджер', footerAff:'Партнёрка', footerReg:'🚀 Регистрация',
+    detailedTableSec:'Детальная таблица сравнения', rsWinsSec:'Почему RS выгоднее в долгосрочной перспективе',
+    managerPerks:['⚡ <b>Отвечает быстро</b> — обычно в течение часа','📋 <b>Индивидуальные условия</b> — ставки, промо, сплит CPA+RS','💳 <b>Еженедельные выплаты</b> — крипто без задержек','📊 <b>Статистика в реальном времени</b>'],
+    compNncoYes:'Есть', compNncoNo:'Нет ✓', compWk:'нед', compDay:'дн', compSession:'Сессия', compNa:'н/д',
+    playerShort:'игрок', formulaCpaSuffix:'разовая выплата за когорту', formulaHybridOnce:'(разово)',
+    srcNotes:{facebook:'Авторег / агентские кабинеты, PWA, APK',telegram:'Тематические каналы, рассылки — тёплый трафик',seo:'Обзорники, бонусные сайты — лучшее качество игрока',google:'iOS/Android приложения',tiktok:'Широкий охват, качество ниже SEO',push:'RichAds, PropellerAds — объём, низкое качество',influencer:'YouTube, Twitch, Telegram — высокий LTV игрока',aso:'Google Play / iOS — высокая конверсия в FTD',email:'Ретаргетинг, реактивация базы',native:'MGID, Taboola — широкий охват',other:'Укажите данные самостоятельно'},
+    geoLabels:{UZ:'Узбекистан',BD:'Бангладеш',EG:'Египет',SO:'Сомали',KZ:'Казахстан',RU:'Россия',AZ:'Азербайджан',KG:'Кыргызстан',TJ:'Таджикистан',PK:'Пакистан',NG:'Нигерия',KE:'Кения',TR:'Турция',MA:'Марокко',DZ:'Алжир'},
   },
   en:{
     headerSub:'/ partner calculator',
@@ -257,7 +297,7 @@ const LANG = {
     egyptWarn:'⚠️ Brand traffic', egyptWarn2:'for Egypt: RS applied as 10% — program restriction. Use non-brand keywords or another source.',
     rsByYear:'RS to partner / year', cpaOncePay:'CPA to partner (one-time)', diffYear:'Difference per year',
     rsWins:'RS better for the year', cpaWins:'CPA pays more — players don\'t stay long',
-    cmpLegendRs:'RS % (cumulative from cohort)', cmpLegendCpa:'CPA $ (one-time)',
+    cmpLegendRs:'(cumulative from cohort)', cmpLegendCpa:'(one-time)',
     beCross:'RS recovers CPA at month', beMonth:'', beAfter:'— after that each month brings additional income. The player returns and loses again — partner gets % every time.',
     beWarnPre:'⚠️ At current parameters CPA pays more over 12 months. RS becomes better at rates above', beWarnOr:'% or FTD volume from',
     cmpPeriod:'Period', rsCumulHeader:'RS (cumulative)', cpaHeader:'CPA (one-time)', diffHeader:'Difference', ngrBrandHeader:'Brand NGR',
@@ -321,6 +361,46 @@ const LANG = {
     scMoSuffix:'1 mo',
     payMin:'Min payout:', payFreq:'Frequency:', payMethod:'Method:', payHold:'Hold (CPA):',
     payMinVal:'$30', payFreqVal:'Weekly (Tuesday)', payMethodVal:'Crypto (USDT, BTC, ETH)', payHoldVal:'14 days',
+    // UI labels
+    tourBtnLabel:'Tour',
+    tabCalcShort:'Calculator', tabScenariosShort:'Scenarios', tabSubaffShort:'Sub-affiliate', tabWhyShort:'Why lil.bet',
+    promoLbl:'Promo load (player bonuses):', promoOfGgr:'of GGR',
+    promoSlider0:'0% (no bonuses)', promoSlider20:'20% typical', promoSlider50:'50% aggressive',
+    statC2RLabel:'C→Reg', statC2RSub:'click→reg', statR2DLabel:'Reg→FTD', statR2DSub:'reg→deposit',
+    statQualLabel:'Quality', statQualSub:'will stay?',
+    editMetrics:'✎ Edit metrics',
+    qualHeader:'Traffic quality → affects income', qualLabel:'Player quality:',
+    qualNote:'(1.0 = normal, higher = play longer)',
+    qualSlider030:'0.30× weak', qualSlider100:'1.00× normal', qualSlider150:'1.50× top',
+    qualDesc:'Low quality = players leave fast, less NGR. High = they return, long LTV.',
+    funnelHeader:'Funnel conversion → affects traffic',
+    c2rLabel:'Click → Registration:', r2dLabel:'Registration → FTD:',
+    funnelModeNote:'In "Know FTD" mode — only changes click estimate. In "Know clicks" mode — changes FTD and all calculation.',
+    resetBtn:'↩ Reset', closeBtn:'Close ✓',
+    ftdMonthLabel:'FTD per month:', clicksMonthLabel:'Clicks per month:',
+    calcFtdLabel:'FTD (estimated):', calcFtdFormula:' = clicks × C2R × R2D',
+    funnelClicks:'Clicks', funnelEst:'estimate', funnelRegs:'Registrations',
+    roiExpand:'+ expand', roiCollapse:'− collapse', adBudgetMonth:'Ad budget per month:',
+    cpcLbl:'CPC (cost per click):', cpcFromSrc:' — from source', cpcFromSrcAuto:' — adjust for your source',
+    budgetCalc:'Budget =', clicksWord:' clicks ×',
+    tierFtdMo:'FTD / mo',
+    srcTelegram:'Telegram channels / bots', srcSeo:'SEO / Content sites', srcPush:'Push / In-Page Push',
+    srcInfluencer:'Influencer / Streamer', srcAso:'ASO / Store traffic', srcNative:'Native advertising', srcOther:'Other (manual)',
+    scSrcLabel:'Source',
+    subCountLbl:'Number of sub-affiliates:', subFtdAvgLbl:'Average FTD each:',
+    subPctLbl:'Your % of sub-affiliate NGR:', subPctRec:'7% rec.',
+    subAlert:'Standard recommendation: 7%. Set individually via the "Referral" commission group.',
+    subGeoSec:'Sub-affiliate GEO', subGeoUsing:'Using GEO from main calculator:',
+    subNgrPerPlayer:'NGR / player (month 1):', subScaleSec:'Network scale', subBuildSec:'How to build a sub-affiliate network',
+    brandChannel:'Brand channel', affChannel:'Affiliate channel',
+    ctaReg:'🚀 Register in the affiliate program',
+    footerText:'lil.bet — affiliate calculator', footerManager:'Manager', footerAff:'Affiliate program', footerReg:'🚀 Register',
+    detailedTableSec:'Detailed comparison table', rsWinsSec:'Why RS is better long-term',
+    managerPerks:['⚡ <b>Fast response</b> — usually within an hour','📋 <b>Individual terms</b> — rates, promos, CPA+RS split','💳 <b>Weekly payouts</b> — crypto, no delays','📊 <b>Real-time statistics</b>'],
+    compNncoYes:'Yes', compNncoNo:'No ✓', compWk:'wk', compDay:'d', compSession:'Session', compNa:'N/A',
+    playerShort:'player', formulaCpaSuffix:'one-time cohort payout', formulaHybridOnce:'(one-time)',
+    srcNotes:{facebook:'Auto-reg / agency accounts, PWA, APK',telegram:'Thematic channels, newsletters — warm traffic',seo:'Review sites, bonus sites — best player quality',google:'iOS/Android apps',tiktok:'Wide reach, quality below SEO',push:'RichAds, PropellerAds — volume, low quality',influencer:'YouTube, Twitch, Telegram — high player LTV',aso:'Google Play / iOS — high FTD conversion',email:'Retargeting, database reactivation',native:'MGID, Taboola — wide reach',other:'Enter your data manually'},
+    geoLabels:{UZ:'Uzbekistan',BD:'Bangladesh',EG:'Egypt',SO:'Somalia',KZ:'Kazakhstan',RU:'Russia',AZ:'Azerbaijan',KG:'Kyrgyzstan',TJ:'Tajikistan',PK:'Pakistan',NG:'Nigeria',KE:'Kenya',TR:'Turkey',MA:'Morocco',DZ:'Algeria'},
   },
   uk:{
     headerSub:'/ калькулятор партнера',
@@ -410,7 +490,7 @@ const LANG = {
     egyptWarn:'⚠️ Бренд-трафік', egyptWarn2:'для Єгипту: RS застосовується як 10%.',
     rsByYear:'RS партнеру / рік', cpaOncePay:'CPA партнеру разово', diffYear:'Різниця за рік',
     rsWins:'RS вигідніше за рік', cpaWins:'CPA дає більше — гравці не затримуються',
-    cmpLegendRs:'RS % (накопичено з когорти)', cmpLegendCpa:'CPA $ (одноразово)',
+    cmpLegendRs:'(накопичено з когорти)', cmpLegendCpa:'(одноразово)',
     beCross:'RS окупає CPA на', beMonth:'-му місяці', beAfter:'— після цього кожен місяць приносить додатковий дохід.',
     beWarnPre:'⚠️ При поточних параметрах CPA дає більше за 12 місяців. RS стає вигіднішим при ставці понад', beWarnOr:'% або FTD від',
     cmpPeriod:'Період', rsCumulHeader:'RS (накопичено)', cpaHeader:'CPA (разово)', diffHeader:'Різниця', ngrBrandHeader:'NGR бренду',
@@ -472,6 +552,46 @@ const LANG = {
     sc1mLabel:'1 міс', sc3mLabel:'3 міс', sc6mLabel:'6 міс', sc12mLabel:'12 міс', scMoSuffix:'1 міс',
     payMin:'Мін. виплата:', payFreq:'Періодичність:', payMethod:'Метод:', payHold:'Hold (CPA):',
     payMinVal:'$30', payFreqVal:'Щотижня (вівторок)', payMethodVal:'Крипто (USDT, BTC, ETH)', payHoldVal:'14 днів',
+    // UI labels
+    tourBtnLabel:'Тур',
+    tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарії', tabSubaffShort:'Суб-афіліат', tabWhyShort:'Чому lil.bet',
+    promoLbl:'Промо навантаження (бонуси гравцям):', promoOfGgr:'від GGR',
+    promoSlider0:'0% (без бонусів)', promoSlider20:'20% типово', promoSlider50:'50% агресивно',
+    statC2RLabel:'C→Рег', statC2RSub:'клік→рег', statR2DLabel:'Рег→FTD', statR2DSub:'рег→депозит',
+    statQualLabel:'Якість', statQualSub:'затримаються?',
+    editMetrics:'✎ Змінити метрики',
+    qualHeader:'Якість трафіку → впливає на дохід', qualLabel:'Якість гравців:',
+    qualNote:'(1.0 = норма, вище = довше грають)',
+    qualSlider030:'0.30× слабкий', qualSlider100:'1.00× норм', qualSlider150:'1.50× топ',
+    qualDesc:'Низька якість = гравці швидко йдуть, менше NGR. Висока = повертаються, довгий LTV.',
+    funnelHeader:'Конверсія воронки → впливає на трафік',
+    c2rLabel:'Клік → Реєстрація:', r2dLabel:'Реєстрація → FTD:',
+    funnelModeNote:'У режимі «Знаю FTD» — лише змінює розрахунок кліків. У режимі «Знаю кліки» — змінює FTD і весь розрахунок.',
+    resetBtn:'↩ Скинути', closeBtn:'Закрити ✓',
+    ftdMonthLabel:'FTD на місяць:', clicksMonthLabel:'Кліків на місяць:',
+    calcFtdLabel:'FTD (розрахунково):', calcFtdFormula:' = кліки × C2R × R2D',
+    funnelClicks:'Кліків', funnelEst:'оцінка', funnelRegs:'Реєстрацій',
+    roiExpand:'+ розгорнути', roiCollapse:'− згорнути', adBudgetMonth:'Рекламний бюджет на місяць:',
+    cpcLbl:'CPC (ціна кліка):', cpcFromSrc:' — з джерела', cpcFromSrcAuto:' — налаштуй під своє джерело',
+    budgetCalc:'Бюджет =', clicksWord:' кліків ×',
+    tierFtdMo:'FTD / міс',
+    srcTelegram:'Telegram-канали / боти', srcSeo:'SEO / Контент-сайти', srcPush:'Push / In-Page Push',
+    srcInfluencer:'Інфлюенсер / Стример', srcAso:'ASO / Стор-трафік', srcNative:'Нативна реклама', srcOther:'Інший (вручну)',
+    scSrcLabel:'Джерело',
+    subCountLbl:'Кількість суб-партнерів:', subFtdAvgLbl:'Середнє FTD у кожного:',
+    subPctLbl:'Ваш % від NGR суб-партнерів:', subPctRec:'7% рек.',
+    subAlert:'Стандартна рекомендація: 7%. Встановлюється індивідуально через комісійну групу «Referral».',
+    subGeoSec:'ГЕО суб-партнерів', subGeoUsing:'Використовується ГЕО з основного калькулятора:',
+    subNgrPerPlayer:'NGR / гравець (міс 1):', subScaleSec:'Масштаб мережі', subBuildSec:'Як будувати суб-партнерську мережу',
+    brandChannel:'Канал бренду', affChannel:'Канал партнерки',
+    ctaReg:'🚀 Зареєструватися в партнерській програмі',
+    footerText:'lil.bet — калькулятор партнера', footerManager:'Менеджер', footerAff:'Партнерка', footerReg:'🚀 Реєстрація',
+    detailedTableSec:'Детальна таблиця порівняння', rsWinsSec:'Чому RS вигідніше у довгостроковій перспективі',
+    managerPerks:['⚡ <b>Відповідає швидко</b> — зазвичай протягом години','📋 <b>Індивідуальні умови</b> — ставки, промо, сплит CPA+RS','💳 <b>Щотижневі виплати</b> — крипто без затримок','📊 <b>Статистика в реальному часі</b>'],
+    compNncoYes:'Є', compNncoNo:'Ні ✓', compWk:'тиж', compDay:'дн', compSession:'Сесія', compNa:'н/д',
+    playerShort:'гравець', formulaCpaSuffix:'разова виплата за когорту', formulaHybridOnce:'(разово)',
+    srcNotes:{facebook:'Авторег / агентські кабінети, PWA, APK',telegram:'Тематичні канали, розсилки — теплий трафік',seo:'Оглядові сайти, бонусні сайти — найкраща якість гравців',google:'iOS/Android додатки',tiktok:'Широке охоплення, якість нижче SEO',push:'RichAds, PropellerAds — обсяг, низька якість',influencer:'YouTube, Twitch, Telegram — високий LTV гравця',aso:'Google Play / iOS — висока конверсія в FTD',email:'Ретаргетинг, реактивація бази',native:'MGID, Taboola — широке охоплення',other:'Введіть дані самостійно'},
+    geoLabels:{UZ:'Узбекистан',BD:'Бангладеш',EG:'Єгипет',SO:'Сомалі',KZ:'Казахстан',RU:'Росія',AZ:'Азербайджан',KG:'Киргизстан',TJ:'Таджикистан',PK:'Пакистан',NG:'Нігерія',KE:'Кенія',TR:'Туреччина',MA:'Марокко',DZ:'Алжир'},
   },
   de:{
     headerSub:'/ Partner-Rechner',
@@ -561,7 +681,7 @@ const LANG = {
     egyptWarn:'⚠️ Marken-Traffic', egyptWarn2:'für Ägypten: RS wird als 10% angewendet.',
     rsByYear:'RS an Partner / Jahr', cpaOncePay:'CPA an Partner (einmalig)', diffYear:'Unterschied pro Jahr',
     rsWins:'RS besser für das Jahr', cpaWins:'CPA zahlt mehr — Spieler bleiben nicht lange',
-    cmpLegendRs:'RS % (kumuliert)', cmpLegendCpa:'CPA $ (einmalig)',
+    cmpLegendRs:'(kumuliert)', cmpLegendCpa:'(einmalig)',
     beCross:'RS amortisiert CPA im Monat', beMonth:'', beAfter:'— danach bringt jeder Monat zusätzliches Einkommen.',
     beWarnPre:'⚠️ Bei aktuellen Parametern zahlt CPA mehr über 12 Monate. RS wird besser ab', beWarnOr:'% oder FTD ab',
     cmpPeriod:'Zeitraum', rsCumulHeader:'RS (kumuliert)', cpaHeader:'CPA (einmalig)', diffHeader:'Unterschied', ngrBrandHeader:'Brand NGR',
@@ -623,6 +743,46 @@ const LANG = {
     sc1mLabel:'1 Mo', sc3mLabel:'3 Mo', sc6mLabel:'6 Mo', sc12mLabel:'12 Mo', scMoSuffix:'1 Mo',
     payMin:'Min. Zahlung:', payFreq:'Häufigkeit:', payMethod:'Methode:', payHold:'Hold (CPA):',
     payMinVal:'$30', payFreqVal:'Wöchentlich (Dienstag)', payMethodVal:'Krypto (USDT, BTC, ETH)', payHoldVal:'14 Tage',
+    // UI labels
+    tourBtnLabel:'Tour',
+    tabCalcShort:'Rechner', tabScenariosShort:'Szenarien', tabSubaffShort:'Sub-Affiliate', tabWhyShort:'Warum lil.bet',
+    promoLbl:'Promo-Last (Spielerboni):', promoOfGgr:'vom GGR',
+    promoSlider0:'0% (keine Boni)', promoSlider20:'20% typisch', promoSlider50:'50% aggressiv',
+    statC2RLabel:'K→Reg', statC2RSub:'Klick→Reg', statR2DLabel:'Reg→FTD', statR2DSub:'Reg→Einzahlung',
+    statQualLabel:'Qualität', statQualSub:'bleiben sie?',
+    editMetrics:'✎ Metriken bearbeiten',
+    qualHeader:'Traffic-Qualität → beeinflusst Einkommen', qualLabel:'Spielerqualität:',
+    qualNote:'(1.0 = normal, höher = spielen länger)',
+    qualSlider030:'0.30× schwach', qualSlider100:'1.00× normal', qualSlider150:'1.50× Top',
+    qualDesc:'Niedrige Qualität = Spieler gehen schnell, weniger NGR. Hoch = kehren zurück, langes LTV.',
+    funnelHeader:'Funnel-Konversion → beeinflusst Traffic',
+    c2rLabel:'Klick → Registrierung:', r2dLabel:'Registrierung → FTD:',
+    funnelModeNote:'Im "Kenne FTD"-Modus — ändert nur Klick-Schätzung. Im "Kenne Klicks"-Modus — ändert FTD und alle Berechnungen.',
+    resetBtn:'↩ Zurücksetzen', closeBtn:'Schließen ✓',
+    ftdMonthLabel:'FTD pro Monat:', clicksMonthLabel:'Klicks pro Monat:',
+    calcFtdLabel:'FTD (geschätzt):', calcFtdFormula:' = Klicks × C2R × R2D',
+    funnelClicks:'Klicks', funnelEst:'Schätzung', funnelRegs:'Registrierungen',
+    roiExpand:'+ erweitern', roiCollapse:'− einklappen', adBudgetMonth:'Werbebudget pro Monat:',
+    cpcLbl:'CPC (Kosten pro Klick):', cpcFromSrc:' — aus der Quelle', cpcFromSrcAuto:' — an Ihre Quelle anpassen',
+    budgetCalc:'Budget =', clicksWord:' Klicks ×',
+    tierFtdMo:'FTD / Mo',
+    srcTelegram:'Telegram-Kanäle / Bots', srcSeo:'SEO / Content-Seiten', srcPush:'Push / In-Page Push',
+    srcInfluencer:'Influencer / Streamer', srcAso:'ASO / Store-Traffic', srcNative:'Native-Werbung', srcOther:'Andere (manuell)',
+    scSrcLabel:'Quelle',
+    subCountLbl:'Anzahl Sub-Affiliates:', subFtdAvgLbl:'Durchschnittliche FTD pro Partner:',
+    subPctLbl:'Ihr % vom Sub-Affiliate-NGR:', subPctRec:'7% empf.',
+    subAlert:'Standardempfehlung: 7%. Wird individuell über die Provisionsgruppe "Referral" festgelegt.',
+    subGeoSec:'Sub-Affiliate GEO', subGeoUsing:'GEO aus dem Hauptrechner verwendet:',
+    subNgrPerPlayer:'NGR / Spieler (Monat 1):', subScaleSec:'Netzwerkgröße', subBuildSec:'Wie man ein Sub-Affiliate-Netzwerk aufbaut',
+    brandChannel:'Markenkanal', affChannel:'Affiliate-Kanal',
+    ctaReg:'🚀 Im Partnerprogramm registrieren',
+    footerText:'lil.bet — Partner-Rechner', footerManager:'Manager', footerAff:'Partnerprogramm', footerReg:'🚀 Registrierung',
+    detailedTableSec:'Detaillierte Vergleichstabelle', rsWinsSec:'Warum RS langfristig besser ist',
+    managerPerks:['⚡ <b>Schnelle Antwort</b> — normalerweise innerhalb einer Stunde','📋 <b>Individuelle Konditionen</b> — Raten, Promos, CPA+RS-Split','💳 <b>Wöchentliche Auszahlungen</b> — Krypto ohne Verzögerungen','📊 <b>Statistik in Echtzeit</b>'],
+    compNncoYes:'Ja', compNncoNo:'Nein ✓', compWk:'Wo', compDay:'T', compSession:'Sitzung', compNa:'k.A.',
+    playerShort:'Spieler', formulaCpaSuffix:'einmalige Kohortenausschüttung', formulaHybridOnce:'(einmalig)',
+    srcNotes:{facebook:'Auto-Reg / Agentur-Accounts, PWA, APK',telegram:'Themenkanäle, Newsletter — warmer Traffic',seo:'Review-Seiten, Bonus-Seiten — beste Spielerqualität',google:'iOS/Android Apps',tiktok:'Breite Reichweite, Qualität unter SEO',push:'RichAds, PropellerAds — Volumen, niedrige Qualität',influencer:'YouTube, Twitch, Telegram — hoher Spieler-LTV',aso:'Google Play / iOS — hohe FTD-Konversion',email:'Retargeting, Datenbank-Reaktivierung',native:'MGID, Taboola — breite Reichweite',other:'Daten manuell eingeben'},
+    geoLabels:{UZ:'Usbekistan',BD:'Bangladesch',EG:'Ägypten',SO:'Somalia',KZ:'Kasachstan',RU:'Russland',AZ:'Aserbaidschan',KG:'Kirgisistan',TJ:'Tadschikistan',PK:'Pakistan',NG:'Nigeria',KE:'Kenia',TR:'Türkei',MA:'Marokko',DZ:'Algerien'},
   },
   es:{
     headerSub:'/ calculadora de afiliados',
@@ -712,7 +872,7 @@ const LANG = {
     egyptWarn:'⚠️ Tráfico de marca', egyptWarn2:'para Egipto: RS aplicado como 10%.',
     rsByYear:'RS al afiliado / año', cpaOncePay:'CPA al afiliado (único)', diffYear:'Diferencia por año',
     rsWins:'RS mejor por el año', cpaWins:'CPA paga más — jugadores no se quedan',
-    cmpLegendRs:'RS % (acumulado)', cmpLegendCpa:'CPA $ (único)',
+    cmpLegendRs:'(acumulado)', cmpLegendCpa:'(único)',
     beCross:'RS recupera CPA en el mes', beMonth:'', beAfter:'— después cada mes trae ingresos adicionales.',
     beWarnPre:'⚠️ Con parámetros actuales CPA paga más en 12 meses. RS supera con tasa superior a', beWarnOr:'% o FTD desde',
     cmpPeriod:'Período', rsCumulHeader:'RS (acumulado)', cpaHeader:'CPA (único)', diffHeader:'Diferencia', ngrBrandHeader:'NGR marca',
@@ -774,17 +934,144 @@ const LANG = {
     sc1mLabel:'1 mes', sc3mLabel:'3 mes', sc6mLabel:'6 mes', sc12mLabel:'12 mes', scMoSuffix:'1 mes',
     payMin:'Pago mín.:', payFreq:'Frecuencia:', payMethod:'Método:', payHold:'Hold (CPA):',
     payMinVal:'$30', payFreqVal:'Semanal (martes)', payMethodVal:'Crypto (USDT, BTC, ETH)', payHoldVal:'14 días',
+    // UI labels
+    tourBtnLabel:'Tour',
+    tabCalcShort:'Calculadora', tabScenariosShort:'Escenarios', tabSubaffShort:'Sub-afiliado', tabWhyShort:'Por qué lil.bet',
+    promoLbl:'Carga promo (bonos a jugadores):', promoOfGgr:'del GGR',
+    promoSlider0:'0% (sin bonos)', promoSlider20:'20% típico', promoSlider50:'50% agresivo',
+    statC2RLabel:'C→Reg', statC2RSub:'clic→reg', statR2DLabel:'Reg→FTD', statR2DSub:'reg→depósito',
+    statQualLabel:'Calidad', statQualSub:'¿se quedarán?',
+    editMetrics:'✎ Editar métricas',
+    qualHeader:'Calidad del tráfico → afecta los ingresos', qualLabel:'Calidad de jugadores:',
+    qualNote:'(1.0 = normal, mayor = juegan más)',
+    qualSlider030:'0.30× débil', qualSlider100:'1.00× normal', qualSlider150:'1.50× top',
+    qualDesc:'Baja calidad = jugadores se van rápido, menos NGR. Alta = vuelven, LTV largo.',
+    funnelHeader:'Conversión del funnel → afecta el tráfico',
+    c2rLabel:'Clic → Registro:', r2dLabel:'Registro → FTD:',
+    funnelModeNote:'En modo "Sé el FTD" — solo cambia la estimación de clics. En modo "Sé los clics" — cambia FTD y todo el cálculo.',
+    resetBtn:'↩ Restablecer', closeBtn:'Cerrar ✓',
+    ftdMonthLabel:'FTD por mes:', clicksMonthLabel:'Clics por mes:',
+    calcFtdLabel:'FTD (estimado):', calcFtdFormula:' = clics × C2R × R2D',
+    funnelClicks:'Clics', funnelEst:'estimación', funnelRegs:'Registros',
+    roiExpand:'+ expandir', roiCollapse:'− contraer', adBudgetMonth:'Presupuesto publicitario por mes:',
+    cpcLbl:'CPC (costo por clic):', cpcFromSrc:' — de la fuente', cpcFromSrcAuto:' — ajusta para tu fuente',
+    budgetCalc:'Presupuesto =', clicksWord:' clics ×',
+    tierFtdMo:'FTD / mes',
+    srcTelegram:'Canales Telegram / bots', srcSeo:'SEO / Sitios de contenido', srcPush:'Push / In-Page Push',
+    srcInfluencer:'Influencer / Streamer', srcAso:'ASO / Tráfico de tienda', srcNative:'Publicidad nativa', srcOther:'Otro (manual)',
+    scSrcLabel:'Fuente',
+    subCountLbl:'Número de sub-afiliados:', subFtdAvgLbl:'FTD promedio de cada uno:',
+    subPctLbl:'Tu % del NGR de sub-afiliados:', subPctRec:'7% rec.',
+    subAlert:'Recomendación estándar: 7%. Se establece individualmente a través del grupo de comisión "Referral".',
+    subGeoSec:'GEO de sub-afiliados', subGeoUsing:'Se usa el GEO de la calculadora principal:',
+    subNgrPerPlayer:'NGR / jugador (mes 1):', subScaleSec:'Escala de red', subBuildSec:'Cómo construir una red de sub-afiliados',
+    brandChannel:'Canal de marca', affChannel:'Canal de afiliados',
+    ctaReg:'🚀 Registrarse en el programa de afiliados',
+    footerText:'lil.bet — calculadora de afiliados', footerManager:'Manager', footerAff:'Afiliados', footerReg:'🚀 Registro',
+    detailedTableSec:'Tabla de comparación detallada', rsWinsSec:'Por qué RS es mejor a largo plazo',
+    managerPerks:['⚡ <b>Respuesta rápida</b> — normalmente en una hora','📋 <b>Condiciones individuales</b> — tasas, promos, split CPA+RS','💳 <b>Pagos semanales</b> — cripto sin demoras','📊 <b>Estadísticas en tiempo real</b>'],
+    compNncoYes:'Sí', compNncoNo:'No ✓', compWk:'sem', compDay:'d', compSession:'Sesión', compNa:'n/d',
+    playerShort:'jugador', formulaCpaSuffix:'pago único por cohorte', formulaHybridOnce:'(único)',
+    srcNotes:{facebook:'Auto-reg / cuentas de agencia, PWA, APK',telegram:'Canales temáticos, newsletters — tráfico cálido',seo:'Sitios de reseñas, bonus — mejor calidad de jugadores',google:'Apps iOS/Android',tiktok:'Amplio alcance, calidad por debajo de SEO',push:'RichAds, PropellerAds — volumen, baja calidad',influencer:'YouTube, Twitch, Telegram — alto LTV del jugador',aso:'Google Play / iOS — alta conversión a FTD',email:'Retargeting, reactivación de base',native:'MGID, Taboola — amplio alcance',other:'Ingrese los datos manualmente'},
+    geoLabels:{UZ:'Uzbekistán',BD:'Bangladés',EG:'Egipto',SO:'Somalia',KZ:'Kazajistán',RU:'Rusia',AZ:'Azerbaiyán',KG:'Kirguistán',TJ:'Tayikistán',PK:'Pakistán',NG:'Nigeria',KE:'Kenia',TR:'Turquía',MA:'Marruecos',DZ:'Argelia'},
   },
 };
 
-function t(key){ return (LANG[currentLang]||LANG.en)[key] || (LANG.en)[key] || key; }
+function t(key){
+  var L = LANG[currentLang] || LANG.en;
+  if (key in L) return L[key];
+  if (key in LANG.en) return LANG.en[key];
+  return key;
+}
+
+function geoLabel(geoKey) {
+  if (!geoKey || typeof GEO_DATA === 'undefined') return geoKey;
+  var geo = GEO_DATA[geoKey];
+  if (!geo) return geoKey;
+  var labels = t('geoLabels');
+  var name = (labels && labels[geoKey]) ? labels[geoKey] : geo.label.replace(/^[\S]+ /, '');
+  var flagMatch = geo.label.match(/^(\S+) /);
+  var flag = flagMatch ? flagMatch[1] + ' ' : '';
+  return flag + name;
+}
+
+var SRC_KEY_MAP = {
+  telegram:'srcTelegram', seo:'srcSeo', push:'srcPush',
+  influencer:'srcInfluencer', aso:'srcAso', native:'srcNative', other:'srcOther'
+};
+
+function srcLabel(srcKey) {
+  var mapKey = SRC_KEY_MAP[srcKey];
+  if (mapKey) { var v = t(mapKey); if (v && v !== mapKey) return v; }
+  if (typeof SRC_DATA !== 'undefined' && SRC_DATA[srcKey]) return SRC_DATA[srcKey].label;
+  return srcKey;
+}
+
+function srcNote(srcKey) {
+  var notes = t('srcNotes');
+  if (notes && notes[srcKey]) return notes[srcKey];
+  if (typeof SRC_DATA !== 'undefined' && SRC_DATA[srcKey]) return SRC_DATA[srcKey].note || '';
+  return '';
+}
 
 function applyI18n() {
+  // Simple text translation
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
     var key = el.getAttribute('data-i18n');
     var val = t(key);
     if (val && val !== key) el.textContent = val;
   });
+  // HTML translation (uses innerHTML)
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-html');
+    var val = t(key);
+    if (val && val !== key) el.innerHTML = val;
+  });
+  // Select option text translation
+  document.querySelectorAll('[data-i18n-opt]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-opt');
+    var val = t(key);
+    if (val && val !== key) el.textContent = val;
+  });
+
+  // Render compareIntroText
+  var cit = document.getElementById('compareIntroText');
+  if (cit) cit.innerHTML = t('compareIntro');
+
+  // Helper: build payout rows HTML
+  function buildPayRows() {
+    return [
+      [t('payMin'), t('payMinVal')],
+      [t('payFreq'), t('payFreqVal')],
+      [t('payMethod'), t('payMethodVal')],
+      [t('payHold'), t('payHoldVal')]
+    ].map(function(row) {
+      return '<div class="pay-row"><span class="pay-lbl">' + row[0] + '</span><span class="pay-val">' + row[1] + '</span></div>';
+    }).join('');
+  }
+
+  // Render payoutRows (calc tab)
+  var pr = document.getElementById('payoutRows');
+  if (pr) pr.innerHTML = buildPayRows();
+
+  // Render whyPayRows (why tab)
+  var wpr = document.getElementById('whyPayRows');
+  if (wpr) wpr.innerHTML = buildPayRows();
+
+  // Render managerPerks
+  var mp = document.getElementById('managerPerks');
+  if (mp) {
+    var perks = t('managerPerks');
+    if (Array.isArray(perks)) {
+      mp.innerHTML = perks.map(function(p) {
+        return '<div class="perk-item" style="padding:5px 0;font-size:13px;color:var(--label);line-height:1.5">' + p + '</div>';
+      }).join('');
+    }
+  }
+
+  // Render footerText
+  var ft = document.getElementById('footerText');
+  if (ft) ft.textContent = t('footerText');
 }
 
 function switchLang(lang){
@@ -795,15 +1082,11 @@ function switchLang(lang){
   document.querySelectorAll('.lang-btn').forEach(function(b) {
     if(b.textContent.toLowerCase()===lang||b.textContent.toUpperCase()===lang.toUpperCase()) b.classList.add('active');
   });
-  // Apply data-i18n translations
+  // Apply data-i18n translations (handles spans inside tab buttons too)
   applyI18n();
-  // Update static elements (keep for backward compat)
+  // Update static elements
   var L = LANG[lang] || LANG.en;
   document.getElementById('headerSub').textContent = L.headerSub;
-  ['calc','compare','scenarios','subaff','why'].forEach(function(id) {
-    var el = document.getElementById('tab-'+id);
-    if(el) el.textContent = L['tab'+id.charAt(0).toUpperCase()+id.slice(1)] || el.textContent;
-  });
   // Update tour buttons if tour open
   var skipBtn = document.getElementById('tourSkipBtn');
   var nextBtn = document.getElementById('tourNextBtn');

@@ -4,22 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>lil.bet — Калькулятор партнёра</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 
 <div class="header">
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <div class="brand"><span>lil</span>.bet <span style="color:var(--muted);font-weight:400;font-size:15px" id="headerSub">/ калькулятор партнёра</span></div>
-    <button class="tour-start-btn" onclick="startTour()" title="Обучающий тур">💡 Тур</button>
+    <button class="tour-start-btn" onclick="startTour()" title="Обучающий тур">💡 <span data-i18n="tourBtnLabel">Тур</span></button>
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <div class="tabs-nav">
-      <button class="tab-btn active" id="tab-calc" onclick="switchTab('calc')">⚡ Калькулятор</button>
+      <button class="tab-btn active" id="tab-calc" onclick="switchTab('calc')">⚡ <span data-i18n="tabCalcShort">Калькулятор</span></button>
       <button class="tab-btn" id="tab-compare" onclick="switchTab('compare')">📊 RS vs CPA</button>
-      <button class="tab-btn" id="tab-scenarios" onclick="switchTab('scenarios')">⚖️ Сценарии</button>
-      <button class="tab-btn" id="tab-subaff" onclick="switchTab('subaff')">🔗 Суб-аффилейт</button>
-      <button class="tab-btn" id="tab-why" onclick="switchTab('why')">✅ Почему lil.bet</button>
+      <button class="tab-btn" id="tab-scenarios" onclick="switchTab('scenarios')">⚖️ <span data-i18n="tabScenariosShort">Сценарии</span></button>
+      <button class="tab-btn" id="tab-subaff" onclick="switchTab('subaff')">🔗 <span data-i18n="tabSubaffShort">Суб-аффилейт</span></button>
+      <button class="tab-btn" id="tab-why" onclick="switchTab('why')">✅ <span data-i18n="tabWhyShort">Почему lil.bet</span></button>
     </div>
     <div class="lang-switcher" id="langSwitcher">
       <button class="lang-btn active" onclick="switchLang('ru')">RU</button>
@@ -47,12 +47,16 @@
       <!-- Promo load -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
         <label class="lbl">
-          Промо нагрузка (бонусы игрокам):
+          <span data-i18n="promoLbl">Промо нагрузка (бонусы игрокам):</span>
           <strong style="color:var(--yellow)" id="promoLoadLabel">20%</strong>
-          <span style="color:var(--muted);font-weight:400"> от GGR</span>
+          <span style="color:var(--muted);font-weight:400"> <span data-i18n="promoOfGgr">от GGR</span></span>
         </label>
         <input type="range" id="promoSlider" min="0" max="50" step="1" value="20" oninput="onPromoSlider()">
-        <div class="slider-labels"><span>0% (нет бонусов)</span><span style="color:var(--yellow)">20% типично</span><span>50% агрессивно</span></div>
+        <div class="slider-labels">
+          <span data-i18n="promoSlider0">0% (нет бонусов)</span>
+          <span style="color:var(--yellow)" data-i18n="promoSlider20">20% типично</span>
+          <span data-i18n="promoSlider50">50% агрессивно</span>
+        </div>
         <div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5" id="promoNote"></div>
       </div>
     </div>
@@ -63,67 +67,64 @@
       <div class="field">
         <select id="srcSelect" onchange="onSrcChange()">
           <option value="facebook">Facebook / Meta (PWA, APK)</option>
-          <option value="telegram">Telegram-каналы / боты</option>
-          <option value="seo">SEO / Контент-сайты</option>
+          <option value="telegram" data-i18n-opt="srcTelegram">Telegram-каналы / боты</option>
+          <option value="seo" data-i18n-opt="srcSeo">SEO / Контент-сайты</option>
           <option value="google">Google UAC / App</option>
           <option value="tiktok">TikTok / Reels</option>
-          <option value="push">Push / In-Page Push</option>
-          <option value="influencer">Инфлюенсер / Стример</option>
-          <option value="aso">ASO / Стор-трафик</option>
+          <option value="push" data-i18n-opt="srcPush">Push / In-Page Push</option>
+          <option value="influencer" data-i18n-opt="srcInfluencer">Инфлюенсер / Стример</option>
+          <option value="aso" data-i18n-opt="srcAso">ASO / Стор-трафик</option>
           <option value="email">Email / SMS</option>
-          <option value="native">Нативная реклама</option>
-          <option value="other">Другой (вручную)</option>
+          <option value="native" data-i18n-opt="srcNative">Нативная реклама</option>
+          <option value="other" data-i18n-opt="srcOther">Другой (вручную)</option>
         </select>
       </div>
       <div class="src-note" id="srcNote"></div>
       <div class="row3" style="margin-top:10px">
         <div class="card-sm" style="text-align:center">
-          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">C→Рег</div>
+          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em" data-i18n="statC2RLabel">C→Рег</div>
           <div style="font-size:16px;font-weight:700;color:var(--green)" id="statC2R">—</div>
-          <div style="font-size:9px;color:var(--muted)">клик→рег</div>
+          <div style="font-size:9px;color:var(--muted)" data-i18n="statC2RSub">клик→рег</div>
         </div>
         <div class="card-sm" style="text-align:center">
-          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Рег→FTD</div>
+          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em" data-i18n="statR2DLabel">Рег→FTD</div>
           <div style="font-size:16px;font-weight:700;color:var(--green)" id="statR2D">—</div>
-          <div style="font-size:9px;color:var(--muted)">рег→депозит</div>
+          <div style="font-size:9px;color:var(--muted)" data-i18n="statR2DSub">рег→депозит</div>
         </div>
         <div class="card-sm" style="text-align:center">
-          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Качество</div>
+          <div class="lbl" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em" data-i18n="statQualLabel">Качество</div>
           <div style="font-size:16px;font-weight:700;color:var(--green)" id="statQual">—</div>
-          <div style="font-size:9px;color:var(--muted)">игроки задержатся?</div>
+          <div style="font-size:9px;color:var(--muted)" data-i18n="statQualSub">игроки задержатся?</div>
         </div>
       </div>
       <div style="margin-top:8px;display:flex;justify-content:flex-end">
-        <button onclick="toggleSrcEdit()" id="srcEditBtn" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;transition:all .15s">✎ Изменить метрики</button>
+        <button onclick="toggleSrcEdit()" id="srcEditBtn" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;transition:all .15s" data-i18n="editMetrics">✎ Изменить метрики</button>
       </div>
       <div id="srcEditPanel" style="display:none;margin-top:10px;padding:14px;background:var(--bg3);border:1px solid rgba(0,212,170,.2);border-radius:8px">
-
-        <!-- QUALITY — affects revenue -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Качество трафика → влияет на доход</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px" data-i18n="qualHeader">Качество трафика → влияет на доход</div>
         <div class="field" style="margin-bottom:14px">
-          <label class="lbl">Качество игроков: <strong style="color:var(--green)" id="srcEditQualLbl">—</strong> <span style="color:var(--muted);font-weight:400">(1.0 = норма, выше = дольше играют)</span></label>
+          <label class="lbl"><span data-i18n="qualLabel">Качество игроков:</span> <strong style="color:var(--green)" id="srcEditQualLbl">—</strong> <span style="color:var(--muted);font-weight:400" data-i18n="qualNote">(1.0 = норма, выше = дольше играют)</span></label>
           <input type="range" id="srcEditQual" min="0.30" max="1.50" step="0.05" oninput="onSrcCustom()">
-          <div class="slider-labels"><span>0.30× слабый</span><span>1.00× норм</span><span>1.50× топ</span></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:4px">Низкое качество = игроки быстро уходят, меньше NGR. Высокое = возвращаются, долгий LTV.</div>
+          <div class="slider-labels">
+            <span data-i18n="qualSlider030">0.30× слабый</span>
+            <span data-i18n="qualSlider100">1.00× норм</span>
+            <span data-i18n="qualSlider150">1.50× топ</span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px" data-i18n="qualDesc">Низкое качество = игроки быстро уходят, меньше NGR. Высокое = возвращаются, долгий LTV.</div>
         </div>
-
-        <!-- FUNNEL — affects clicks/regs display, and FTD in clicks mode -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Конверсия воронки → влияет на трафик</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px" data-i18n="funnelHeader">Конверсия воронки → влияет на трафик</div>
         <div class="field">
-          <label class="lbl">Клик → Регистрация: <strong style="color:var(--blue)" id="srcEditC2RLbl">—</strong></label>
+          <label class="lbl"><span data-i18n="c2rLabel">Клик → Регистрация:</span> <strong style="color:var(--blue)" id="srcEditC2RLbl">—</strong></label>
           <input type="range" id="srcEditC2R" min="1" max="40" step="0.5" oninput="onSrcCustom()">
         </div>
         <div class="field" style="margin-bottom:4px">
-          <label class="lbl">Регистрация → FTD: <strong style="color:var(--blue)" id="srcEditR2DLbl">—</strong></label>
+          <label class="lbl"><span data-i18n="r2dLabel">Регистрация → FTD:</span> <strong style="color:var(--blue)" id="srcEditR2DLbl">—</strong></label>
           <input type="range" id="srcEditR2D" min="1" max="50" step="0.5" oninput="onSrcCustom()">
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-bottom:12px" id="funnelModeNote">
-          В режиме «Знаю FTD» — только меняет расчёт кликов. В режиме «Знаю клики» — меняет FTD и весь расчёт.
-        </div>
-
+        <div style="font-size:10px;color:var(--muted);margin-bottom:12px" data-i18n="funnelModeNote" id="funnelModeNote">В режиме «Знаю FTD» — только меняет расчёт кликов. В режиме «Знаю клики» — меняет FTD и весь расчёт.</div>
         <div style="display:flex;gap:8px">
-          <button onclick="resetSrcCustom()" style="flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:6px;cursor:pointer;font-size:11px">↩ Сбросить</button>
-          <button onclick="toggleSrcEdit()" style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);color:var(--green);border-radius:5px;padding:6px;cursor:pointer;font-size:11px">Закрыть ✓</button>
+          <button onclick="resetSrcCustom()" style="flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:6px;cursor:pointer;font-size:11px" data-i18n="resetBtn">↩ Сбросить</button>
+          <button onclick="toggleSrcEdit()" style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);color:var(--green);border-radius:5px;padding:6px;cursor:pointer;font-size:11px" data-i18n="closeBtn">Закрыть ✓</button>
         </div>
       </div>
     </div>
@@ -139,7 +140,7 @@
       <!-- FTD mode -->
       <div id="inputFtdBlock">
         <div class="field">
-          <label class="lbl">FTD в месяц: <strong style="color:var(--green)" id="ftdLabel">100</strong></label>
+          <label class="lbl"><span data-i18n="ftdMonthLabel">FTD в месяц:</span> <strong style="color:var(--green)" id="ftdLabel">100</strong></label>
           <input type="range" id="ftdSlider" min="5" max="1000" step="5" value="100" oninput="onFtdSlider()">
           <div class="slider-labels"><span>5 micro</span><span>250 team</span><span>1 000+</span></div>
         </div>
@@ -148,25 +149,25 @@
       <!-- Clicks mode -->
       <div id="inputClicksBlock" style="display:none">
         <div class="field">
-          <label class="lbl">Кликов в месяц: <strong style="color:var(--blue)" id="clicksLabel">5 000</strong></label>
+          <label class="lbl"><span data-i18n="clicksMonthLabel">Кликов в месяц:</span> <strong style="color:var(--blue)" id="clicksLabel">5 000</strong></label>
           <input type="range" id="clicksSlider" min="100" max="200000" step="100" value="5000" oninput="onClicksSlider()">
           <div class="slider-labels"><span>100</span><span>50 000</span><span>200 000</span></div>
         </div>
         <div class="card-sm" style="margin-bottom:10px;font-size:12px">
-          <span style="color:var(--muted)">FTD (расчётно): </span>
+          <span style="color:var(--muted)" data-i18n="calcFtdLabel">FTD (расчётно):</span>
           <strong style="color:var(--green)" id="calcFtdDisplay">—</strong>
-          <span style="color:var(--muted);font-size:10px"> = клики × C2R × R2D</span>
+          <span style="color:var(--muted);font-size:10px" data-i18n="calcFtdFormula"> = клики × C2R × R2D</span>
         </div>
       </div>
 
       <div class="funnel" id="funnelBlock">
         <div class="funnel-step" style="background:#1e293b">
-          <div class="funnel-lbl">Кликов</div>
+          <div class="funnel-lbl" data-i18n="funnelClicks">Кликов</div>
           <div class="funnel-val" id="fClicks">—</div>
-          <div class="funnel-pct">оценка</div>
+          <div class="funnel-pct" data-i18n="funnelEst">оценка</div>
         </div>
         <div class="funnel-step" style="background:#1e3a5f">
-          <div class="funnel-lbl">Регистраций</div>
+          <div class="funnel-lbl" data-i18n="funnelRegs">Регистраций</div>
           <div class="funnel-val" id="fRegs">—</div>
           <div class="funnel-pct" id="fRegPct">—</div>
         </div>
@@ -181,19 +182,19 @@
       <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleBudget()">
           <span style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em" data-i18n="roiToggle">💰 ROI-расчёт (учесть расходы)</span>
-          <span style="font-size:11px;color:var(--green)" id="budgetToggleIcon">+ развернуть</span>
+          <span style="font-size:11px;color:var(--green)" id="budgetToggleIcon" data-i18n="roiExpand">+ развернуть</span>
         </div>
         <div id="budgetBlock" style="display:none;margin-top:10px">
           <!-- FTD mode: manual budget slider -->
           <div id="roiBudgetManual">
             <div class="field">
-              <label class="lbl">Рекламный бюджет в месяц: <strong style="color:var(--yellow)" id="budgetLabel">$500</strong></label>
+              <label class="lbl"><span data-i18n="adBudgetMonth">Рекламный бюджет в месяц:</span> <strong style="color:var(--yellow)" id="budgetLabel">$500</strong></label>
               <input type="range" id="budgetSlider" min="100" max="50000" step="100" value="500" oninput="onBudgetSlider()">
               <div class="slider-labels"><span>$100</span><span>$5 000</span><span>$50 000</span></div>
             </div>
             <div class="field">
-              <label class="lbl">CPC (цена клика): <strong style="color:var(--yellow)" id="cpcLabel">$0.18</strong>
-                <span style="color:var(--muted);font-weight:400"> — из источника</span></label>
+              <label class="lbl"><span data-i18n="cpcLbl">CPC (цена клика):</span> <strong style="color:var(--yellow)" id="cpcLabel">$0.18</strong>
+                <span style="color:var(--muted);font-weight:400" data-i18n="cpcFromSrc"> — из источника</span></label>
               <input type="range" id="cpcSlider" min="0.01" max="2" step="0.01" value="0.18" oninput="onCpcSlider()">
               <div class="slider-labels"><span>$0.01</span><span>$0.50</span><span>$2.00</span></div>
             </div>
@@ -201,15 +202,15 @@
           <!-- Clicks mode: budget auto = clicks × CPC, only CPC is editable -->
           <div id="roiBudgetAuto" style="display:none">
             <div class="field">
-              <label class="lbl">CPC (цена клика): <strong style="color:var(--yellow)" id="cpcLabelAuto">$0.18</strong>
-                <span style="color:var(--muted);font-weight:400"> — настрой под свой источник</span></label>
+              <label class="lbl"><span data-i18n="cpcLbl">CPC (цена клика):</span> <strong style="color:var(--yellow)" id="cpcLabelAuto">$0.18</strong>
+                <span style="color:var(--muted);font-weight:400" data-i18n="cpcFromSrcAuto"> — настрой под свой источник</span></label>
               <input type="range" id="cpcSliderAuto" min="0.01" max="2" step="0.01" value="0.18" oninput="onCpcSliderAuto()">
               <div class="slider-labels"><span>$0.01</span><span>$0.50</span><span>$2.00</span></div>
             </div>
             <div class="card-sm" style="font-size:12px;margin-bottom:8px">
-              <span style="color:var(--muted)">Бюджет = </span>
+              <span style="color:var(--muted)" data-i18n="budgetCalc">Бюджет =</span>
               <strong id="autoBudgetClicks">—</strong>
-              <span style="color:var(--muted)"> кликов × </span>
+              <span style="color:var(--muted)" data-i18n="clicksWord"> кликов ×</span>
               <strong id="autoBudgetCpc">—</strong>
               <span style="color:var(--muted)"> CPC = </span>
               <strong style="color:var(--yellow)" id="autoBudgetTotal">—</strong>
@@ -255,21 +256,21 @@
 
     <!-- Timeline -->
     <div class="card">
-      <div class="sec">Доход с когорты — <span style="text-transform:none;font-size:10px;color:var(--muted);letter-spacing:0" id="timelineLabel">RS растёт по мере возврата игроков</span></div>
+      <div class="sec"><span data-i18n="timelineSec">Доход с когорты</span> — <span style="text-transform:none;font-size:10px;color:var(--muted);letter-spacing:0" id="timelineLabel"></span></div>
       <div class="row4" id="timeline"></div>
     </div>
 
     <!-- Player metrics -->
     <div class="card">
-      <div class="sec">Метрики игрока · <span id="geoNameLabel">—</span></div>
+      <div class="sec"><span data-i18n="metricsSecLabel">Метрики игрока</span> · <span id="geoNameLabel">—</span></div>
       <div class="row4" id="playerMetrics"></div>
     </div>
 
     <!-- RS Tier (shown for rs/hybrid) -->
     <div id="tierCard" class="card">
-      <div class="sec">Лестница RevShare · <span id="tierGeoLabel">—</span></div>
+      <div class="sec"><span data-i18n="tierSec">Лестница RevShare</span> · <span id="tierGeoLabel">—</span></div>
       <table class="tier-table">
-        <thead><tr><th>FTD / мес</th><th>RS %</th><th></th></tr></thead>
+        <thead><tr><th data-i18n="tierFtdMo">FTD / мес</th><th>RS %</th><th></th></tr></thead>
         <tbody id="tierBody"></tbody>
       </table>
       <div id="tierNote" style="margin-top:10px;font-size:11px;color:var(--muted)"></div>
@@ -277,19 +278,13 @@
 
     <!-- CPA options (shown for cpa) -->
     <div id="cpaCard" class="card" style="display:none">
-      <div class="sec">CPA условия</div>
       <div id="cpaBody"></div>
     </div>
 
     <!-- Payout conditions -->
     <div class="card">
       <div class="sec" data-i18n="payoutSec">Условия выплат</div>
-      <div class="p-row"><span class="p-key">Периодичность</span><span class="p-val">Еженедельно или ежемесячно — на выбор</span></div>
-      <div class="p-row"><span class="p-key">Минимум (неделя)</span><span class="p-val">$30</span></div>
-      <div class="p-row"><span class="p-key">Минимум (месяц)</span><span class="p-val">$100</span></div>
-      <div class="p-row"><span class="p-key">Еженедельная выплата</span><span class="p-val" style="color:var(--green)" id="weeklyPay">—</span></div>
-      <div class="p-row"><span class="p-key">Методы</span><span class="p-val">USDT / Игровой аккаунт</span></div>
-      <div class="p-row"><span class="p-key">Отрицательный баланс</span><span class="p-val" style="color:var(--green)">Не переносится на след. месяц</span></div>
+      <div id="payoutRows"></div>
     </div>
 
     <!-- Seasonality notice -->
@@ -306,10 +301,7 @@
   <div style="display:flex;flex-direction:column;gap:14px">
 
     <div class="card" style="border-color:rgba(0,212,170,.2);background:rgba(0,212,170,.03)">
-      <div style="font-size:13px;color:var(--label);line-height:1.7">
-        <strong style="color:var(--green)">Как работает сравнение:</strong> за каждый FTD по CPA партнёр получает фиксированную выплату один раз.
-        По RS — процент от каждого проигрыша игрока: через неделю, через месяц, через год. Таблица показывает накопленный доход с одной когорты игроков (привлечённых за один месяц).
-      </div>
+      <div style="font-size:13px;color:var(--label);line-height:1.7" id="compareIntroText"></div>
     </div>
 
     <!-- Hero cards -->
@@ -329,7 +321,7 @@
 
     <!-- Table -->
     <div class="card">
-      <div class="sec">Детальная таблица сравнения</div>
+      <div class="sec" data-i18n="detailedTableSec">Детальная таблица сравнения</div>
       <div style="overflow-x:auto">
         <table class="cmp-table" id="cmpTable"></table>
       </div>
@@ -351,7 +343,7 @@
 
     <!-- Why RS wins -->
     <div class="card" style="border-color:rgba(0,212,170,.15)">
-      <div class="sec">Почему RS выгоднее в долгосрочной перспективе</div>
+      <div class="sec" data-i18n="rsWinsSec">Почему RS выгоднее в долгосрочной перспективе</div>
       <div id="rsArgsList"></div>
     </div>
 
@@ -368,7 +360,7 @@
       <div class="sc-header" style="background:rgba(0,212,170,.1);color:var(--green)" id="scAHeader" data-i18n="scAHeader">Сценарий A</div>
       <div class="sc-geo" id="scAGeo"></div>
       <div class="field">
-        <label class="lbl" style="font-size:10px">Источник</label>
+        <label class="lbl" style="font-size:10px" data-i18n="scSrcLabel">Источник</label>
         <select id="scASrc" onchange="renderScenarios()" style="font-size:12px;padding:6px 8px">
           <option value="facebook">Facebook / Meta</option>
           <option value="telegram">Telegram</option>
@@ -376,10 +368,10 @@
           <option value="google">Google UAC</option>
           <option value="tiktok">TikTok</option>
           <option value="push">Push</option>
-          <option value="influencer">Инфлюенсер</option>
+          <option value="influencer" data-i18n-opt="srcInfluencer">Инфлюенсер</option>
           <option value="aso">ASO</option>
           <option value="email">Email / SMS</option>
-          <option value="native">Нативная</option>
+          <option value="native" data-i18n-opt="srcNative">Нативная</option>
         </select>
       </div>
       <div class="field">
@@ -399,7 +391,7 @@
       <div class="sc-header" style="background:rgba(139,92,246,.1);color:var(--purple)" id="scBHeader" data-i18n="scBHeader">Сценарий B</div>
       <div class="sc-geo" id="scBGeo"></div>
       <div class="field">
-        <label class="lbl" style="font-size:10px">Источник</label>
+        <label class="lbl" style="font-size:10px" data-i18n="scSrcLabel">Источник</label>
         <select id="scBSrc" onchange="renderScenarios()" style="font-size:12px;padding:6px 8px">
           <option value="facebook">Facebook / Meta</option>
           <option value="telegram" selected>Telegram</option>
@@ -407,10 +399,10 @@
           <option value="google">Google UAC</option>
           <option value="tiktok">TikTok</option>
           <option value="push">Push</option>
-          <option value="influencer">Инфлюенсер</option>
+          <option value="influencer" data-i18n-opt="srcInfluencer">Инфлюенсер</option>
           <option value="aso">ASO</option>
           <option value="email">Email / SMS</option>
-          <option value="native">Нативная</option>
+          <option value="native" data-i18n-opt="srcNative">Нативная</option>
         </select>
       </div>
       <div class="field">
@@ -444,27 +436,27 @@
       <div class="card">
         <div class="sec" data-i18n="subSec">Ваша суб-сеть</div>
         <div class="field">
-          <label class="lbl">Количество суб-партнёров: <strong style="color:var(--purple)" id="subCountLabel">3</strong></label>
+          <label class="lbl"><span data-i18n="subCountLbl">Количество суб-партнёров:</span> <strong style="color:var(--purple)" id="subCountLabel">3</strong></label>
           <input type="range" id="subCountSlider" min="1" max="50" value="3" oninput="onSubSlider()">
           <div class="slider-labels"><span>1</span><span>25</span><span>50</span></div>
         </div>
         <div class="field">
-          <label class="lbl">Среднее FTD у каждого: <strong style="color:var(--purple)" id="subFtdLabel">80</strong></label>
+          <label class="lbl"><span data-i18n="subFtdAvgLbl">Среднее FTD у каждого:</span> <strong style="color:var(--purple)" id="subFtdLabel">80</strong></label>
           <input type="range" id="subFtdSlider" min="10" max="500" step="10" value="80" oninput="onSubSlider()">
           <div class="slider-labels"><span>10</span><span>250</span><span>500</span></div>
         </div>
         <div class="field">
-          <label class="lbl">Ваш % от NGR суб-партнёров: <strong style="color:var(--purple)" id="subPctLabel">7%</strong></label>
+          <label class="lbl"><span data-i18n="subPctLbl">Ваш % от NGR суб-партнёров:</span> <strong style="color:var(--purple)" id="subPctLabel">7%</strong></label>
           <input type="range" id="subPctSlider" min="1" max="15" value="7" oninput="onSubSlider()">
-          <div class="slider-labels"><span>1%</span><span style="color:var(--purple)">7% рек.</span><span>15%</span></div>
+          <div class="slider-labels"><span>1%</span><span style="color:var(--purple)" data-i18n="subPctRec">7% рек.</span><span>15%</span></div>
         </div>
-        <div class="alert alert-info" style="margin-top:4px">Стандартная рекомендация: 7%. Устанавливается индивидуально через комиссионную группу «Referral».</div>
+        <div class="alert alert-info" style="margin-top:4px" data-i18n="subAlert">Стандартная рекомендация: 7%. Устанавливается индивидуально через комиссионную группу «Referral».</div>
       </div>
 
       <div class="card">
-        <div class="sec">ГЕО суб-партнёров</div>
-        <div style="font-size:12px;color:var(--muted)">Используется ГЕО из основного калькулятора: <strong style="color:var(--text)" id="subGeoLabel">—</strong></div>
-        <div style="margin-top:10px;font-size:12px;color:var(--muted)">NGR / игрок (мес 1): <strong style="color:var(--green)" id="subNgrLabel">—</strong></div>
+        <div class="sec" data-i18n="subGeoSec">ГЕО суб-партнёров</div>
+        <div style="font-size:12px;color:var(--muted)"><span data-i18n="subGeoUsing">Используется ГЕО из основного калькулятора:</span> <strong style="color:var(--text)" id="subGeoLabel">—</strong></div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted)"><span data-i18n="subNgrPerPlayer">NGR / игрок (мес 1):</span> <strong style="color:var(--green)" id="subNgrLabel">—</strong></div>
       </div>
 
     </div>
@@ -476,14 +468,14 @@
       </div>
 
       <div class="card">
-        <div class="sec">Масштаб сети</div>
+        <div class="sec" data-i18n="subScaleSec">Масштаб сети</div>
         <div style="overflow-x:auto">
           <table class="cmp-table" id="subTable"></table>
         </div>
       </div>
 
       <div class="card" style="border-color:rgba(245,158,11,.2)">
-        <div class="sec">Как строить суб-партнёрскую сеть</div>
+        <div class="sec" data-i18n="subBuildSec">Как строить суб-партнёрскую сеть</div>
         <div id="subTips"></div>
       </div>
 
@@ -506,16 +498,7 @@
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="card">
           <div class="sec" data-i18n="whyPaySec">Условия выплат — кратко</div>
-          <div class="p-row"><span class="p-key">RS по умолчанию</span><span class="p-val" style="color:var(--green)">25%</span></div>
-          <div class="p-row"><span class="p-key">RS максимум (объём)</span><span class="p-val" style="color:var(--green)">35–40%</span></div>
-          <div class="p-row"><span class="p-key">RS для топов</span><span class="p-val" style="color:var(--green)">до 65%</span></div>
-          <div class="p-row"><span class="p-key">Admin fee</span><span class="p-val" style="color:var(--green)">0% <span style="font-size:10px;color:var(--muted)">(у Pin-Up 20%, Vavada 14%)</span></span></div>
-          <div class="p-row"><span class="p-key">CPA</span><span class="p-val" style="font-size:11px;color:var(--muted)">По ГЕО, от $16 — обсуждается индивидуально после пролива по RevShare</span></div>
-          <div class="p-row"><span class="p-key">Выплаты</span><span class="p-val">Вт. еженед. / ежемес.</span></div>
-          <div class="p-row"><span class="p-key">Минимум</span><span class="p-val">$30 / нед <span style="font-size:10px;color:var(--muted)">(у Parimatch $100)</span></span></div>
-          <div class="p-row"><span class="p-key">Cookie</span><span class="p-val">30 дней, Last Win</span></div>
-          <div class="p-row"><span class="p-key">Sub-aff</span><span class="p-val" style="color:var(--green)">~7% от NGR <span style="font-size:10px;color:var(--muted)">(рынок: 3–10%)</span></span></div>
-          <div class="p-row"><span class="p-key">Отриц. баланс</span><span class="p-val" style="color:var(--green)">Не переносится</span></div>
+          <div id="whyPayRows"></div>
         </div>
 
         <div class="card">
@@ -544,25 +527,18 @@
     <div class="card" style="border-color:rgba(0,212,170,.25);background:linear-gradient(135deg,#0d1929,#0a1622)">
       <div class="sec" data-i18n="managerSec">Твой менеджер в lil.bet</div>
       <div class="manager-card">
-        <img class="manager-photo" src="img/ivan.jpg" alt="Ivan — менеджер lil.bet">
+        <img class="manager-photo" src="img/ivan.jpg" alt="Ivan">
         <div class="manager-info">
           <div class="manager-name">Иван Поленок</div>
           <div class="manager-title">Affiliate Manager · lil.bet</div>
-          <div class="manager-perks">
-            <div class="manager-perk">🎨 Выдам готовые <strong>креативы для запуска</strong> — баннеры, тексты, видео под твой ГЕО и источник</div>
-            <div class="manager-perk">📊 Скажу, что <strong>сейчас лучше конвертит</strong> — какие связки, форматы и подходы дают результат прямо сейчас</div>
-            <div class="manager-perk">🎯 Помогу с <strong>целевой аудиторией</strong> — на кого таргетироваться для максимального CR в FTD</div>
-            <div class="manager-perk">🎰 Подскажу, какие <strong>слоты и игры</strong> лучше всего продают идею и удерживают игроков</div>
-            <div class="manager-perk">🎁 Разберём, какие <strong>бонусы лучше продают</strong> — фриспины, приветственный бонус, кэшбек</div>
-            <div class="manager-perk">⚡ Решаю вопросы по условиям, выплатам и промо <strong>напрямую в чате</strong> — без тикетов и ожидания</div>
-          </div>
+          <div class="manager-perks" id="managerPerks"></div>
           <div class="contact-links">
             <a class="contact-link tg" href="https://t.me/ivan_lilbet" target="_blank">✈️ @ivan_lilbet</a>
-            <a class="contact-link tg" href="https://t.me/lilbet_official" target="_blank">📢 Канал бренда</a>
-            <a class="contact-link tg" href="https://t.me/partners_lilbet" target="_blank">🔗 Канал партнёрки</a>
+            <a class="contact-link tg" href="https://t.me/lilbet_official" target="_blank">📢 <span data-i18n="brandChannel">Канал бренда</span></a>
+            <a class="contact-link tg" href="https://t.me/partners_lilbet" target="_blank">🔗 <span data-i18n="affChannel">Канал партнёрки</span></a>
             <a class="contact-link mail" href="mailto:polenok.ivan@lil.bet">✉️ polenok.ivan@lil.bet</a>
           </div>
-          <a class="cta-reg" href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank">🚀 Зарегистрироваться в партнёрской программе</a>
+          <a class="cta-reg" href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank" data-i18n="ctaReg">🚀 Зарегистрироваться в партнёрской программе</a>
         </div>
       </div>
     </div>
@@ -572,11 +548,11 @@
 
 </div><!-- /wrap -->
 
-<footer>
-  Данные NGR/игрок — бенчмарки по ГЕО. CPA обсуждается индивидуально после пролива. Cookie 30 дней (Last Win). &nbsp;·&nbsp;
-  <a href="https://t.me/ivan_lilbet" target="_blank" style="color:var(--green);text-decoration:none">✈️ Менеджер</a> &nbsp;·&nbsp;
-  <a href="https://t.me/partners_lilbet" target="_blank" style="color:var(--muted);text-decoration:none">Партнёрка</a> &nbsp;·&nbsp;
-  <a href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank" style="color:var(--green);text-decoration:none;font-weight:600">🚀 Регистрация</a>
+<footer id="siteFooter">
+  <span id="footerText"></span> &nbsp;·&nbsp;
+  <a href="https://t.me/ivan_lilbet" target="_blank" style="color:var(--green);text-decoration:none">✈️ <span data-i18n="footerManager">Менеджер</span></a> &nbsp;·&nbsp;
+  <a href="https://t.me/partners_lilbet" target="_blank" style="color:var(--muted);text-decoration:none" data-i18n="footerAff">Партнёрка</a> &nbsp;·&nbsp;
+  <a href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank" style="color:var(--green);text-decoration:none;font-weight:600" data-i18n="footerReg">🚀 Регистрация</a>
 </footer>
 
 <!-- Tour overlay -->
@@ -594,10 +570,10 @@
   </div>
 </div>
 
-<script src="js/lang.js"></script>
-<script src="js/data.js"></script>
-<script src="js/calc.js"></script>
-<script src="js/render.js"></script>
-<script src="js/app.js"></script>
+<script src="js/lang.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/calc.js?v=5"></script>
+<script src="js/render.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

@@ -16,7 +16,7 @@ function buildScGeoGrid(ab) {
   document.getElementById('sc' + ab + 'Geo').innerHTML =
     Object.entries(GEO_DATA).map(function(entry) {
       var k=entry[0], v=entry[1];
-      return '<button class="sc-geo-btn ' + (k === sc.geo ? 'active' : '') + '" onclick="setScGeo(\'' + ab + '\',\'' + k + '\')">' + v.label + '</button>';
+      return '<button class="sc-geo-btn ' + (k === sc.geo ? 'active' : '') + '" onclick="setScGeo(\'' + ab + '\',\'' + k + '\')">' + geoLabel(k) + '</button>';
     }).join('');
 }
 
@@ -186,7 +186,7 @@ function skipTour() {
 function buildGeoGrid() {
   document.getElementById('geoGrid').innerHTML = Object.entries(GEO_DATA).map(function(entry) {
     var k=entry[0], v=entry[1];
-    return '<button class="geo-btn ' + (k===state.geo?'active':'') + '" onclick="setGeo(\'' + k + '\')">' + v.label + '</button>';
+    return '<button class="geo-btn ' + (k===state.geo?'active':'') + '" onclick="setGeo(\'' + k + '\')">' + geoLabel(k) + '</button>';
   }).join('');
 }
 
@@ -343,7 +343,7 @@ function onCpcSliderAuto() {
 function toggleBudget() {
   state.showBudget = !state.showBudget;
   document.getElementById('budgetBlock').style.display = state.showBudget ? '' : 'none';
-  document.getElementById('budgetToggleIcon').textContent = state.showBudget ? '− свернуть' : '+ развернуть';
+  document.getElementById('budgetToggleIcon').textContent = state.showBudget ? t('roiCollapse') : t('roiExpand');
   if (state.showBudget) { syncCpcSliders(); renderROI(calc()); }
 }
 
@@ -373,14 +373,8 @@ function switchTab(tab) {
   document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.textContent.toLowerCase() === currentLang.toLowerCase());
   });
-  // Update tab labels for saved language
-  ['calc','compare','scenarios','subaff','why'].forEach(function(id) {
-    var el = document.getElementById('tab-'+id);
-    var key = 'tab' + id.charAt(0).toUpperCase() + id.slice(1);
-    if (el && L[key]) el.textContent = L[key];
-  });
 
-  // Apply data-i18n attributes
+  // Apply data-i18n attributes (handles all spans including tab buttons)
   applyI18n();
 
   buildGeoGrid();
