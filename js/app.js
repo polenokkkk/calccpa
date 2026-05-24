@@ -505,7 +505,7 @@ function spinSlot() {
           if (res) res.textContent = t('slotWin');
           var footer = document.getElementById('slotFooter');
           if (footer) {
-            footer.innerHTML = '<a href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank">' + t('slotWinCta') + ' →</a>';
+            footer.innerHTML = '<a href="https://t.me/ivan_lilbet" target="_blank">' + t('slotWinCta') + ' →</a>';
           }
         }, 350);
       }
