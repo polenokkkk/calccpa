@@ -195,7 +195,7 @@ function renderModelBlock(c) {
         t('hybridManualPre') +
         '</div>' +
         '<div class="field">' +
-          '<label class="lbl">' + t('hybridCpaLabel') + ' <strong style="color:var(--red)">$' + state.hybridCpa + '</strong></label>' +
+          '<label class="lbl">' + t('hybridCpaLabel') + ' <strong style="color:var(--red)" id="hybridCpaLbl">$' + state.hybridCpa + '</strong></label>' +
           '<input type="range" id="hybridCpaSlider" min="5" max="100" step="1" value="' + state.hybridCpa + '"' +
             ' oninput="state.hybridCpa=+this.value;document.getElementById(\'hybridCpaLbl\').textContent=\'$\'+this.value;renderAll()">' +
           '<div class="slider-labels"><span>$5</span><span>$50</span><span>$100</span></div>' +
