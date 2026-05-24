@@ -222,7 +222,7 @@ const LANG = {
     subGeoSec:'ГЕО суб-партнёров', subGeoUsing:'Используется ГЕО из основного калькулятора:',
     subNgrPerPlayer:'NGR / игрок (мес 1):', subScaleSec:'Масштаб сети', subBuildSec:'Как строить суб-партнёрскую сеть',
     brandChannel:'Канал бренда', affChannel:'Канал партнёрки',
-    ctaReg:'🚀 Зарегистрироваться в партнёрской программе', regBtnShort:'🚀 Регистрация',
+    ctaReg:'🤝 Стать партнёром', regBtnShort:'🚀 Регистрация',
     footerText:'lil.bet — партнёрский калькулятор', footerManager:'Менеджер', footerAff:'Партнёрка', footerReg:'🚀 Регистрация',
     detailedTableSec:'Детальная таблица сравнения', rsWinsSec:'Почему RS выгоднее в долгосрочной перспективе',
     managerPerks:['⚡ <b>Отвечает быстро</b> — обычно в течение часа','📋 <b>Индивидуальные условия</b> — ставки, промо, сплит CPA+RS','💳 <b>Еженедельные выплаты</b> — крипто без задержек','📊 <b>Статистика в реальном времени</b>'],
@@ -416,7 +416,7 @@ const LANG = {
     subGeoSec:'Sub-affiliate GEO', subGeoUsing:'Using GEO from main calculator:',
     subNgrPerPlayer:'NGR / player (month 1):', subScaleSec:'Network scale', subBuildSec:'How to build a sub-affiliate network',
     brandChannel:'Brand channel', affChannel:'Affiliate channel',
-    ctaReg:'🚀 Register in the affiliate program', regBtnShort:'🚀 Register',
+    ctaReg:'🤝 Become a partner', regBtnShort:'🚀 Register',
     footerText:'lil.bet — affiliate calculator', footerManager:'Manager', footerAff:'Affiliate program', footerReg:'🚀 Register',
     detailedTableSec:'Detailed comparison table', rsWinsSec:'Why RS is better long-term',
     managerPerks:['⚡ <b>Fast response</b> — usually within an hour','📋 <b>Individual terms</b> — rates, promos, CPA+RS split','💳 <b>Weekly payouts</b> — crypto, no delays','📊 <b>Real-time statistics</b>'],
@@ -608,7 +608,7 @@ const LANG = {
     subGeoSec:'ГЕО суб-партнерів', subGeoUsing:'Використовується ГЕО з основного калькулятора:',
     subNgrPerPlayer:'NGR / гравець (міс 1):', subScaleSec:'Масштаб мережі', subBuildSec:'Як будувати суб-партнерську мережу',
     brandChannel:'Канал бренду', affChannel:'Канал партнерки',
-    ctaReg:'🚀 Зареєструватися в партнерській програмі', regBtnShort:'🚀 Реєстрація',
+    ctaReg:'🤝 Стати партнером', regBtnShort:'🚀 Реєстрація',
     footerText:'lil.bet — калькулятор партнера', footerManager:'Менеджер', footerAff:'Партнерка', footerReg:'🚀 Реєстрація',
     detailedTableSec:'Детальна таблиця порівняння', rsWinsSec:'Чому RS вигідніше у довгостроковій перспективі',
     managerPerks:['⚡ <b>Відповідає швидко</b> — зазвичай протягом години','📋 <b>Індивідуальні умови</b> — ставки, промо, сплит CPA+RS','💳 <b>Щотижневі виплати</b> — крипто без затримок','📊 <b>Статистика в реальному часі</b>'],
@@ -800,7 +800,7 @@ const LANG = {
     subGeoSec:'Sub-Affiliate GEO', subGeoUsing:'GEO aus dem Hauptrechner verwendet:',
     subNgrPerPlayer:'NGR / Spieler (Monat 1):', subScaleSec:'Netzwerkgröße', subBuildSec:'Wie man ein Sub-Affiliate-Netzwerk aufbaut',
     brandChannel:'Markenkanal', affChannel:'Affiliate-Kanal',
-    ctaReg:'🚀 Im Partnerprogramm registrieren', regBtnShort:'🚀 Registrierung',
+    ctaReg:'🤝 Partner werden', regBtnShort:'🚀 Registrierung',
     footerText:'lil.bet — Partner-Rechner', footerManager:'Manager', footerAff:'Partnerprogramm', footerReg:'🚀 Registrierung',
     detailedTableSec:'Detaillierte Vergleichstabelle', rsWinsSec:'Warum RS langfristig besser ist',
     managerPerks:['⚡ <b>Schnelle Antwort</b> — normalerweise innerhalb einer Stunde','📋 <b>Individuelle Konditionen</b> — Raten, Promos, CPA+RS-Split','💳 <b>Wöchentliche Auszahlungen</b> — Krypto ohne Verzögerungen','📊 <b>Statistik in Echtzeit</b>'],
@@ -992,7 +992,7 @@ const LANG = {
     subGeoSec:'GEO de sub-afiliados', subGeoUsing:'Se usa el GEO de la calculadora principal:',
     subNgrPerPlayer:'NGR / jugador (mes 1):', subScaleSec:'Escala de red', subBuildSec:'Cómo construir una red de sub-afiliados',
     brandChannel:'Canal de marca', affChannel:'Canal de afiliados',
-    ctaReg:'🚀 Registrarse en el programa de afiliados', regBtnShort:'🚀 Registro',
+    ctaReg:'🤝 Convertirse en socio', regBtnShort:'🚀 Registro',
     footerText:'lil.bet — calculadora de afiliados', footerManager:'Manager', footerAff:'Afiliados', footerReg:'🚀 Registro',
     detailedTableSec:'Tabla de comparación detallada', rsWinsSec:'Por qué RS es mejor a largo plazo',
     managerPerks:['⚡ <b>Respuesta rápida</b> — normalmente en una hora','📋 <b>Condiciones individuales</b> — tasas, promos, split CPA+RS','💳 <b>Pagos semanales</b> — cripto sin demoras','📊 <b>Estadísticas en tiempo real</b>'],
@@ -1089,7 +1089,7 @@ function applyI18n() {
     var perks = t('managerPerks');
     if (Array.isArray(perks)) {
       mp.innerHTML = perks.map(function(p) {
-        return '<div class="perk-item" style="padding:5px 0;font-size:13px;color:var(--label);line-height:1.5">' + p + '</div>';
+        return '<div class="manager-perk-item">' + p + '</div>';
       }).join('');
     }
   }

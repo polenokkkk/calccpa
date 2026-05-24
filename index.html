@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>lil.bet — Калькулятор партнёра</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="css/style.css?v=11">
+<link rel="stylesheet" href="css/style.css?v=12">
 </head>
 <body>
 
@@ -435,7 +435,7 @@
 
 <!-- ═══════════════════ TAB: SUB-AFF ═══════════════════ -->
 <div id="panel-subaff" class="panel">
-  <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start" class="cols">
+  <div class="cols">
     <div class="col-inputs">
 
       <div class="card">
@@ -529,23 +529,36 @@
     </div>
 
     <!-- Manager & Contacts -->
-    <div class="card" style="border-color:rgba(0,212,170,.25);background:linear-gradient(135deg,#0d1929,#0a1622)">
-      <div class="sec" data-i18n="managerSec">Твой менеджер в lil.bet</div>
-      <div class="manager-card">
-        <img class="manager-photo" src="img/ivan.jpg" alt="Ivan">
-        <div class="manager-info">
+    <div class="manager-outer">
+      <div class="manager-hero">
+        <div class="manager-avatar-wrap">
+          <img class="manager-avatar" src="img/ivan.jpg" alt="Ivan">
+          <div class="manager-online"></div>
+        </div>
+        <div class="manager-headline">
           <div class="manager-name" data-i18n="managerName">Иван Поленок</div>
           <div class="manager-title" data-i18n="managerTitle">Affiliate Manager · lil.bet</div>
-          <div class="manager-perks" id="managerPerks"></div>
-          <div class="contact-links">
-            <a class="contact-link tg" href="https://t.me/ivan_lilbet" target="_blank">✈️ @ivan_lilbet</a>
-            <a class="contact-link tg" href="https://t.me/lilbet_official" target="_blank">📢 <span data-i18n="brandChannel">Канал бренда</span></a>
-            <a class="contact-link tg" href="https://t.me/partners_lilbet" target="_blank">🔗 <span data-i18n="affChannel">Канал партнёрки</span></a>
-            <a class="contact-link mail" href="mailto:polenok.ivan@lil.bet">✉️ polenok.ivan@lil.bet</a>
-          </div>
-          <a class="cta-reg" href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank" data-i18n="ctaReg">🚀 Зарегистрироваться в партнёрской программе</a>
         </div>
       </div>
+
+      <div class="manager-perks-grid" id="managerPerks"></div>
+
+      <div class="manager-contacts">
+        <a class="mlink mlink-tg" href="https://t.me/ivan_lilbet" target="_blank">
+          <span class="mlink-icon">✈️</span><span>@ivan_lilbet</span>
+        </a>
+        <a class="mlink mlink-tg" href="https://t.me/lilbet_official" target="_blank">
+          <span class="mlink-icon">📢</span><span data-i18n="brandChannel">Канал бренда</span>
+        </a>
+        <a class="mlink mlink-tg" href="https://t.me/partners_lilbet" target="_blank">
+          <span class="mlink-icon">🔗</span><span data-i18n="affChannel">Канал партнёрки</span>
+        </a>
+        <a class="mlink mlink-mail" href="mailto:polenok.ivan@lil.bet">
+          <span class="mlink-icon">✉️</span><span>polenok.ivan@lil.bet</span>
+        </a>
+      </div>
+
+      <a class="partner-btn" href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank" data-i18n="ctaReg">🤝 Стать партнёром</a>
     </div>
 
   </div>
@@ -575,10 +588,10 @@
   </div>
 </div>
 
-<script src="js/lang.js?v=11"></script>
-<script src="js/data.js?v=11"></script>
-<script src="js/calc.js?v=11"></script>
-<script src="js/render.js?v=11"></script>
-<script src="js/app.js?v=11"></script>
+<script src="js/lang.js?v=12"></script>
+<script src="js/data.js?v=12"></script>
+<script src="js/calc.js?v=12"></script>
+<script src="js/render.js?v=12"></script>
+<script src="js/app.js?v=12"></script>
 </body>
 </html>

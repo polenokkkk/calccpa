@@ -267,11 +267,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   /* Scenarios */
   .sc-geo{grid-template-columns:repeat(3,1fr)}
 
-  /* Manager card — stack vertically */
-  .manager-card{flex-direction:column;align-items:center;text-align:center}
-  .manager-info{min-width:unset;width:100%}
-  .manager-photo{width:100px;height:100px}
-  .contact-links{justify-content:center}
+  /* Manager card */
+  .manager-perks-grid{grid-template-columns:1fr}
+  .manager-outer{padding:18px 14px;gap:16px}
+  .manager-avatar{width:60px;height:60px}
+
+  /* Competitor table — scroll + tiny font */
+  .comp-table{font-size:9px;min-width:480px}
+  .comp-table th,.comp-table td{padding:5px 6px;white-space:nowrap}
 
   /* Footer */
   footer{font-size:10px;padding:10px;flex-wrap:wrap;gap:6px;text-align:center}
@@ -287,21 +290,63 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 /* Seasonality notice */
 .season-note{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:4px;padding:3px 8px;margin-top:6px}
 
-/* Manager card */
-.manager-card{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
-.manager-photo{width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--green);flex-shrink:0}
-.manager-info{flex:1;min-width:0}
-.manager-name{font-size:17px;font-weight:700;color:var(--text);margin-bottom:2px}
-.manager-title{font-size:11px;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
-.manager-perks{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.manager-perk{font-size:12px;color:var(--label);display:flex;align-items:flex-start;gap:6px;line-height:1.5}
+/* ── Manager card (new design) ── */
+.manager-outer{
+  border-radius:16px;
+  border:1px solid rgba(0,212,170,.25);
+  background:linear-gradient(160deg,#0d1f35 0%,#0a1622 100%);
+  padding:24px 20px 20px;
+  display:flex;flex-direction:column;gap:20px;
+}
+.manager-hero{display:flex;align-items:center;gap:16px}
+.manager-avatar-wrap{position:relative;flex-shrink:0}
+.manager-avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2.5px solid var(--green);display:block}
+.manager-online{
+  position:absolute;bottom:3px;right:3px;
+  width:13px;height:13px;border-radius:50%;
+  background:#22c55e;border:2px solid #0a1622;
+}
+.manager-headline{}
+.manager-name{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.2px}
+.manager-title{font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;font-weight:600}
+
+.manager-perks-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.manager-perk-item{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;padding:10px 12px;font-size:12px;color:var(--label);line-height:1.5;
+}
+
+.manager-contacts{display:flex;flex-direction:column;gap:8px}
+.mlink{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;
+  text-decoration:none;font-size:13px;font-weight:600;
+  transition:opacity .15s;
+}
+.mlink:hover{opacity:.8}
+.mlink-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center}
+.mlink-tg{background:rgba(0,136,204,.12);border:1px solid rgba(0,136,204,.25);color:#29b6f6}
+.mlink-mail{background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.2);color:var(--green)}
+
+.partner-btn{
+  display:block;text-align:center;
+  font-size:15px;font-weight:800;letter-spacing:.02em;
+  padding:14px 20px;border-radius:12px;
+  background:linear-gradient(135deg,#00d4aa,#00b894);
+  color:#03120e;text-decoration:none;
+  box-shadow:0 4px 20px rgba(0,212,170,.25);
+  transition:transform .15s,box-shadow .15s;
+}
+.partner-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(0,212,170,.35)}
+
+/* old classes kept for safety */
+.cta-reg{display:block;text-align:center;font-size:14px;font-weight:700;padding:12px 20px;border-radius:8px;background:linear-gradient(135deg,var(--green),#00b894);color:#000;text-decoration:none;transition:opacity .15s;margin-top:12px}
 .contact-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .contact-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:6px;text-decoration:none;transition:opacity .15s}
-.contact-link:hover{opacity:.8}
 .contact-link.tg{background:rgba(0,136,204,.15);border:1px solid rgba(0,136,204,.35);color:#29b6f6}
 .contact-link.mail{background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);color:var(--green)}
-.cta-reg{display:block;text-align:center;font-size:14px;font-weight:700;padding:12px 20px;border-radius:8px;background:linear-gradient(135deg,var(--green),#00b894);color:#000;text-decoration:none;letter-spacing:.03em;transition:opacity .15s;margin-top:12px}
-.cta-reg:hover{opacity:.88}
 /* Payout rows */
 .pay-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
 .pay-row:last-child{border-bottom:none}
