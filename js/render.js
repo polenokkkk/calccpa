@@ -20,7 +20,7 @@ function renderCalc(c) {
   document.getElementById('statC2R').textContent = fmtP(src.c2r);
   document.getElementById('statR2D').textContent = fmtP(src.r2d);
   document.getElementById('statQual').textContent = src.qual.toFixed(2) + 'x';
-  document.getElementById('srcNote').textContent = src.note + (src.isCustom ? ' · ✎ метрики изменены' : '');
+  document.getElementById('srcNote').textContent = src.note + (src.isCustom ? ' · ' + t('metricsChanged') : '');
   var editBtn = document.getElementById('srcEditBtn');
   if (editBtn) editBtn.style.borderColor = src.isCustom ? 'var(--green)' : 'var(--border)';
   if (editBtn) editBtn.style.color = src.isCustom ? 'var(--green)' : 'var(--muted)';
@@ -30,13 +30,13 @@ function renderCalc(c) {
   if (promoEl) {
     var bonus = c.monthGgr - monthNgr;
     promoEl.innerHTML = state.promoLoad === 0
-      ? 'Бонусов нет. GGR = NGR = <strong>' + fmtU(c.monthGgr) + '</strong>'
-      : 'GGR ' + fmtU(c.monthGgr) + ' − бонусы <strong style="color:var(--red)">' + fmtU(bonus) + '</strong> (' + state.promoLoad + '%) = NGR <strong style="color:var(--green)">' + fmtU(monthNgr) + '</strong>. RS считается от NGR.';
+      ? t('promoNone') + ' <strong>' + fmtU(c.monthGgr) + '</strong>'
+      : t('promoGgr') + ' ' + fmtU(c.monthGgr) + ' ' + t('promoMinus') + ' <strong style="color:var(--red)">' + fmtU(bonus) + '</strong> (' + state.promoLoad + '%) = NGR <strong style="color:var(--green)">' + fmtU(monthNgr) + '</strong>. ' + t('promoHas');
   }
 
   // Hero
   document.getElementById('heroNgr').textContent = fmtU(monthNgr);
-  document.getElementById('heroSub').textContent = geo.label + ' · ' + src.label + ' · промо ' + state.promoLoad + '%';
+  document.getElementById('heroSub').textContent = geo.label + ' · ' + src.label + ' · ' + t('promoLabel') + ' ' + state.promoLoad + '%';
   document.getElementById('heroEarn').textContent = fmtU(earn1m);
   document.getElementById('heroFormula').textContent = formula;
 
@@ -46,7 +46,7 @@ function renderCalc(c) {
 
   // Weekly payout
   var weekly = earn1m / 4.3;
-  document.getElementById('weeklyPay').textContent = weekly >= 30 ? fmtU(weekly)+' / нед.' : '⚠ Ниже порога $30';
+  document.getElementById('weeklyPay').textContent = weekly >= 30 ? fmtU(weekly) + ' ' + t('perWeek') : t('belowThreshold');
 
   // Clicks mode
   if (state.inputMode === 'clicks') {
@@ -66,26 +66,26 @@ function renderCalc(c) {
   // Timeline label
   var tlLabel = document.getElementById('timelineLabel');
   if (tlLabel) {
-    if (state.model === 'rs') tlLabel.textContent = 'RS растёт по мере возврата игроков';
-    else if (state.model === 'cpa') tlLabel.textContent = 'CPA — разовая выплата, не растёт';
-    else tlLabel.textContent = 'Hybrid: CPA разово + RS за возвраты';
+    if (state.model === 'rs') tlLabel.textContent = t('rsTimelineLabel');
+    else if (state.model === 'cpa') tlLabel.textContent = t('cpaTimelineLabel');
+    else tlLabel.textContent = t('hybridTimelineLabel');
   }
 
   // Timeline
   var periods = [
-    ['1 мес', earn1m, monthNgr],
-    ['3 мес', earn3m, ftd * c.aNgr3m],
-    ['6 мес', earn6m, ftd * c.aNgr6m],
-    ['12 мес', earn12m, ftd * c.aNgr12m],
+    [t('earn1m'), earn1m, monthNgr],
+    [t('earn3m'), earn3m, ftd * c.aNgr3m],
+    [t('earn6m'), earn6m, ftd * c.aNgr6m],
+    [t('earn12m'), earn12m, ftd * c.aNgr12m],
   ];
   document.getElementById('timeline').innerHTML = periods.map(function(p) {
     var per=p[0],e=p[1],n=p[2];
     return '<div class="card-sm" style="text-align:center">' +
       '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">' + per + '</div>' +
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:2px">NGR бренда</div>' +
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:2px">' + t('brandNgr') + '</div>' +
       '<div style="font-size:14px;font-weight:700;color:var(--green)">' + fmtU(n) + '</div>' +
       '<div style="height:1px;background:var(--border);margin:6px 0"></div>' +
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:2px">Партнёру</div>' +
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:2px">' + t('partnerEarn') + '</div>' +
       '<div style="font-size:14px;font-weight:700;color:#fff">' + fmtU(e) + '</div>' +
       '</div>';
   }).join('');
@@ -96,22 +96,22 @@ function renderCalc(c) {
     '<div class="card-sm" style="text-align:center">' +
       '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Avg FTD</div>' +
       '<div style="font-size:16px;font-weight:700;color:var(--blue);margin-top:4px">' + fmtU(geo.avgFtd) + '</div>' +
-      '<div style="font-size:9px;color:var(--muted);margin-top:2px">первый депозит</div>' +
+      '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + t('firstDeposit') + '</div>' +
     '</div>' +
     '<div class="card-sm" style="text-align:center">' +
-      '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">NGR / 1мес</div>' +
+      '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">' + t('ngr1mShort') + '</div>' +
       '<div style="font-size:16px;font-weight:700;color:var(--green);margin-top:4px">' + fmtU(c.aNgr1m,0) + '</div>' +
-      '<div style="font-size:9px;color:var(--muted);margin-top:2px">на игрока</div>' +
+      '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + t('perPlayer') + '</div>' +
     '</div>' +
     '<div class="card-sm" style="text-align:center">' +
-      '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">NGR / 6мес</div>' +
+      '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">' + t('ngr6mShort') + '</div>' +
       '<div style="font-size:16px;font-weight:700;color:var(--green);margin-top:4px">' + fmtU(c.aNgr6m,0) + '</div>' +
-      '<div style="font-size:9px;color:var(--muted);margin-top:2px">когортный</div>' +
+      '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + t('cohortLabel') + '</div>' +
     '</div>' +
     '<div class="card-sm" style="text-align:center">' +
-      '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">LTV / 12мес</div>' +
+      '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">' + t('ltv12mShort') + '</div>' +
       '<div style="font-size:16px;font-weight:700;color:var(--yellow);margin-top:4px">' + fmtU(c.aNgr12m,0) + '</div>' +
-      '<div style="font-size:9px;color:var(--muted);margin-top:2px">на игрока</div>' +
+      '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + t('perPlayer') + '</div>' +
     '</div>';
 
   renderModelBlock(c);
@@ -133,31 +133,30 @@ function renderModelBlock(c) {
     if (hasLadder) {
       if (tierRate > state.rsRate) {
         tierNote = '<div style="font-size:11px;color:var(--green);margin-top:6px">' +
-          '📈 Тир по объёму: <strong>' + tierRate + '%</strong> — применяется автоматически (выше согласованного)' +
+          t('rsTierHigher') + ' <strong>' + tierRate + '%</strong> ' + t('rsTierApplied') +
           '</div>';
       } else if (tierRate < state.rsRate) {
         tierNote = '<div style="font-size:11px;color:var(--muted);margin-top:6px">' +
-          'Тир по объёму: ' + tierRate + '%. Применяется согласованная ставка <strong style="color:var(--green)">' + state.rsRate + '%</strong>' +
+          t('rsTierLower') + ' ' + tierRate + '%. ' + t('rsTierApplied2') + ' <strong style="color:var(--green)">' + state.rsRate + '%</strong>' +
           '</div>';
       } else {
-        tierNote = '<div style="font-size:11px;color:var(--muted);margin-top:6px">Тир совпадает со ставкой: ' + applied + '%</div>';
+        tierNote = '<div style="font-size:11px;color:var(--muted);margin-top:6px">' + t('rsTierEqual') + ' ' + applied + '%</div>';
       }
       tierNote += '<div style="font-size:10px;color:var(--muted);margin-top:6px;padding:8px;background:var(--bg3);border-radius:6px;line-height:1.6">' +
-        '<strong>Как работает лесенка:</strong> ставка определяется по количеству FTD <em>в текущем месяце</em>' +
-        ' и применяется <em>ко всем FTD</em> этого месяца целиком — не к части.<br>' +
-        'Приведи ' + realFtd + ' FTD → ставка <strong>' + applied + '%</strong>.' +
-        ' В следующем месяце считается заново.' +
+        '<strong>' + t('tierHowLabel') + '</strong> ' + t('tierHowText') + '<br>' +
+        t('tierBringFtd') + ' ' + realFtd + ' ' + t('tierFtdRate') + ' <strong>' + applied + '%</strong>. ' +
+        t('tierMonthReset') +
         '</div>';
     }
 
-    html = '<label class="lbl">RevShare % (согласованный): <strong style="color:var(--green)">' + state.rsRate + '%</strong></label>' +
+    html = '<label class="lbl">' + t('rsSliderLabel') + ' <strong style="color:var(--green)">' + state.rsRate + '%</strong></label>' +
       '<input type="range" id="rsSlider" min="15" max="65" value="' + state.rsRate + '" oninput="onRsSlider()">' +
-      '<div class="slider-labels"><span>15% старт</span><span style="color:var(--green)">25–40% основная</span><span>65% топы</span></div>' +
+      '<div class="slider-labels"><span>' + t('rsSliderMin') + '</span><span style="color:var(--green)">' + t('rsSliderMid') + '</span><span>' + t('rsSliderMax') + '</span></div>' +
       tierNote;
 
   } else if (state.model === 'cpa') {
     if (!geo.cpaAllowed) {
-      html = '<div class="alert alert-red">⛔ CPA недоступна для этого ГЕО</div>';
+      html = '<div class="alert alert-red">' + t('cpaUnavail') + '</div>';
     } else if (geo.cpaRates) {
       html = geo.cpaRates.map(function(r,i) {
         return '<label onclick="state.cpaRateIdx=' + i + ';renderAll()" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:' + (i===state.cpaRateIdx?'rgba(239,68,68,.1)':'var(--bg3)') + ';border:1px solid ' + (i===state.cpaRateIdx?'var(--red)':'var(--border)') + ';border-radius:7px;cursor:pointer;margin-bottom:6px">' +
@@ -167,8 +166,8 @@ function renderModelBlock(c) {
           '</label>';
       }).join('');
     } else {
-      html = '<div class="alert alert-warn">Ставка CPA для ' + geo.label + ' уточняйте у менеджера</div>' +
-        '<label class="lbl">Ставка CPA, $</label>' +
+      html = '<div class="alert alert-warn">' + t('cpaAskManager') + ' ' + geo.label + ' ' + t('cpaAskManager2') + '</div>' +
+        '<label class="lbl">' + t('cpaCustomLabel') + '</label>' +
         '<input type="number" value="' + state.cpaCustom + '" min="0" oninput="state.cpaCustom=+this.value;renderAll()">';
     }
 
@@ -176,39 +175,39 @@ function renderModelBlock(c) {
     if (geo.hybridAllowed && geo.hybridRate) {
       var h = geo.hybridRate;
       html = '<div class="alert alert-info" style="margin-bottom:10px">' +
-        'Официальная гибридная модель: <strong>$' + h.cpa + '/FTD</strong> разово + <strong>' + h.rs + '% RS</strong> от NGR' +
+        t('hybridOfficialPre') + ' <strong>$' + h.cpa + t('hybridOfficialPerFtd') + '</strong> <strong>' + h.rs + '% ' + t('hybridOfficialRs') + '</strong>' +
         '</div>' +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">' +
           '<div class="card-sm" style="text-align:center">' +
-            '<div style="font-size:10px;color:var(--muted);margin-bottom:3px">CPA часть</div>' +
+            '<div style="font-size:10px;color:var(--muted);margin-bottom:3px">' + t('hybridCpaPart') + '</div>' +
             '<div style="font-size:18px;font-weight:700;color:var(--red)">$' + h.cpa + '</div>' +
-            '<div style="font-size:9px;color:var(--muted)">за каждый FTD (разово)</div>' +
+            '<div style="font-size:9px;color:var(--muted)">' + t('hybridCpaOnce') + '</div>' +
           '</div>' +
           '<div class="card-sm" style="text-align:center">' +
-            '<div style="font-size:10px;color:var(--muted);margin-bottom:3px">RS часть</div>' +
+            '<div style="font-size:10px;color:var(--muted);margin-bottom:3px">' + t('hybridRsPart') + '</div>' +
             '<div style="font-size:18px;font-weight:700;color:var(--green)">' + h.rs + '%</div>' +
-            '<div style="font-size:9px;color:var(--muted)">от NGR игрока ежемесячно</div>' +
+            '<div style="font-size:9px;color:var(--muted)">' + t('hybridRsMonthly') + '</div>' +
           '</div>' +
         '</div>';
     } else {
       html = '<div class="alert alert-info" style="margin-bottom:10px">' +
-        'Ручной гибрид: CPA-выплата разово за FTD + RS от NGR каждый месяц' +
+        t('hybridManualPre') +
         '</div>' +
         '<div class="field">' +
-          '<label class="lbl">CPA за каждый FTD: <strong style="color:var(--red)">$' + state.hybridCpa + '</strong></label>' +
+          '<label class="lbl">' + t('hybridCpaLabel') + ' <strong style="color:var(--red)">$' + state.hybridCpa + '</strong></label>' +
           '<input type="range" id="hybridCpaSlider" min="5" max="100" step="1" value="' + state.hybridCpa + '"' +
             ' oninput="state.hybridCpa=+this.value;document.getElementById(\'hybridCpaLbl\').textContent=\'$\'+this.value;renderAll()">' +
           '<div class="slider-labels"><span>$5</span><span>$50</span><span>$100</span></div>' +
         '</div>' +
         '<div class="field">' +
-          '<label class="lbl">RS от NGR: <strong style="color:var(--green)" id="hybridRsLbl">' + state.hybridRs + '%</strong></label>' +
+          '<label class="lbl">' + t('hybridRsLabel') + ' <strong style="color:var(--green)" id="hybridRsLbl">' + state.hybridRs + '%</strong></label>' +
           '<input type="range" id="hybridRsSlider" min="5" max="40" step="1" value="' + state.hybridRs + '"' +
             ' oninput="state.hybridRs=+this.value;document.getElementById(\'hybridRsLbl\').textContent=this.value+\'%\';renderAll()">' +
           '<div class="slider-labels"><span>5%</span><span>20%</span><span>40%</span></div>' +
         '</div>' +
         '<div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5">' +
-          'CPA выплачивается <strong>один раз</strong> при привлечении FTD.' +
-          ' RS начисляется <strong>ежемесячно</strong> пока игрок активен.' +
+          t('hybridCpaOnceNote') + ' <strong>' + t('hybridCpaOnceBold') + '</strong> ' + t('hybridCpaOnceEnd') +
+          ' ' + t('hybridRsNote') + ' <strong>' + t('hybridRsBold') + '</strong> ' + t('hybridRsEnd') +
         '</div>';
     }
   }
@@ -243,25 +242,25 @@ function renderTierBlock(c) {
         return '<tr class="' + (isCur?'cur':'') + '">' +
           '<td>' + tRow.min + ' – ' + (tRow.max===Infinity?'∞':tRow.max) + ' FTD</td>' +
           '<td>' + tRow.rate + '%</td>' +
-          '<td style="font-size:11px">' + (isCur ? '← текущий (' + ftd + ' FTD этот месяц)' : '') + '</td>' +
+          '<td style="font-size:11px">' + (isCur ? t('tierCurrentMark') + ' (' + ftd + ' FTD)' : '') + '</td>' +
           '</tr>';
       }).join('');
 
       var toNext = nextTier ? nextTier.min - ftd : 0;
       document.getElementById('tierNote').innerHTML = nextTier
-        ? 'Ещё <strong>' + toNext + ' FTD</strong> в этом месяце — и ставка вырастет до <strong style="color:var(--green)">' + nextTier.rate + '%</strong> на весь месяц'
-        : '<span style="color:var(--green)">✓ Максимальный тир достигнут</span>';
+        ? t('tierMoreFtd') + ' <strong>' + toNext + ' ' + t('tierFtdWord') + '</strong> ' + t('tierAndRate') + ' <strong style="color:var(--green)">' + nextTier.rate + '%</strong> ' + t('tierOnAll')
+        : '<span style="color:var(--green)">' + t('tierMaxed') + '</span>';
     }
   }
 
   if (state.model === 'cpa') {
     var geo2 = GEO_DATA[state.geo];
-    document.getElementById('cpaCard').innerHTML = '<div class="sec">CPA условия</div>' +
+    document.getElementById('cpaCard').innerHTML = '<div class="sec">CPA</div>' +
       (geo2.cpaRates
         ? geo2.cpaRates.map(function(r) {
             return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:var(--muted)">' + r.label + '</span><strong style="color:var(--red)">$' + r.rate + '</strong></div>';
-          }).join('') + '<div style="font-size:11px;color:var(--muted);margin-top:8px">Hold: 14 дней</div>'
-        : '<div style="font-size:12px;color:var(--muted)">Ставка уточняется у менеджера. Hold: 14 дней.</div>');
+          }).join('') + '<div style="font-size:11px;color:var(--muted);margin-top:8px">' + t('holdDays') + '</div>'
+        : '<div style="font-size:12px;color:var(--muted)">' + t('cpaAskNote') + '</div>');
   }
 }
 
@@ -271,7 +270,7 @@ function renderGeoAlerts() {
   var html = '';
   if (geo.warn) html += '<div class="alert alert-warn">' + geo.warn + '</div>';
   if (geo.brandTrafficSources && geo.brandTrafficSources.indexOf(state.src) !== -1) {
-    html += '<div class="alert alert-red">⚠️ Бренд-трафик (' + src.label + ') для Египта: RS применяется как 10% — ограничение программы. Используйте небрендовые ключи или другой источник.</div>';
+    html += '<div class="alert alert-red">' + t('egyptWarn') + ' (' + src.label + ') ' + t('egyptWarn2') + '</div>';
   }
   document.getElementById('geoAlerts').innerHTML = html;
 }
@@ -307,9 +306,9 @@ function renderCompare(c) {
 
   // Hero
   document.getElementById('cmpHero').innerHTML = [
-    {label:'RS партнёру / год', val:fmtU(rsC12), color:'var(--green)', sub:rsRate+'% × LTV когорты'},
-    {label:'CPA партнёру разово', val:fmtU(cpaPaid), color:'var(--red)', sub:'$'+cpaRate+' × '+ftd+' FTD'},
-    {label:'Разница за год', val:fmtU(rsC12-cpaPaid), color:rsC12>cpaPaid?'var(--green)':'var(--yellow)', sub:rsC12>cpaPaid?'RS выгоднее за год':'CPA даёт больше — игроки не задерживаются долго'},
+    {label:t('rsByYear'), val:fmtU(rsC12), color:'var(--green)', sub:rsRate+'% × LTV'},
+    {label:t('cpaOncePay'), val:fmtU(cpaPaid), color:'var(--red)', sub:'$'+cpaRate+' × '+ftd+' FTD'},
+    {label:t('diffYear'), val:fmtU(rsC12-cpaPaid), color:rsC12>cpaPaid?'var(--green)':'var(--yellow)', sub:rsC12>cpaPaid?t('rsWins'):t('cpaWins')},
   ].map(function(m) {
     return '<div class="card" style="border-color:' + m.color + '33;text-align:center">' +
       '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">' + m.label + '</div>' +
@@ -320,8 +319,8 @@ function renderCompare(c) {
 
   // Legend
   document.getElementById('cmpLegend').innerHTML =
-    '<div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:3px;background:var(--green);border-radius:2px"></div><span style="font-size:11px;color:var(--muted)">RS ' + rsRate + '% (накопленно с когорты)</span></div>' +
-    '<div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:3px;background:var(--red);border-radius:2px"></div><span style="font-size:11px;color:var(--muted)">CPA $' + cpaRate + ' (одноразово)</span></div>';
+    '<div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:3px;background:var(--green);border-radius:2px"></div><span style="font-size:11px;color:var(--muted)">RS ' + rsRate + '% ' + t('cmpLegendRs') + '</span></div>' +
+    '<div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:3px;background:var(--red);border-radius:2px"></div><span style="font-size:11px;color:var(--muted)">CPA $' + cpaRate + ' ' + t('cmpLegendCpa') + '</span></div>';
 
   // Chart bars
   var months = [1,2,3,4,5,6,7,8,9,10,11,12];
@@ -349,21 +348,21 @@ function renderCompare(c) {
 
   // Breakeven box
   document.getElementById('beBox').innerHTML = beMonth
-    ? '<div class="be-box">💡 RS окупает CPA на <strong>' + beMonth + '-м месяце</strong> — после этого каждый месяц приносит дополнительный доход. Игрок возвращается и проигрывает снова — партнёр получает % каждый раз.</div>'
+    ? '<div class="be-box">💡 ' + t('beCross') + ' <strong>' + beMonth + t('beMonth') + '</strong> ' + t('beAfter') + '</div>'
     : '<div style="margin-top:12px;padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;font-size:12px;color:#fbbf24">' +
-       '⚠️ При текущих параметрах CPA даёт больше за 12 месяцев. RS становится выгоднее при повышении ставки до ' + Math.ceil(cpaRate/geo.ngr12m/qual*100) + '%+ или при объёме FTD от ' + (Math.ceil(cpaRate/geo.ngr12m/qual*100) > 35 ? '—' : '300+') + '.' +
+       t('beWarnPre') + ' ' + Math.ceil(cpaRate/geo.ngr12m/qual*100) + t('beWarnOr') + ' ' + (Math.ceil(cpaRate/geo.ngr12m/qual*100) > 35 ? '—' : '300+') + '.' +
      '</div>';
 
   // Table
   document.getElementById('cmpTable').innerHTML =
     '<thead><tr>' +
-      '<th style="text-align:left">Период</th>' +
-      '<th style="color:var(--green)">RS (накопленно)</th>' +
-      '<th style="color:var(--red)">CPA (разово)</th>' +
-      '<th>Разница</th>' +
-      '<th>NGR бренда</th>' +
+      '<th style="text-align:left">' + t('cmpPeriod') + '</th>' +
+      '<th style="color:var(--green)">' + t('rsCumulHeader') + '</th>' +
+      '<th style="color:var(--red)">' + t('cpaHeader') + '</th>' +
+      '<th>' + t('diffHeader') + '</th>' +
+      '<th>' + t('ngrBrandHeader') + '</th>' +
     '</tr></thead>' +
-    '<tbody>' + [[1,'1 мес'],[3,'3 мес'],[6,'6 мес'],[12,'12 мес']].map(function(pair) {
+    '<tbody>' + [[1,t('earn1m')],[3,t('earn3m')],[6,t('earn6m')],[12,t('earn12m')]].map(function(pair) {
       var m=pair[0], lbl=pair[1];
       var rs = ftd * cohortNgr(geo, m) * qual * (rsRate/100);
       var diff = rs - cpaPaid;
@@ -378,7 +377,7 @@ function renderCompare(c) {
     }).join('') +
     '<tr style="border-top:2px solid var(--border)">' +
       '<td colspan="5" style="padding-top:10px;font-size:11px;color:var(--muted);text-align:left">' +
-        '* RS считается от накопленного NGR когорты (игроки возвращаются, продолжают играть). CPA выплачивается один раз за FTD.' +
+        t('cmpFootnote') +
       '</td>' +
     '</tr>' +
     '</tbody>';
@@ -388,11 +387,11 @@ function renderCompare(c) {
   // RS args
   var rsPct = (rsRate/100);
   document.getElementById('rsArgsList').innerHTML = [
-    ['♾️','Пассивный доход с каждого возврата', 'Игрок вернулся через 3 недели и проиграл снова — по CPA партнёр не получит ничего, по RS получит ещё ' + fmtP(rsRate) + ' от его проигрыша.'],
-    ['📈','Whale-эффект', 'Крупный игрок с NGR $500/мес даст RS ' + fmtU(500*rsPct) + '/мес. По CPA он стоил бы столько же, сколько игрок с минимальным депозитом.'],
-    ['🔒','Нет риска шейва', 'RS считается от реального NGR — всё видно в статистике. CPA легче занижать.'],
-    ['📊','Накопительный эффект', 'При стабильном трафике база игроков растёт. К 12-му месяцу ' + ftd + ' FTD ежемесячно дают накопленный пул ~' + fmt(Math.round(ftd * geo.ltMonths * 0.4)) + ' активных игроков.'],
-    ['⚡','CPA лучше при коротком горизонте', 'Если партнёр планирует работать 1–3 месяца — CPA выгоднее. RS раскрывается на 6–12+ месяцах.'],
+    ['♾️', t('rsArgPassive'), t('rsArgPassiveDesc') + ' ' + fmtP(rsRate) + ' ' + t('rsArgPassiveEnd')],
+    ['📈', t('rsArgWhale'), t('rsArgWhaleDesc') + ' ' + fmtU(500*rsPct) + t('rsArgWhaleEnd')],
+    ['🔒', t('rsArgShave'), t('rsArgShaveDesc')],
+    ['📊', t('rsArgCumul'), t('rsArgCumulDescPre') + ' ' + ftd + ' ' + t('rsArgCumulDescMid') + fmt(Math.round(ftd * geo.ltMonths * 0.4)) + ' ' + t('rsArgCumulEnd')],
+    ['⚡', t('rsArgCpa'), t('rsArgCpaDesc')],
   ].map(function(item) {
     return '<div class="usp-item">' +
       '<div class="usp-icon">' + item[0] + '</div>' +
@@ -416,9 +415,9 @@ function renderSubAff(c) {
   document.getElementById('subNgrLabel').textContent = fmtU(ngrPerPlayer, 0);
 
   document.getElementById('subHero').innerHTML = [
-    {label:'FTD всей сети / мес', val:fmt(totalFtd), color:'var(--purple)'},
-    {label:'Ваш доход / мес', val:fmtU(myMonth), color:'var(--purple)'},
-    {label:'Ваш доход / год', val:fmtU(myYear), color:'var(--purple)'},
+    {label:t('ftdNetLabel'), val:fmt(totalFtd), color:'var(--purple)'},
+    {label:t('myMonthLabel'), val:fmtU(myMonth), color:'var(--purple)'},
+    {label:t('myYearLabel'), val:fmtU(myYear), color:'var(--purple)'},
   ].map(function(m) {
     return '<div class="card-sm" style="text-align:center">' +
       '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">' + m.label + '</div>' +
@@ -428,11 +427,11 @@ function renderSubAff(c) {
 
   document.getElementById('subTable').innerHTML =
     '<thead><tr>' +
-      '<th style="text-align:right">Партнёров</th>' +
+      '<th style="text-align:right">' + t('partnersHeader') + '</th>' +
       '<th style="text-align:right">FTD total</th>' +
-      '<th style="text-align:right">NGR сети / мес</th>' +
-      '<th style="text-align:right">Ваш ' + subPct + '% / мес</th>' +
-      '<th style="text-align:right">Ваш / год</th>' +
+      '<th style="text-align:right">' + t('ngrNetHeader') + '</th>' +
+      '<th style="text-align:right">' + subPct + '% / ' + t('moSuffix') + '</th>' +
+      '<th style="text-align:right">/ ' + t('earn12m') + '</th>' +
     '</tr></thead>' +
     '<tbody>' + [2,5,10,20,50].map(function(n) {
       var f=n*subFtd, ng=f*ngrPerPlayer, mm=ng*(subPct/100);
@@ -446,12 +445,8 @@ function renderSubAff(c) {
         '</tr>';
     }).join('') + '</tbody>';
 
-  document.getElementById('subTips').innerHTML = [
-    ['🎯','Качество > количество', 'Один партнёр с 200 FTD выгоднее десяти с 20. Фокусируйся на командах и медиабайерах.'],
-    ['📊','Показывай этот калькулятор', 'Партнёр видит реальные цифры — не проценты, а деньги. Это ускоряет принятие решения.'],
-    ['🔗','Суб-аффилейт как якорь', 'Партнёр, строящий свою сеть через тебя, не уйдёт — у него двойная мотивация оставаться.'],
-    ['📈','Рост ставки как стимул', 'Предлагай повышение RS при масштабировании: 25% → 30% → 35%. Стимул лить больше.'],
-  ].map(function(item) {
+  var subTips = t('subTipsItems') || [];
+  document.getElementById('subTips').innerHTML = subTips.map(function(item) {
     return '<div class="usp-item"><div class="usp-icon">' + item[0] + '</div><div><div class="usp-title">' + item[1] + '</div><div class="usp-desc">' + item[2] + '</div></div></div>';
   }).join('');
 }
@@ -520,36 +515,36 @@ function renderROI(c) {
   document.getElementById('roiCards').innerHTML =
     '<div class="roi-grid">' +
       '<div class="roi-cell">' +
-        '<div class="rc-label">Рекламный бюджет</div>' +
+        '<div class="rc-label">' + t('adBudgetLabel') + '</div>' +
         '<div class="rc-val" style="color:var(--yellow)">' + fmtU(budget) + '</div>' +
       '</div>' +
       '<div class="roi-cell">' +
-        '<div class="rc-label">Доход партнёра / мес</div>' +
+        '<div class="rc-label">' + t('partnerMonthLabel') + '</div>' +
         '<div class="rc-val" style="color:var(--green)">' + fmtU(earn) + '</div>' +
       '</div>' +
       '<div class="roi-cell highlight">' +
-        '<div class="rc-label">Чистая прибыль</div>' +
+        '<div class="rc-label">' + t('netProfitLabel') + '</div>' +
         '<div class="rc-val ' + netClass + '">' + (net >= 0 ? '+' : '') + fmtU(net) + '</div>' +
       '</div>' +
       '<div class="roi-cell highlight">' +
-        '<div class="rc-label">ROI</div>' +
+        '<div class="rc-label">' + t('roiLabel') + '</div>' +
         '<div class="rc-val ' + roiClass + '">' + (roi >= 0 ? '+' : '') + fmt(roi, 0) + '%</div>' +
       '</div>' +
     '</div>' +
     '<div class="roi-grid" style="margin-top:8px">' +
       '<div class="roi-cell">' +
-        '<div class="rc-label">Стоимость 1 FTD</div>' +
+        '<div class="rc-label">' + t('costPerFtdLabel') + '</div>' +
         '<div class="rc-val" style="color:var(--muted);font-size:14px">' + fmtU(costPerFtd, 1) + '</div>' +
       '</div>' +
       '<div class="roi-cell">' +
-        '<div class="rc-label">Окупаемость бюджета</div>' +
-        '<div class="rc-val" style="color:var(--blue);font-size:14px">' + (beMonth ? beMonth + ' мес' : '> 24 мес') + '</div>' +
+        '<div class="rc-label">' + t('paybackLabel') + '</div>' +
+        '<div class="rc-val" style="color:var(--blue);font-size:14px">' + (beMonth ? beMonth + ' ' + t('moSuffix') : t('moSuffixGt')) + '</div>' +
       '</div>' +
     '</div>' +
     '<div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">' +
       (net >= 0
-        ? '✅ Кампания прибыльная. На каждый $1 расходов — $' + (earn/budget).toFixed(2) + ' дохода.'
-        : '⚠️ Убыток при текущих параметрах. Попробуй снизить CPC, повысить конверсию или объём.') +
+        ? t('profitable') + (earn/budget).toFixed(2) + t('profitableEnd')
+        : t('unprofitable')) +
     '</div>';
 }
 
@@ -584,19 +579,18 @@ function renderRolling(c) {
   var maxVal = Math.max.apply(null, rsMonthly.concat(cpaMonthly).concat([1]));
 
   document.getElementById('rollingDesc').innerHTML =
-    'Вы стабильно приводите <strong style="color:var(--green)">' + fmt(ftd) + ' FTD каждый месяц</strong>. ' +
-    'Игроки предыдущих месяцев возвращаются и продолжают играть — ' +
-    'RS-доход <strong>растёт каждый месяц</strong>, даже если объём трафика не меняется. ' +
-    'CPA — фиксирован: сколько новых FTD, столько и заплатят.';
+    t('rollingDescPre') + ' <strong style="color:var(--green)">' + fmt(ftd) + ' ' + t('rollingDescMid') + '</strong>. ' +
+    t('rollingDescPost') + ' <strong>' + t('rollingDescGrow') + '</strong>,' +
+    t('rollingDescEnd');
 
   document.getElementById('rollingLegend').innerHTML =
     '<div style="display:flex;align-items:center;gap:6px">' +
       '<div style="width:12px;height:3px;background:rgba(0,212,170,.7);border-radius:2px"></div>' +
-      '<span style="font-size:11px;color:var(--muted)">RS ' + rsRate + '% / мес (доход за месяц)</span>' +
+      '<span style="font-size:11px;color:var(--muted)">RS ' + rsRate + t('rollingLegendRsSuffix') + '</span>' +
     '</div>' +
     '<div style="display:flex;align-items:center;gap:6px">' +
       '<div style="width:12px;height:3px;background:rgba(239,68,68,.6);border-radius:2px"></div>' +
-      '<span style="font-size:11px;color:var(--muted)">CPA $' + cpaRate + ' / мес (новые FTD × ставка)</span>' +
+      '<span style="font-size:11px;color:var(--muted)">CPA $' + cpaRate + t('rollingLegendCpaSuffix') + '</span>' +
     '</div>';
 
   var gridPcts = [0, 25, 50, 75, 100];
@@ -624,10 +618,10 @@ function renderRolling(c) {
   var crossMonth = rsMonthly.findIndex(function(v, i) { return v > cpaMonthly[i]; }) + 1;
 
   document.getElementById('rollingStats').innerHTML = [
-    {label: 'RS в мес. 1',  val: fmtU(rsMonthly[0]),  color: 'var(--green)', sub: 'только новые игроки'},
-    {label: 'RS в мес. 6',  val: fmtU(rsMonthly[5]),  color: 'var(--green)', sub: '6 когорт работают'},
-    {label: 'RS в мес. 12', val: fmtU(rsMonthly[11]), color: 'var(--green)', sub: '12 когорт работают'},
-    {label: 'Рост ×',       val: rsGrowth.toFixed(1)+'×', color: 'var(--purple)', sub: 'мес 1 → мес 12'},
+    {label: t('rollMo1'),  val: fmtU(rsMonthly[0]),  color: 'var(--green)', sub: t('rollMo1Sub')},
+    {label: t('rollMo6'),  val: fmtU(rsMonthly[5]),  color: 'var(--green)', sub: t('rollMo6Sub')},
+    {label: t('rollMo12'), val: fmtU(rsMonthly[11]), color: 'var(--green)', sub: t('rollMo12Sub')},
+    {label: t('rollGrowth'), val: rsGrowth.toFixed(1)+'×', color: 'var(--purple)', sub: t('rollGrowthSub')},
   ].map(function(s) {
     return '<div class="card-sm" style="text-align:center">' +
       '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">' + s.label + '</div>' +
@@ -641,18 +635,18 @@ function renderRolling(c) {
   document.getElementById('rollingInsight').innerHTML =
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">' +
       '<div class="card-sm" style="text-align:center;border-color:rgba(0,212,170,.3)">' +
-        '<div style="font-size:10px;color:var(--muted);margin-bottom:4px">RS за 12 мес (суммарно)</div>' +
+        '<div style="font-size:10px;color:var(--muted);margin-bottom:4px">' + t('rollRs12') + '</div>' +
         '<div style="font-size:18px;font-weight:700;color:var(--green)">' + fmtU(cumulRs12) + '</div>' +
       '</div>' +
       '<div class="card-sm" style="text-align:center;border-color:rgba(239,68,68,.3)">' +
-        '<div style="font-size:10px;color:var(--muted);margin-bottom:4px">CPA за 12 мес (суммарно)</div>' +
+        '<div style="font-size:10px;color:var(--muted);margin-bottom:4px">' + t('rollCpa12') + '</div>' +
         '<div style="font-size:18px;font-weight:700;color:var(--red)">' + fmtU(cumulCpa12) + '</div>' +
       '</div>' +
     '</div>' +
     '<div class="be-box">' +
       (crossMonth > 0
-        ? '📈 С <strong>' + crossMonth + '-го месяца</strong> ежемесячный RS-доход превышает CPA-выплату. К 12-му месяцу RS приносит <strong>' + fmtU(rsM12) + '/мес</strong> — в ' + (rsM12 / Math.max(ftd * cpaRate, 1)).toFixed(1) + '× больше, чем CPA за тот же месяц.'
-        : 'RS растёт, но при текущих параметрах CPA остаётся выгоднее помесячно. Попробуйте повысить RS ставку или выбрать ГЕО с высоким LTV.') +
+        ? t('rollCrossPre') + ' <strong>' + crossMonth + t('rollCrossMid') + ' <strong>' + fmtU(rsM12) + t('rollCrossMonEnd') + (rsM12 / Math.max(ftd * cpaRate, 1)).toFixed(1) + t('rollCrossX')
+        : t('rollNoCross')) +
     '</div>';
 }
 
@@ -671,27 +665,16 @@ function renderWhy() {
       '</div>';
   }).join('');
 
-  document.getElementById('acceptSources').innerHTML = [
-    '✅ SEO / Контент','✅ Telegram (каналы, боты, mini-apps)','✅ Facebook / Instagram (PWA, APK)',
-    '✅ Google UAC / ASO','✅ TikTok / Reels','✅ Инфлюенсеры / Стримеры',
-    '✅ Push / Native','✅ Email / SMS','✅ Арбитраж любого типа',
-    '✅ Любой источник, который приводит реальных игроков',
-  ].map(function(s) {
+  var acceptSrc = t('acceptSrcItems') || [];
+  document.getElementById('acceptSources').innerHTML = acceptSrc.map(function(s) {
     return '<div style="font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);color:var(--label)">' + s + '</div>';
   }).join('') +
   '<div style="font-size:11px;color:var(--green);margin-top:8px;padding:6px 8px;background:rgba(0,212,170,.06);border-radius:5px;border:1px solid rgba(0,212,170,.2)">' +
-    '💬 Работаешь с нестандартным источником? Напиши менеджеру — найдём решение.' +
+    t('acceptSrcNote') +
   '</div>';
 
-  document.getElementById('restrictList').innerHTML = [
-    '⛔ Брендовый PPC (контекст по ключу lil.bet)',
-    '⛔ Cookie stuffing',
-    '⛔ Спам-рассылки',
-    '⛔ Клоакинг / маскировка трафика',
-    '⛔ Сайты-имитаторы бренда',
-    '⛔ Египет: SEO/ASO/Google по бренду → RS 10%',
-    '⛔ USA, UK, France, Spain, Ukraine — блок',
-  ].map(function(s) {
+  var restrictItems = t('restrictItems') || [];
+  document.getElementById('restrictList').innerHTML = restrictItems.map(function(s) {
     return '<div style="font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);color:var(--label)">' + s + '</div>';
   }).join('');
 
@@ -706,7 +689,7 @@ function renderWhy() {
     {name:'888Starz',   rs:'20–45%', adminFee:'н/д', nnco:'Нет ✓',  subaff:'10%',minPay:'$50',    cookie:'30 дн'},
   ];
 
-  var headers = ['Партнёрка','RS диапазон','Admin fee','Отриц. баланс','Sub-aff','Мин. выплата','Cookie'];
+  var headers = t('competitorHeaders') || ['Program','RS','Admin fee','Neg.balance','Sub-aff','Min payout','Cookie'];
   var fields  = ['rs','adminFee','nnco','subaff','minPay','cookie'];
   var winVal = {adminFee:['0%'], nnco:['Нет ✓'], minPay:['$30/нед'], cookie:['30 дн','30 дн ✓']};
   var loseVal = {adminFee:['14%','20%'], nnco:['Есть'], minPay:['$100','$50'], cookie:['Сессия']};
@@ -728,8 +711,7 @@ function renderWhy() {
         '</tr>';
     }).join('') + '</tbody>';
 
-  document.getElementById('competitorNote').textContent =
-    'Данные — публичные условия партнёрских программ на май 2026. Admin fee снимается с NGR до расчёта RS: при fee 20% и RS 25% реальная ставка = 25% × 0.8 = 20% эффективно.';
+  document.getElementById('competitorNote').textContent = t('competitorNote');
 }
 
 // ── Scenario comparison ───────────────────────────────────────────────────────
@@ -753,10 +735,10 @@ function renderScenarios() {
       '<div class="sc-result-hero" style="background:' + bg + ';border:1px solid ' + bdr + '">' +
         '<div style="font-size:10px;color:var(--muted);margin-bottom:4px">' + rr.geo.label + ' · ' + rr.src.label + '</div>' +
         '<div style="font-size:26px;font-weight:800;color:' + color + '">' + fmtU(rr.earn1m) + '</div>' +
-        '<div style="font-size:10px;color:var(--muted);margin-top:2px">' + rr.modelLabel + ' · 1 мес</div>' +
+        '<div style="font-size:10px;color:var(--muted);margin-top:2px">' + rr.modelLabel + ' · ' + t('scMoSuffix') + '</div>' +
       '</div>' +
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">' +
-        [['1 мес', rr.earn1m],['3 мес', rr.earn3m],['6 мес', rr.earn6m],['12 мес', rr.earn12m]].map(function(pair) {
+        [[t('sc1mLabel'), rr.earn1m],[t('sc3mLabel'), rr.earn3m],[t('sc6mLabel'), rr.earn6m],[t('sc12mLabel'), rr.earn12m]].map(function(pair) {
           return '<div class="card-sm" style="text-align:center;padding:8px">' +
             '<div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px">' + pair[0] + '</div>' +
             '<div style="font-size:14px;font-weight:700;color:' + color + '">' + fmtU(pair[1]) + '</div>' +
@@ -777,10 +759,10 @@ function renderScenarios() {
 
   document.getElementById('scDiffTable').innerHTML =
     '<thead><tr>' +
-      '<th style="text-align:left">Период</th>' +
-      '<th style="color:var(--green)">' + (L.scAHeader||'Сценарий A') + '</th>' +
-      '<th style="color:var(--purple)">' + (L.scBHeader||'Сценарий B') + '</th>' +
-      '<th>Разница</th>' +
+      '<th style="text-align:left">' + t('scPeriod') + '</th>' +
+      '<th style="color:var(--green)">' + (L.scAHeader||'Scenario A') + '</th>' +
+      '<th style="color:var(--purple)">' + (L.scBHeader||'Scenario B') + '</th>' +
+      '<th>' + t('scDiff') + '</th>' +
     '</tr></thead>' +
     '<tbody>' + rows.map(function(row) {
       var lbl=row[0], a=row[1], b=row[2];
@@ -792,7 +774,7 @@ function renderScenarios() {
         '<td class="' + (wA?'winner':'') + '" style="color:var(--green)">' + fmtU(a) + '</td>' +
         '<td class="' + (wB?'winner':'') + '" style="color:var(--purple)">' + fmtU(b) + '</td>' +
         '<td style="color:' + (wA?'var(--green)':wB?'var(--purple)':'var(--muted)') + '">' +
-          (Math.abs(diff) < 1 ? '≈ равно' : (wA ? '▲ A +' : wB ? '▲ B +' : '') + fmtU(Math.abs(diff))) +
+          (Math.abs(diff) < 1 ? t('scApproxEqual') : (wA ? t('scWinA') : wB ? t('scWinB') : '') + fmtU(Math.abs(diff))) +
         '</td>' +
         '</tr>';
     }).join('') + '</tbody>';
@@ -801,6 +783,6 @@ function renderScenarios() {
   var winner = diff12 > 100 ? 'A' : diff12 < -100 ? 'B' : null;
   var winRes = winner === 'A' ? rA : rB;
   document.getElementById('scDiffInsight').innerHTML = winner
-    ? '<div class="be-box">💡 Сценарий <strong>' + winner + '</strong> выгоднее за 12 мес на <strong>' + fmtU(Math.abs(diff12)) + '</strong> — ' + winRes.geo.label + ' + ' + winRes.modelLabel + ' показывает лучший LTV при данных параметрах.</div>'
-    : '<div class="be-box">⚖️ Сценарии примерно равны по доходности за 12 месяцев. Попробуй изменить ГЕО или модель.</div>';
+    ? '<div class="be-box">💡 ' + t('scInsightWin') + ' <strong>' + winner + '</strong> ' + t('scInsightWinMid') + ' <strong>' + fmtU(Math.abs(diff12)) + '</strong> — ' + winRes.geo.label + ' + ' + winRes.modelLabel + ' ' + t('scInsightWinEnd') + '</div>'
+    : '<div class="be-box">' + t('scInsightEqual') + '</div>';
 }
