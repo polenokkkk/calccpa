@@ -210,6 +210,17 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
     <div class="card">
       <div class="sec">ГЕО</div>
       <div class="geo-grid" id="geoGrid"></div>
+      <!-- Promo load -->
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+        <label class="lbl">
+          Промо нагрузка (бонусы игрокам):
+          <strong style="color:var(--yellow)" id="promoLoadLabel">20%</strong>
+          <span style="color:var(--muted);font-weight:400"> от GGR</span>
+        </label>
+        <input type="range" id="promoSlider" min="0" max="50" step="1" value="20" oninput="onPromoSlider()">
+        <div class="slider-labels"><span>0% (нет бонусов)</span><span style="color:var(--yellow)">20% типично</span><span>50% агрессивно</span></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5" id="promoNote"></div>
+      </div>
     </div>
 
     <!-- Source -->
@@ -719,10 +730,11 @@ let state = {
   inputMode: 'ftd',
   clicks: 5000,
   adBudget: 500,   // только для FTD-режима
-  cpc: null,       // null = берём из SRC_DATA, иначе ручной
+  cpc: null,
   showBudget: false,
   hybridCpa: 15,
   hybridRs: 20,
+  promoLoad: 20,    // % от GGR на бонусы игрокам (типичный рынок: 15–30%)
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -808,11 +820,18 @@ function calc() {
     clicks = Math.round(regs / (src.c2r / 100));
   }
 
-  // Adjusted NGR: source quality multiplies per-player LTV
-  const aNgr1m  = geo.ngr1m  * qual;
-  const aNgr3m  = geo.ngr3m  * qual;
-  const aNgr6m  = geo.ngr6m  * qual;
-  const aNgr12m = geo.ngr12m * qual;
+  // NGR = GGR − бонусы. Наши benchmark-значения — GGR.
+  // promoLoad % уходит на бонусы игрокам → NGR = GGR × (1 − promoLoad/100)
+  const promoFactor = 1 - (state.promoLoad / 100);
+
+  // Adjusted NGR: source quality + promo load
+  const aNgr1m  = geo.ngr1m  * qual * promoFactor;
+  const aNgr3m  = geo.ngr3m  * qual * promoFactor;
+  const aNgr6m  = geo.ngr6m  * qual * promoFactor;
+  const aNgr12m = geo.ngr12m * qual * promoFactor;
+
+  // GGR (до вычета бонусов) — для отображения
+  const ggrPerPlayer = geo.ngr1m * qual;
 
   // Effective RS — tier OR manual, whichever higher
   // Egypt brand traffic (SEO/Google) is capped at 10% per program rules
@@ -822,6 +841,7 @@ function calc() {
 
   // NGR for brand (1 month cohort)
   const monthNgr = ftd * aNgr1m;
+  const monthGgr = ftd * ggrPerPlayer;
 
   // Partner earnings by model
   let earn1m=0, earn3m=0, earn6m=0, earn12m=0, formula='';
@@ -853,7 +873,7 @@ function calc() {
   }
 
   return {geo, src, ftd, qual, aNgr1m, aNgr3m, aNgr6m, aNgr12m,
-    monthNgr, regs, clicks, effectiveRS, brandPenalty,
+    monthNgr, monthGgr, ggrPerPlayer, regs, clicks, effectiveRS, brandPenalty,
     earn1m, earn3m, earn6m, earn12m, formula};
 }
 
@@ -889,9 +909,18 @@ function renderCalc(c) {
   if (editBtn) editBtn.style.borderColor = src.isCustom ? 'var(--green)' : 'var(--border)';
   if (editBtn) editBtn.style.color = src.isCustom ? 'var(--green)' : 'var(--muted)';
 
-  // Hero
+  // Promo note
+  const promoEl = document.getElementById('promoNote');
+  if (promoEl) {
+    const bonus = c.monthGgr - monthNgr;
+    promoEl.innerHTML = state.promoLoad === 0
+      ? `Бонусов нет. GGR = NGR = <strong>${fmtU(c.monthGgr)}</strong>`
+      : `GGR ${fmtU(c.monthGgr)} − бонусы <strong style="color:var(--red)">${fmtU(bonus)}</strong> (${state.promoLoad}%) = NGR <strong style="color:var(--green)">${fmtU(monthNgr)}</strong>. RS считается от NGR.`;
+  }
+
+  // Hero — show NGR (after bonuses)
   document.getElementById('heroNgr').textContent = fmtU(monthNgr);
-  document.getElementById('heroSub').textContent = `${geo.label} · ${src.label}`;
+  document.getElementById('heroSub').textContent = `${geo.label} · ${src.label} · промо ${state.promoLoad}%`;
   document.getElementById('heroEarn').textContent = fmtU(earn1m);
   document.getElementById('heroFormula').textContent = formula;
 
@@ -1740,6 +1769,12 @@ function onFtdSlider() {
 
 function onRsSlider() {
   state.rsRate = +document.getElementById('rsSlider').value;
+  renderAll();
+}
+
+function onPromoSlider() {
+  state.promoLoad = +document.getElementById('promoSlider').value;
+  document.getElementById('promoLoadLabel').textContent = state.promoLoad + '%';
   renderAll();
 }
 
