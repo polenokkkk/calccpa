@@ -150,10 +150,20 @@ function renderModelBlock(c) {
         '</div>';
     }
 
-    html = '<label class="lbl">' + t('rsSliderLabel') + ' <strong style="color:var(--green)">' + state.rsRate + '%</strong></label>' +
+    // ── If slider already in DOM, update in-place (don't destroy it — touch event would be lost) ──
+    if (document.getElementById('rsSlider')) {
+      var rateLbl = document.getElementById('rsRateLabel');
+      if (rateLbl) rateLbl.textContent = state.rsRate + '%';
+      var noteEl = document.getElementById('rsTierNote');
+      if (noteEl) noteEl.innerHTML = tierNote;
+      document.getElementById('modelBlock').style.display = ''; // ensure visible
+      return;
+    }
+
+    html = '<label class="lbl">' + t('rsSliderLabel') + ' <strong id="rsRateLabel" style="color:var(--green)">' + state.rsRate + '%</strong></label>' +
       '<input type="range" id="rsSlider" min="15" max="65" value="' + state.rsRate + '" oninput="onRsSlider()">' +
       '<div class="slider-labels"><span>' + t('rsSliderMin') + '</span><span style="color:var(--green)">' + t('rsSliderMid') + '</span><span>' + t('rsSliderMax') + '</span></div>' +
-      tierNote;
+      '<div id="rsTierNote">' + tierNote + '</div>';
 
   } else if (state.model === 'cpa') {
     if (!geo.cpaAllowed) {
