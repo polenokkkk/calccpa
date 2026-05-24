@@ -13,7 +13,7 @@ const LANG = {
     scAHeader:'Сценарий A', scBHeader:'Сценарий B', scDiffHeader:'Сравнение сценариев',
     earn1m:'1 мес', earn3m:'3 мес', earn6m:'6 мес', earn12m:'12 мес',
     partnerEarn:'Партнёру', brandNgr:'NGR бренда',
-    seasonNote:'⚠️ Сезонность не учтена — реальные значения могут отличаться на ±20–30% в праздники и Рамадан',
+    seasonNote:'⚠️ Сезонность не учтена — реальные значения могут отличаться на ±20–30% в праздники',
     tourSkip:'Пропустить', tourNext:'Далее →', tourFinish:'Готово!',
     tourSteps:[
       {title:'👋 Добро пожаловать!', text:'Этот калькулятор покажет реальный доход с партнёрской программы lil.bet. Займёт 30 секунд. Начнём с выбора ГЕО.'},
@@ -216,7 +216,7 @@ const LANG = {
     scAHeader:'Scenario A', scBHeader:'Scenario B', scDiffHeader:'Scenario comparison',
     earn1m:'1 mo', earn3m:'3 mo', earn6m:'6 mo', earn12m:'12 mo',
     partnerEarn:'Partner', brandNgr:'Brand NGR',
-    seasonNote:'⚠️ Seasonality not included — real values may vary ±20–30% during holidays and Ramadan',
+    seasonNote:'⚠️ Seasonality not included — real values may vary ±20–30% during holidays',
     tourSkip:'Skip', tourNext:'Next →', tourFinish:'Done!',
     tourSteps:[
       {title:'👋 Welcome!', text:'This calculator shows real earnings from the lil.bet affiliate program. Takes 30 seconds. Let\'s start with GEO selection.'},
