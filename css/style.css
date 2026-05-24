@@ -219,31 +219,69 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .sc-diff-table td:first-child{text-align:left;color:var(--muted)}
 .sc-diff-table .winner{font-weight:700}
 
-/* Mobile improvements */
+/* ══════ MOBILE ══════ */
+@media(max-width:900px){
+  /* Why tab: stack to single column */
+  .why-grid{grid-template-columns:1fr !important}
+}
+
 @media(max-width:600px){
-  .header{padding:10px 12px;gap:8px}
+  /* Header */
+  .header{padding:8px 12px;gap:6px}
+  .brand{font-size:15px}
+  .reg-btn{font-size:11px;padding:6px 11px}
+  .tour-start-btn{padding:5px 8px;font-size:13px}
   .tab-btn{font-size:11px;padding:6px 10px;flex-shrink:0}
-  .wrap{padding:10px 10px}
+  .lang-btn{font-size:10px;padding:3px 8px}
+  .lang-switcher{gap:3px}
+
+  /* Layout */
+  .wrap{padding:8px 10px}
   .cols{gap:10px}
-  .card{padding:14px}
-  .geo-btn{padding:7px 5px;font-size:11px}
-  .metric-xl{font-size:26px}
-  .metric-lg{font-size:18px}
+  .card{padding:12px}
+
+  /* GEO grid */
+  .geo-btn{padding:8px 6px;font-size:11px}
+
+  /* Metrics */
+  .metric-xl{font-size:28px}
+  .metric-lg{font-size:20px}
+
+  /* Rows */
   .row4{grid-template-columns:1fr 1fr}
   .row3{grid-template-columns:1fr 1fr}
-  .comp-table{font-size:10px}
-  .comp-table th,.comp-table td{padding:5px 6px}
-  .brand{font-size:16px}
-  .lang-switcher{display:flex;flex-wrap:wrap;gap:3px}
+
+  /* Pay rows — wrap long values */
+  .pay-row{flex-wrap:wrap;gap:2px;padding:8px 0}
+  .pay-lbl{font-size:12px;width:100%;color:var(--muted)}
+  .pay-val{font-size:13px;font-weight:700}
+
+  /* Charts */
   .chart-wrap{height:120px}
   .roll-chart{height:110px}
+
+  /* Competitor table */
+  .comp-table{font-size:10px}
+  .comp-table th,.comp-table td{padding:5px 5px;white-space:normal;word-break:break-word}
+
+  /* Scenarios */
   .sc-geo{grid-template-columns:repeat(3,1fr)}
-  footer{font-size:10px;padding:12px}
+
+  /* Manager card — stack vertically */
+  .manager-card{flex-direction:column;align-items:center;text-align:center}
+  .manager-info{min-width:unset;width:100%}
+  .manager-photo{width:100px;height:100px}
+  .contact-links{justify-content:center}
+
+  /* Footer */
+  footer{font-size:10px;padding:10px;flex-wrap:wrap;gap:6px;text-align:center}
 }
+
 @media(max-width:400px){
   .row4{grid-template-columns:1fr 1fr}
   .geo-grid{grid-template-columns:1fr 1fr}
   .roi-grid{grid-template-columns:1fr 1fr}
+  .card{padding:10px}
 }
 
 /* Seasonality notice */
@@ -252,7 +290,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 /* Manager card */
 .manager-card{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
 .manager-photo{width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--green);flex-shrink:0}
-.manager-info{flex:1;min-width:200px}
+.manager-info{flex:1;min-width:0}
 .manager-name{font-size:17px;font-weight:700;color:var(--text);margin-bottom:2px}
 .manager-title{font-size:11px;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
 .manager-perks{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
