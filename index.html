@@ -179,6 +179,80 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .roll-gridline{position:absolute;left:0;right:0;border-top:1px dashed rgba(255,255,255,.05)}
 .roll-gridline span{position:absolute;left:-44px;font-size:9px;color:#374151;transform:translateY(-50%)}
 
+/* Lang switcher */
+.lang-switcher{display:flex;gap:4px;align-items:center}
+.lang-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:3px 8px;cursor:pointer;font-size:11px;transition:all .12s}
+.lang-btn.active{background:rgba(0,212,170,.15);border-color:var(--green);color:var(--green);font-weight:600}
+.lang-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text)}
+
+/* Onboarding tour */
+.tour-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none}
+.tour-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);pointer-events:all}
+.tour-spotlight{position:absolute;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.65),0 0 0 3px var(--green);pointer-events:none;transition:all .3s ease}
+.tour-tooltip{position:absolute;background:#1a2236;border:1px solid rgba(0,212,170,.4);border-radius:10px;padding:16px 18px;min-width:240px;max-width:300px;z-index:9001;pointer-events:all;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.tour-tooltip h4{font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px}
+.tour-tooltip p{font-size:12px;color:var(--label);line-height:1.6;margin-bottom:12px}
+.tour-nav{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tour-step-dots{display:flex;gap:4px}
+.tour-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .2s}
+.tour-dot.active{background:var(--green)}
+.tour-btn{background:rgba(0,212,170,.15);border:1px solid rgba(0,212,170,.3);color:var(--green);border-radius:5px;padding:5px 12px;cursor:pointer;font-size:11px;font-weight:600}
+.tour-skip{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:5px}
+.tour-start-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:5px 10px;cursor:pointer;font-size:11px;transition:all .12s}
+.tour-start-btn:hover{border-color:var(--green);color:var(--green)}
+
+/* Scenario comparison */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:700px){.sc-grid{grid-template-columns:1fr}}
+.sc-header{font-size:13px;font-weight:700;padding:10px 14px;border-radius:7px;margin-bottom:12px;text-align:center;letter-spacing:.02em}
+.sc-geo{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:10px}
+.sc-geo-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:4px 4px;cursor:pointer;font-size:10px;text-align:center;transition:all .1s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-geo-btn.active{background:rgba(0,212,170,.12);border-color:var(--green);color:var(--green)}
+.sc-model-btns{display:flex;gap:4px;margin:8px 0}
+.sc-model-btn{flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:4px 6px;cursor:pointer;font-size:10px;transition:all .12s;text-align:center}
+.sc-model-btn.active-rs{background:rgba(0,212,170,.15);border-color:var(--green);color:var(--green)}
+.sc-model-btn.active-cpa{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
+.sc-model-btn.active-hybrid{background:rgba(245,158,11,.15);border-color:var(--yellow);color:var(--yellow)}
+.sc-result-hero{text-align:center;padding:14px;border-radius:8px;margin:10px 0}
+.sc-diff-table{width:100%;border-collapse:collapse;font-size:12px}
+.sc-diff-table th{padding:8px 12px;color:var(--muted);font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--border);text-align:center}
+.sc-diff-table th:first-child{text-align:left}
+.sc-diff-table td{padding:8px 12px;border-bottom:1px solid rgba(37,40,71,.4);text-align:center}
+.sc-diff-table td:first-child{text-align:left;color:var(--muted)}
+.sc-diff-table .winner{font-weight:700}
+
+/* Mobile improvements */
+@media(max-width:600px){
+  .header{padding:10px 12px;gap:8px}
+  .tabs-nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:3px;scrollbar-width:none}
+  .tabs-nav::-webkit-scrollbar{display:none}
+  .tab-btn{font-size:11px;padding:6px 10px;flex-shrink:0}
+  .wrap{padding:10px 10px}
+  .cols{gap:10px}
+  .card{padding:14px}
+  .geo-btn{padding:7px 5px;font-size:11px}
+  .metric-xl{font-size:26px}
+  .metric-lg{font-size:18px}
+  .row4{grid-template-columns:1fr 1fr}
+  .row3{grid-template-columns:1fr 1fr}
+  .comp-table{font-size:10px}
+  .comp-table th,.comp-table td{padding:5px 6px}
+  .brand{font-size:16px}
+  .lang-switcher{display:none}
+  .chart-wrap{height:120px}
+  .roll-chart{height:110px}
+  .sc-geo{grid-template-columns:repeat(3,1fr)}
+  footer{font-size:10px;padding:12px}
+}
+@media(max-width:400px){
+  .row4{grid-template-columns:1fr 1fr}
+  .geo-grid{grid-template-columns:1fr 1fr}
+  .roi-grid{grid-template-columns:1fr 1fr}
+}
+
+/* Seasonality notice */
+.season-note{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:4px;padding:3px 8px;margin-top:6px}
+
 /* Footer */
 footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:8px}
 </style>
@@ -186,14 +260,25 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
 <body>
 
 <div class="header">
-  <div>
-    <div class="brand"><span>lil</span>.bet <span style="color:var(--muted);font-weight:400;font-size:15px">/ калькулятор партнёра</span></div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div class="brand"><span>lil</span>.bet <span style="color:var(--muted);font-weight:400;font-size:15px" id="headerSub">/ калькулятор партнёра</span></div>
+    <button class="tour-start-btn" onclick="startTour()" title="Обучающий тур">💡 Тур</button>
   </div>
-  <div class="tabs-nav">
-    <button class="tab-btn active" onclick="switchTab('calc')">⚡ Калькулятор</button>
-    <button class="tab-btn" onclick="switchTab('compare')">📊 RS vs CPA</button>
-    <button class="tab-btn" onclick="switchTab('subaff')">🔗 Суб-аффилейт</button>
-    <button class="tab-btn" onclick="switchTab('why')">✅ Почему lil.bet</button>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div class="tabs-nav">
+      <button class="tab-btn active" id="tab-calc" onclick="switchTab('calc')">⚡ Калькулятор</button>
+      <button class="tab-btn" id="tab-compare" onclick="switchTab('compare')">📊 RS vs CPA</button>
+      <button class="tab-btn" id="tab-scenarios" onclick="switchTab('scenarios')">⚖️ Сценарии</button>
+      <button class="tab-btn" id="tab-subaff" onclick="switchTab('subaff')">🔗 Суб-аффилейт</button>
+      <button class="tab-btn" id="tab-why" onclick="switchTab('why')">✅ Почему lil.bet</button>
+    </div>
+    <div class="lang-switcher" id="langSwitcher">
+      <button class="lang-btn active" onclick="switchLang('ru')">RU</button>
+      <button class="lang-btn" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('uk')">UA</button>
+      <button class="lang-btn" onclick="switchLang('de')">DE</button>
+      <button class="lang-btn" onclick="switchLang('es')">ES</button>
+    </div>
   </div>
 </div>
 
@@ -458,6 +543,9 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
       <div class="p-row"><span class="p-key">Отрицательный баланс</span><span class="p-val" style="color:var(--green)">Не переносится на след. месяц</span></div>
     </div>
 
+    <!-- Seasonality notice -->
+    <div id="seasonNote" class="season-note"></div>
+
   </div><!-- /col-results -->
 
 </div><!-- /cols -->
@@ -518,6 +606,83 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
       <div id="rsArgsList"></div>
     </div>
 
+  </div>
+</div>
+
+
+<!-- ═══════════════════ TAB: SCENARIOS ═══════════════════ -->
+<div id="panel-scenarios" class="panel">
+  <div class="sc-grid" style="margin-bottom:16px">
+
+    <!-- Scenario A -->
+    <div class="card" style="border-color:rgba(0,212,170,.3)">
+      <div class="sc-header" style="background:rgba(0,212,170,.1);color:var(--green)" id="scAHeader">Сценарий A</div>
+      <div class="sc-geo" id="scAGeo"></div>
+      <div class="field">
+        <label class="lbl" style="font-size:10px">Источник</label>
+        <select id="scASrc" onchange="renderScenarios()" style="font-size:12px;padding:6px 8px">
+          <option value="facebook">Facebook / Meta</option>
+          <option value="telegram">Telegram</option>
+          <option value="seo">SEO</option>
+          <option value="google">Google UAC</option>
+          <option value="tiktok">TikTok</option>
+          <option value="push">Push</option>
+          <option value="influencer">Инфлюенсер</option>
+          <option value="aso">ASO</option>
+          <option value="email">Email / SMS</option>
+          <option value="native">Нативная</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="lbl">FTD / мес: <strong style="color:var(--green)" id="scAFtdLbl">100</strong></label>
+        <input type="range" id="scAFtd" min="5" max="1000" step="5" value="100" oninput="onScSlider('A')">
+      </div>
+      <div class="sc-model-btns">
+        <button class="sc-model-btn active-rs" id="scABtnRS" onclick="setScModel('A','rs')">RS</button>
+        <button class="sc-model-btn" id="scABtnCPA" onclick="setScModel('A','cpa')">CPA</button>
+        <button class="sc-model-btn" id="scABtnHybrid" onclick="setScModel('A','hybrid')">Hybrid</button>
+      </div>
+      <div id="scAResults"></div>
+    </div>
+
+    <!-- Scenario B -->
+    <div class="card" style="border-color:rgba(139,92,246,.3)">
+      <div class="sc-header" style="background:rgba(139,92,246,.1);color:var(--purple)" id="scBHeader">Сценарий B</div>
+      <div class="sc-geo" id="scBGeo"></div>
+      <div class="field">
+        <label class="lbl" style="font-size:10px">Источник</label>
+        <select id="scBSrc" onchange="renderScenarios()" style="font-size:12px;padding:6px 8px">
+          <option value="facebook">Facebook / Meta</option>
+          <option value="telegram" selected>Telegram</option>
+          <option value="seo">SEO</option>
+          <option value="google">Google UAC</option>
+          <option value="tiktok">TikTok</option>
+          <option value="push">Push</option>
+          <option value="influencer">Инфлюенсер</option>
+          <option value="aso">ASO</option>
+          <option value="email">Email / SMS</option>
+          <option value="native">Нативная</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="lbl">FTD / мес: <strong style="color:var(--purple)" id="scBFtdLbl">100</strong></label>
+        <input type="range" id="scBFtd" min="5" max="1000" step="5" value="100" oninput="onScSlider('B')">
+      </div>
+      <div class="sc-model-btns">
+        <button class="sc-model-btn active-rs" id="scBBtnRS" onclick="setScModel('B','rs')">RS</button>
+        <button class="sc-model-btn" id="scBBtnCPA" onclick="setScModel('B','cpa')">CPA</button>
+        <button class="sc-model-btn" id="scBBtnHybrid" onclick="setScModel('B','hybrid')">Hybrid</button>
+      </div>
+      <div id="scBResults"></div>
+    </div>
+
+  </div>
+
+  <!-- Diff table -->
+  <div class="card" style="border-color:rgba(59,130,246,.2)">
+    <div class="sec" id="scDiffHeader">Сравнение сценариев</div>
+    <div style="overflow-x:auto"><table class="sc-diff-table" id="scDiffTable"></table></div>
+    <div id="scDiffInsight" style="margin-top:12px"></div>
   </div>
 </div>
 
@@ -636,7 +801,453 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
   Статистика обновляется раз в сутки. Cookie 30 дней (Last Win).
 </footer>
 
+<!-- Tour overlay -->
+<div id="tourOverlay" style="display:none;position:fixed;inset:0;z-index:9000">
+  <div class="tour-backdrop" onclick="skipTour()"></div>
+  <div class="tour-spotlight" id="tourSpotlight"></div>
+  <div class="tour-tooltip" id="tourTooltip">
+    <h4 id="tourTitle"></h4>
+    <p id="tourText"></p>
+    <div class="tour-nav">
+      <button class="tour-skip" onclick="skipTour()" id="tourSkipBtn">Пропустить</button>
+      <div class="tour-step-dots" id="tourDots"></div>
+      <button class="tour-btn" onclick="tourNext()" id="tourNextBtn">Далее →</button>
+    </div>
+  </div>
+</div>
+
 <script>
+// ══════════════════════════════════════════════════════════════════════════════
+// TRANSLATIONS
+// ══════════════════════════════════════════════════════════════════════════════
+
+let currentLang = localStorage.getItem('calc_lang') || 'ru';
+let tourStep = 0;
+
+// Scenario comparison state
+let scState = {
+  A: { geo: 'RU', src: 'facebook', ftd: 100, model: 'rs' },
+  B: { geo: 'EG', src: 'telegram', ftd: 100, model: 'rs' },
+};
+
+const LANG = {
+  ru:{
+    headerSub:'/ калькулятор партнёра',
+    tabCalc:'⚡ Калькулятор', tabCompare:'📊 RS vs CPA', tabScenarios:'⚖️ Сценарии',
+    tabSubaff:'🔗 Суб-аффилейт', tabWhy:'✅ Почему lil.bet',
+    scAHeader:'Сценарий A', scBHeader:'Сценарий B', scDiffHeader:'Сравнение сценариев',
+    earn1m:'1 мес', earn3m:'3 мес', earn6m:'6 мес', earn12m:'12 мес',
+    partnerEarn:'Партнёру', brandNgr:'NGR бренда',
+    seasonNote:'⚠️ Сезонность не учтена — реальные значения могут отличаться на ±20–30% в праздники и Рамадан',
+    tourSkip:'Пропустить', tourNext:'Далее →', tourFinish:'Готово!',
+    tourSteps:[
+      {title:'👋 Добро пожаловать!', text:'Этот калькулятор покажет реальный доход с партнёрской программы lil.bet. Займёт 30 секунд. Начнём с выбора ГЕО.'},
+      {title:'🌍 Шаг 1 — Выбери ГЕО', text:'Выбери страну, в которую льёшь трафик. Каждое ГЕО имеет свои NGR-бенчмарки и лесенку RS.'},
+      {title:'📡 Шаг 2 — Источник трафика', text:'Выбери откуда приходят игроки. Качество трафика влияет на NGR и итоговый доход.'},
+      {title:'📊 Шаг 3 — Модель выплат', text:'RS = процент от NGR каждый месяц пока игроки активны. CPA = разово за каждый FTD. Hybrid = оба варианта.'},
+      {title:'💰 Шаг 4 — Твой доход', text:'Всё посчитано! Видишь NGR бренда и выплату партнёру. Меняй ГЕО, FTD, RS — результаты обновляются в реальном времени.'},
+    ],
+    uspItems:[
+      ['0️⃣','0% Admin fee — получаешь полный RS','Pin-Up берёт 20%, Vavada — 14% от NGR до выплаты. У нас admin fee 0%: RS 25% здесь = RS 25% у конкурентов с fee 20% это как 31%.','#1'],
+      ['🚫','Нет переноса отрицательного баланса','Плохой месяц не вычитается из следующего. Большинство конкурентов (Mostbet, 1xPartners, Melbet) переносят минус — у нас он сгорает.','USP'],
+      ['🪙','$30 с еженедельной выплатой по вторникам','Минимальный порог ниже Mostbet ($50), Pin-Up ($50), Parimatch ($100). Крипто-выплата без задержек.','🔥'],
+      ['🔗','Sub-affiliate 7% — выше рынка','Рыночный диапазон: 3–10%. Mostbet даёт 2%, Pin-Up 3%. Наши 7% — топ-2 среди конкурентов.'],
+      ['🍪','Cookie 30 дней Last Win','Vavada — только сессия, Mostbet — сессия. Наш cookie работает 30 дней.'],
+      ['⚡','Прямой менеджер, живое общение','Никаких тикетов. Условия, промо, выплаты — решается в чате напрямую.'],
+      ['📱','Telegram без ограничений','Каналы, боты, mini-apps, APK, PWA — всё принимаем.'],
+      ['🚀','Нет FTD кэпа при тесте','Работаем на любой объём сразу — без пробных 50 FTD.'],
+    ],
+  },
+  en:{
+    headerSub:'/ partner calculator',
+    tabCalc:'⚡ Calculator', tabCompare:'📊 RS vs CPA', tabScenarios:'⚖️ Scenarios',
+    tabSubaff:'🔗 Sub-affiliate', tabWhy:'✅ Why lil.bet',
+    scAHeader:'Scenario A', scBHeader:'Scenario B', scDiffHeader:'Scenario comparison',
+    earn1m:'1 mo', earn3m:'3 mo', earn6m:'6 mo', earn12m:'12 mo',
+    partnerEarn:'Partner', brandNgr:'Brand NGR',
+    seasonNote:'⚠️ Seasonality not included — real values may vary ±20–30% during holidays and Ramadan',
+    tourSkip:'Skip', tourNext:'Next →', tourFinish:'Done!',
+    tourSteps:[
+      {title:'👋 Welcome!', text:'This calculator shows real earnings from the lil.bet affiliate program. Takes 30 seconds. Let\'s start with GEO selection.'},
+      {title:'🌍 Step 1 — Choose GEO', text:'Pick the country you send traffic to. Each GEO has its own NGR benchmarks and RS ladder.'},
+      {title:'📡 Step 2 — Traffic source', text:'Choose where players come from. Traffic quality affects NGR and total earnings.'},
+      {title:'📊 Step 3 — Payout model', text:'RS = % of NGR monthly while players are active. CPA = one-time per FTD. Hybrid = both.'},
+      {title:'💰 Step 4 — Your earnings', text:'All calculated! See brand NGR and partner payout. Change GEO, FTD, RS — results update in real time.'},
+    ],
+    uspItems:[
+      ['0️⃣','0% Admin fee — full RS payout','Pin-Up charges 20%, Vavada 14% before RS. Our admin fee is 0%: our 25% RS = 31%+ effective vs competitors.','#1'],
+      ['🚫','No negative carryover','Bad month doesn\'t carry to next. Most competitors (Mostbet, 1xPartners, Melbet) carry negatives — ours resets.','USP'],
+      ['🪙','$30 weekly payouts every Tuesday','Lower threshold than Mostbet ($50), Pin-Up ($50), Parimatch ($100). Crypto payout, no delays.','🔥'],
+      ['🔗','Sub-affiliate 7% — above market','Market range: 3–10%. Mostbet pays 2%, Pin-Up 3%. Our 7% is top-2 among competitors.'],
+      ['🍪','30-day Last Win cookie','Vavada is session-only, Mostbet is session-only. Our cookie runs 30 days.'],
+      ['⚡','Direct manager, live chat','No tickets. Conditions, promos, payouts — resolved in chat directly.'],
+      ['📱','Telegram-friendly','Channels, bots, mini-apps, APK, PWA — all accepted.'],
+      ['🚀','No FTD cap on test','Work at any volume immediately — no trial 50 FTD period.'],
+    ],
+  },
+  uk:{
+    headerSub:'/ калькулятор партнера',
+    tabCalc:'⚡ Калькулятор', tabCompare:'📊 RS vs CPA', tabScenarios:'⚖️ Сценарії',
+    tabSubaff:'🔗 Суб-афіліат', tabWhy:'✅ Чому lil.bet',
+    scAHeader:'Сценарій A', scBHeader:'Сценарій B', scDiffHeader:'Порівняння сценаріїв',
+    earn1m:'1 міс', earn3m:'3 міс', earn6m:'6 міс', earn12m:'12 міс',
+    partnerEarn:'Партнеру', brandNgr:'NGR бренду',
+    seasonNote:'⚠️ Сезонність не врахована — реальні значення можуть відрізнятися на ±20–30%',
+    tourSkip:'Пропустити', tourNext:'Далі →', tourFinish:'Готово!',
+    tourSteps:[
+      {title:'👋 Ласкаво просимо!', text:'Цей калькулятор покаже реальний дохід з партнерської програми lil.bet.'},
+      {title:'🌍 Крок 1 — Вибери ГЕО', text:'Вибери країну, на яку льєш трафік.'},
+      {title:'📡 Крок 2 — Джерело трафіку', text:'Вибери звідки приходять гравці.'},
+      {title:'📊 Крок 3 — Модель виплат', text:'RS, CPA або Hybrid — обери свою модель.'},
+      {title:'💰 Крок 4 — Твій дохід', text:'Все пораховано! Змінюй параметри — результати оновлюються.'},
+    ],
+    uspItems:[
+      ['0️⃣','0% Admin fee','Pin-Up бере 20%, Vavada 14%. Наш admin fee 0%.','#1'],
+      ['🚫','Без перенесення від\'ємного балансу','Поганий місяць не переноситься.','USP'],
+      ['🪙','$30 щотижня по вівторках','Крипто-виплата без затримок.','🔥'],
+      ['🔗','Sub-affiliate 7%','Ринковий діапазон: 3–10%.'],
+      ['🍪','Cookie 30 днів Last Win','Vavada та Mostbet — лише сесія.'],
+      ['⚡','Прямий менеджер','Без тікетів.'],
+      ['📱','Telegram без обмежень','Канали, боти, APK, PWA.'],
+      ['🚀','Без кепу FTD','Будь-який обсяг одразу.'],
+    ],
+  },
+  de:{
+    headerSub:'/ Partner-Rechner',
+    tabCalc:'⚡ Rechner', tabCompare:'📊 RS vs CPA', tabScenarios:'⚖️ Szenarien',
+    tabSubaff:'🔗 Sub-Affiliate', tabWhy:'✅ Warum lil.bet',
+    scAHeader:'Szenario A', scBHeader:'Szenario B', scDiffHeader:'Szenariovergleich',
+    earn1m:'1 Mo', earn3m:'3 Mo', earn6m:'6 Mo', earn12m:'12 Mo',
+    partnerEarn:'Partner', brandNgr:'Brand NGR',
+    seasonNote:'⚠️ Saisonalität nicht berücksichtigt — reale Werte können ±20–30% abweichen',
+    tourSkip:'Überspringen', tourNext:'Weiter →', tourFinish:'Fertig!',
+    tourSteps:[
+      {title:'👋 Willkommen!', text:'Dieser Rechner zeigt echte Einnahmen aus dem lil.bet Partnerprogramm.'},
+      {title:'🌍 Schritt 1 — GEO wählen', text:'Wähle das Land, in das du Traffic sendest.'},
+      {title:'📡 Schritt 2 — Traffic-Quelle', text:'Wähle, woher die Spieler kommen.'},
+      {title:'📊 Schritt 3 — Auszahlungsmodell', text:'RS, CPA oder Hybrid.'},
+      {title:'💰 Schritt 4 — Deine Einnahmen', text:'Alles berechnet! Ändere Parameter — Ergebnisse aktualisieren sich.'},
+    ],
+    uspItems:[
+      ['0️⃣','0% Admin Fee','Pin-Up 20%, Vavada 14%. Unsere Admin Fee: 0%.','#1'],
+      ['🚫','Kein negativer Übertrag','Schlechter Monat wird nicht übertragen.','USP'],
+      ['🪙','$30 wöchentlich jeden Dienstag','Niedriger als Mostbet ($50), Parimatch ($100).','🔥'],
+      ['🔗','Sub-Affiliate 7%','Marktbereich: 3–10%.'],
+      ['🍪','Cookie 30 Tage Last Win','Vavada und Mostbet nur Session.'],
+      ['⚡','Direkter Manager','Keine Tickets.'],
+      ['📱','Telegram-freundlich','Alle Quellen akzeptiert.'],
+      ['🚀','Kein FTD-Cap','Sofort auf jedem Volumen.'],
+    ],
+  },
+  es:{
+    headerSub:'/ calculadora de afiliados',
+    tabCalc:'⚡ Calculadora', tabCompare:'📊 RS vs CPA', tabScenarios:'⚖️ Escenarios',
+    tabSubaff:'🔗 Sub-afiliado', tabWhy:'✅ Por qué lil.bet',
+    scAHeader:'Escenario A', scBHeader:'Escenario B', scDiffHeader:'Comparación de escenarios',
+    earn1m:'1 mes', earn3m:'3 mes', earn6m:'6 mes', earn12m:'12 mes',
+    partnerEarn:'Afiliado', brandNgr:'NGR marca',
+    seasonNote:'⚠️ Estacionalidad no incluida — los valores reales pueden variar ±20–30%',
+    tourSkip:'Saltar', tourNext:'Siguiente →', tourFinish:'¡Listo!',
+    tourSteps:[
+      {title:'👋 ¡Bienvenido!', text:'Esta calculadora muestra ganancias reales del programa de afiliados lil.bet.'},
+      {title:'🌍 Paso 1 — Elige GEO', text:'Elige el país al que envías tráfico.'},
+      {title:'📡 Paso 2 — Fuente de tráfico', text:'Elige de dónde vienen los jugadores.'},
+      {title:'📊 Paso 3 — Modelo de pago', text:'RS, CPA o Hybrid.'},
+      {title:'💰 Paso 4 — Tus ganancias', text:'¡Todo calculado! Cambia parámetros — resultados en tiempo real.'},
+    ],
+    uspItems:[
+      ['0️⃣','0% Admin Fee','Pin-Up 20%, Vavada 14%. Nuestra tarifa: 0%.','#1'],
+      ['🚫','Sin arrastre negativo','El mes malo no se arrastra.','USP'],
+      ['🪙','$30 semanal cada martes','Umbral inferior a Mostbet ($50).','🔥'],
+      ['🔗','Sub-afiliado 7%','Rango de mercado: 3–10%.'],
+      ['🍪','Cookie 30 días Last Win','Vavada y Mostbet solo sesión.'],
+      ['⚡','Manager directo','Sin tickets.'],
+      ['📱','Telegram sin restricciones','Canales, bots, APK, PWA.'],
+      ['🚀','Sin cap de FTD','Cualquier volumen de inmediato.'],
+    ],
+  },
+};
+
+function t(key){ return (LANG[currentLang]||LANG.en)[key] || (LANG.en)[key] || key; }
+
+function switchLang(lang){
+  currentLang = lang;
+  localStorage.setItem('calc_lang', lang);
+  // Update lang buttons
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => { if(b.textContent.toLowerCase()===lang||b.textContent.toUpperCase()===lang.toUpperCase()) b.classList.add('active'); });
+  // Update static elements
+  const L = LANG[lang] || LANG.en;
+  document.getElementById('headerSub').textContent = L.headerSub;
+  ['calc','compare','scenarios','subaff','why'].forEach(id => {
+    const el = document.getElementById('tab-'+id);
+    if(el) el.textContent = L['tab'+id.charAt(0).toUpperCase()+id.slice(1)] || el.textContent;
+  });
+  // Update tour buttons if tour open
+  const skipBtn = document.getElementById('tourSkipBtn');
+  const nextBtn = document.getElementById('tourNextBtn');
+  if(skipBtn) skipBtn.textContent = L.tourSkip;
+  if(nextBtn) nextBtn.textContent = tourStep >= (L.tourSteps.length-1) ? L.tourFinish : L.tourNext;
+  // Update scenario headers
+  const sh = {scAHeader:'scAHeader', scBHeader:'scBHeader', scDiffHeader:'scDiffHeader'};
+  Object.entries(sh).forEach(([k,id]) => { const e=document.getElementById(id); if(e) e.textContent=L[k]; });
+  renderAll();
+  renderWhy();
+  renderScenarios();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ONBOARDING TOUR
+// ══════════════════════════════════════════════════════════════════════════════
+
+// Each step: [targetElementId or null for center, scrollIntoView?]
+const TOUR_TARGETS = [null, 'geoGrid', 'srcSelect', 'btnRS', 'heroEarn'];
+
+function startTour() {
+  tourStep = 0;
+  // Make sure calc tab is active so targets exist
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-calc').classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-calc').classList.add('active');
+  document.getElementById('tourOverlay').style.display = '';
+  showTourStep(0);
+}
+
+function showTourStep(step) {
+  const L = LANG[currentLang] || LANG.en;
+  const steps = L.tourSteps;
+  if (!steps || step >= steps.length) { skipTour(); return; }
+  tourStep = step;
+
+  document.getElementById('tourTitle').textContent = steps[step].title;
+  document.getElementById('tourText').textContent  = steps[step].text;
+
+  // Dots
+  document.getElementById('tourDots').innerHTML = steps.map((_, i) =>
+    `<div class="tour-dot ${i === step ? 'active' : ''}"></div>`).join('');
+
+  // Buttons
+  document.getElementById('tourSkipBtn').textContent = L.tourSkip || 'Пропустить';
+  document.getElementById('tourNextBtn').textContent =
+    step >= steps.length - 1 ? (L.tourFinish || 'Готово!') : (L.tourNext || 'Далее →');
+
+  // Spotlight + tooltip positioning
+  const spotlight = document.getElementById('tourSpotlight');
+  const tooltip   = document.getElementById('tourTooltip');
+  const targetId  = TOUR_TARGETS[step] || null;
+
+  // Reset tooltip transform
+  tooltip.style.transform = '';
+
+  if (targetId) {
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // Use setTimeout to let scroll settle
+      setTimeout(() => {
+        const r   = el.getBoundingClientRect();
+        const pad = 8;
+        spotlight.style.cssText =
+          `position:absolute;left:${r.left - pad}px;top:${r.top - pad}px;` +
+          `width:${r.width + pad*2}px;height:${r.height + pad*2}px;` +
+          `border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.65),0 0 0 3px var(--green);` +
+          `pointer-events:none;transition:all .3s ease;`;
+
+        // Place tooltip below element if space, otherwise above
+        const ttH = 200;
+        const leftPos = Math.min(Math.max(r.left, 8), window.innerWidth - 320);
+        if (r.bottom + pad + 12 + ttH < window.innerHeight) {
+          tooltip.style.cssText =
+            `position:absolute;left:${leftPos}px;top:${r.bottom + pad + 12}px;transform:none;`;
+        } else {
+          tooltip.style.cssText =
+            `position:absolute;left:${leftPos}px;top:${Math.max(r.top - ttH - pad - 12, 8)}px;transform:none;`;
+        }
+      }, 80);
+      return;
+    }
+  }
+
+  // No target — center the tooltip, hide spotlight
+  spotlight.style.cssText = 'position:absolute;width:0;height:0;box-shadow:0 0 0 9999px rgba(0,0,0,.65);pointer-events:none;top:50%;left:50%;';
+  tooltip.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);';
+}
+
+function tourNext() {
+  const L = LANG[currentLang] || LANG.en;
+  const steps = L.tourSteps || [];
+  if (tourStep >= steps.length - 1) {
+    skipTour();
+  } else {
+    showTourStep(tourStep + 1);
+  }
+}
+
+function skipTour() {
+  document.getElementById('tourOverlay').style.display = 'none';
+  localStorage.setItem('calc_tour_done', '1');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SCENARIO COMPARISON
+// ══════════════════════════════════════════════════════════════════════════════
+
+function buildScGeoGrid(ab) {
+  const sc = scState[ab];
+  document.getElementById('sc' + ab + 'Geo').innerHTML =
+    Object.entries(GEO_DATA).map(([k, v]) =>
+      `<button class="sc-geo-btn ${k === sc.geo ? 'active' : ''}" onclick="setScGeo('${ab}','${k}')">${v.label}</button>`
+    ).join('');
+}
+
+function setScGeo(ab, geo) {
+  scState[ab].geo = geo;
+  const g = GEO_DATA[geo];
+  if (scState[ab].model === 'cpa' && !g.cpaAllowed) scState[ab].model = 'rs';
+  buildScGeoGrid(ab);
+  updateScModelBtns(ab);
+  renderScenarios();
+}
+
+function setScModel(ab, model) {
+  const g = GEO_DATA[scState[ab].geo];
+  if (model === 'cpa' && !g.cpaAllowed) return;
+  scState[ab].model = model;
+  updateScModelBtns(ab);
+  renderScenarios();
+}
+
+function updateScModelBtns(ab) {
+  const sc = scState[ab];
+  const g  = GEO_DATA[sc.geo];
+  const map = { rs: 'RS', cpa: 'CPA', hybrid: 'Hybrid' };
+  ['rs', 'cpa', 'hybrid'].forEach(m => {
+    const btn = document.getElementById('sc' + ab + 'Btn' + map[m]);
+    if (!btn) return;
+    btn.className = 'sc-model-btn' + (m === sc.model ? ' active-' + m : '');
+    btn.disabled  = (m === 'cpa' && !g.cpaAllowed);
+  });
+}
+
+function onScSlider(ab) {
+  const val = +document.getElementById('sc' + ab + 'Ftd').value;
+  scState[ab].ftd = val;
+  document.getElementById('sc' + ab + 'FtdLbl').textContent = val;
+  renderScenarios();
+}
+
+function calcScenario(sc) {
+  const geo = GEO_DATA[sc.geo];
+  const src = SRC_DATA[sc.src] || SRC_DATA.facebook;
+  const qual = src.qual;
+  const ftd  = sc.ftd;
+  const promoFactor = 1 - (state.promoLoad / 100);
+
+  const aNgr1m  = geo.ngr1m  * qual * promoFactor;
+  const aNgr3m  = geo.ngr3m  * qual * promoFactor;
+  const aNgr6m  = geo.ngr6m  * qual * promoFactor;
+  const aNgr12m = geo.ngr12m * qual * promoFactor;
+
+  const rsRate = getTierRate(geo, ftd);
+  let earn1m=0, earn3m=0, earn6m=0, earn12m=0, modelLabel='';
+
+  if (sc.model === 'rs') {
+    earn1m  = ftd * aNgr1m  * (rsRate/100);
+    earn3m  = ftd * aNgr3m  * (rsRate/100);
+    earn6m  = ftd * aNgr6m  * (rsRate/100);
+    earn12m = ftd * aNgr12m * (rsRate/100);
+    modelLabel = `RS ${rsRate}%`;
+  } else if (sc.model === 'cpa') {
+    const rate = geo.cpaRates ? geo.cpaRates[0].rate : 20;
+    earn1m = earn3m = earn6m = earn12m = ftd * rate;
+    modelLabel = `CPA $${rate}`;
+  } else if (sc.model === 'hybrid') {
+    const h = (geo.hybridAllowed && geo.hybridRate) ? geo.hybridRate : { cpa: state.hybridCpa, rs: state.hybridRs };
+    const cpaP = ftd * h.cpa;
+    earn1m  = cpaP + ftd * aNgr1m  * (h.rs/100);
+    earn3m  = cpaP + ftd * aNgr3m  * (h.rs/100);
+    earn6m  = cpaP + ftd * aNgr6m  * (h.rs/100);
+    earn12m = cpaP + ftd * aNgr12m * (h.rs/100);
+    modelLabel = `Hybrid $${h.cpa}+${h.rs}%`;
+  }
+
+  return { geo, src, ftd, qual, earn1m, earn3m, earn6m, earn12m, modelLabel };
+}
+
+function renderScenarios() {
+  const L = LANG[currentLang] || LANG.en;
+
+  ['A', 'B'].forEach(ab => {
+    const sc    = scState[ab];
+    // Sync src select → state
+    const srcEl = document.getElementById('sc' + ab + 'Src');
+    if (srcEl) scState[ab].src = srcEl.value;
+    const rr    = calcScenario(sc);
+    const color = ab === 'A' ? 'var(--green)' : 'var(--purple)';
+    const bg    = ab === 'A' ? 'rgba(0,212,170,.08)' : 'rgba(139,92,246,.08)';
+    const bdr   = ab === 'A' ? 'rgba(0,212,170,.2)' : 'rgba(139,92,246,.2)';
+
+    // Geo grid buttons
+    buildScGeoGrid(ab);
+    updateScModelBtns(ab);
+
+    document.getElementById('sc' + ab + 'Results').innerHTML = `
+      <div class="sc-result-hero" style="background:${bg};border:1px solid ${bdr}">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">${rr.geo.label} · ${rr.src.label}</div>
+        <div style="font-size:26px;font-weight:800;color:${color}">${fmtU(rr.earn1m)}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${rr.modelLabel} · 1 мес</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+        ${[['1 мес', rr.earn1m],['3 мес', rr.earn3m],['6 мес', rr.earn6m],['12 мес', rr.earn12m]].map(([lbl, val]) =>
+          `<div class="card-sm" style="text-align:center;padding:8px">
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px">${lbl}</div>
+            <div style="font-size:14px;font-weight:700;color:${color}">${fmtU(val)}</div>
+          </div>`).join('')}
+      </div>`;
+  });
+
+  // Diff table — re-calc both with synced src
+  const rA = calcScenario(scState['A']);
+  const rB = calcScenario(scState['B']);
+
+  const rows = [
+    [L.earn1m  || '1 мес',  rA.earn1m,  rB.earn1m],
+    [L.earn3m  || '3 мес',  rA.earn3m,  rB.earn3m],
+    [L.earn6m  || '6 мес',  rA.earn6m,  rB.earn6m],
+    [L.earn12m || '12 мес', rA.earn12m, rB.earn12m],
+  ];
+
+  document.getElementById('scDiffTable').innerHTML = `
+    <thead><tr>
+      <th style="text-align:left">Период</th>
+      <th style="color:var(--green)">${L.scAHeader||'Сценарий A'}</th>
+      <th style="color:var(--purple)">${L.scBHeader||'Сценарий B'}</th>
+      <th>Разница</th>
+    </tr></thead>
+    <tbody>${rows.map(([lbl, a, b]) => {
+      const diff = a - b;
+      const wA   = diff > 100;
+      const wB   = diff < -100;
+      return `<tr>
+        <td>${lbl}</td>
+        <td class="${wA?'winner':''}" style="color:var(--green)">${fmtU(a)}</td>
+        <td class="${wB?'winner':''}" style="color:var(--purple)">${fmtU(b)}</td>
+        <td style="color:${wA?'var(--green)':wB?'var(--purple)':'var(--muted)'}">
+          ${Math.abs(diff) < 1 ? '≈ равно' : (wA ? '▲ A +' : wB ? '▲ B +' : '') + fmtU(Math.abs(diff))}
+        </td>
+      </tr>`;
+    }).join('')}</tbody>`;
+
+  // Insight
+  const diff12 = rA.earn12m - rB.earn12m;
+  const winner = diff12 > 100 ? 'A' : diff12 < -100 ? 'B' : null;
+  const winRes = winner === 'A' ? rA : rB;
+  document.getElementById('scDiffInsight').innerHTML = winner
+    ? `<div class="be-box">💡 Сценарий <strong>${winner}</strong> выгоднее за 12 мес на <strong>${fmtU(Math.abs(diff12))}</strong> — ${winRes.geo.label} + ${winRes.modelLabel} показывает лучший LTV при данных параметрах.</div>`
+    : `<div class="be-box">⚖️ Сценарии примерно равны по доходности за 12 месяцев. Попробуй изменить ГЕО или модель.</div>`;
+}
+
 // ══════════════════════════════════════════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════════════════════════════════════════
@@ -923,6 +1534,10 @@ function renderCalc(c) {
   document.getElementById('heroSub').textContent = `${geo.label} · ${src.label} · промо ${state.promoLoad}%`;
   document.getElementById('heroEarn').textContent = fmtU(earn1m);
   document.getElementById('heroFormula').textContent = formula;
+
+  // Seasonality notice
+  const snEl = document.getElementById('seasonNote');
+  if (snEl) { snEl.textContent = t('seasonNote'); }
 
   // Weekly payout
   const weekly = earn1m / 4.3;
@@ -1575,20 +2190,12 @@ function renderRolling(c) {
 // ── Why lil.bet tab ──────────────────────────────────────────────────────────
 
 function renderWhy() {
-  document.getElementById('uspList').innerHTML = [
-    ['0️⃣','0% Admin fee — получаешь полный RS','Pin-Up берёт 20%, Vavada — 14% от NGR до выплаты. У нас admin fee 0%: RS 25% здесь = RS 25% у конкурентов с fee 20% это как 31%.','#1'],
-    ['🚫','Нет переноса отрицательного баланса','Плохой месяц не вычитается из следующего. Большинство конкурентов (Mostbet, 1xPartners, Melbet) переносят минус — у нас он сгорает.','USP'],
-    ['🪙','$30 с еженедельной выплатой по вторникам','Минимальный порог ниже Mostbet ($50), Pin-Up ($50), Parimatch ($100). Крипто-выплата без задержек.','🔥'],
-    ['🔗','Sub-affiliate 7% — выше рынка','Рыночный диапазон: 3–10%. Mostbet даёт 2%, Pin-Up 3%. Наши 7% — топ-2 среди конкурентов (выше только 888Starz).'],
-    ['🍪','Cookie 30 дней Last Win','Vavada — только сессия, Mostbet — сессия. Наш cookie работает 30 дней: партнёр получает кредит, даже если игрок вернулся через неделю.'],
-    ['⚡','Прямой менеджер, живое общение','Никаких тикетов. Условия, промо, выплаты — решается в чате напрямую.'],
-    ['📱','Telegram без ограничений','Каналы, боты, mini-apps, APK, PWA — всё принимаем без ограничений.'],
-    ['🚀','Нет FTD кэпа при тесте','Работаем на любой объём сразу — без пробных 50 FTD.'],
-  ].map(([i,t,d,badge])=>`
+  const uspItems = t('uspItems') || [];
+  document.getElementById('uspList').innerHTML = uspItems.map(([i,title,d,badge])=>`
     <div class="usp-item">
       <div class="usp-icon">${i}</div>
       <div>
-        <div class="usp-title">${t}${badge?`<span class="usp-badge">${badge}</span>`:''}</div>
+        <div class="usp-title">${title}${badge?`<span class="usp-badge">${badge}</span>`:''}</div>
         <div class="usp-desc">${d}</div>
       </div>
     </div>`).join('');
@@ -1792,18 +2399,46 @@ function switchTab(tab) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-'+tab).classList.add('active');
-  event.currentTarget.classList.add('active');
+  const tabBtn = document.getElementById('tab-'+tab);
+  if (tabBtn) tabBtn.classList.add('active');
   renderAll();
   renderWhy();
+  if (tab === 'scenarios') renderScenarios();
 }
 
 // Init — script is at bottom of body, DOM is already ready
 (function init() {
+  // Restore language preference
+  const L = LANG[currentLang] || LANG.en;
+  document.getElementById('headerSub').textContent = L.headerSub;
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase() === currentLang.toLowerCase());
+  });
+  // Update tab labels for saved language
+  ['calc','compare','scenarios','subaff','why'].forEach(id => {
+    const el = document.getElementById('tab-'+id);
+    const key = 'tab' + id.charAt(0).toUpperCase() + id.slice(1);
+    if (el && L[key]) el.textContent = L[key];
+  });
+
   buildGeoGrid();
   updateModelBtns();
   state.src = document.getElementById('srcSelect').value;
+
+  // Build scenario geo grids
+  buildScGeoGrid('A');
+  buildScGeoGrid('B');
+  updateScModelBtns('A');
+  updateScModelBtns('B');
+
   renderAll();
   renderWhy();
+  renderScenarios();
+
+  // Show onboarding tour on first visit (delay so UI is ready)
+  if (!localStorage.getItem('calc_tour_done')) {
+    setTimeout(startTour, 1200);
+  }
 })();
 </script>
 </body>
