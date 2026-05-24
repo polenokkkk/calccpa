@@ -186,10 +186,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .lang-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--text)}
 
 /* Onboarding tour */
-.tour-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none}
-.tour-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);pointer-events:all}
-.tour-spotlight{position:absolute;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.65),0 0 0 3px var(--green);pointer-events:none;transition:all .3s ease}
-.tour-tooltip{position:absolute;background:#1a2236;border:1px solid rgba(0,212,170,.4);border-radius:10px;padding:16px 18px;min-width:240px;max-width:300px;z-index:9001;pointer-events:all;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.tour-overlay{position:fixed;inset:0;z-index:9000;pointer-events:all}
+.tour-backdrop{position:fixed;inset:0;background:transparent;pointer-events:all;cursor:default}
+.tour-spotlight{position:fixed;border-radius:10px;pointer-events:none;transition:left .25s ease,top .25s ease,width .25s ease,height .25s ease}
+.tour-tooltip{position:fixed;background:#1a2236;border:1px solid rgba(0,212,170,.4);border-radius:12px;padding:18px 20px;width:300px;max-width:90vw;z-index:9002;pointer-events:all;box-shadow:0 12px 40px rgba(0,0,0,.6)}
 .tour-tooltip h4{font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px}
 .tour-tooltip p{font-size:12px;color:var(--label);line-height:1.6;margin-bottom:12px}
 .tour-nav{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -882,7 +882,7 @@ const LANG = {
     scAHeader:'Сценарий A', scBHeader:'Сценарий B', scDiffHeader:'Сравнение сценариев',
     earn1m:'1 мес', earn3m:'3 мес', earn6m:'6 мес', earn12m:'12 мес',
     partnerEarn:'Партнёру', brandNgr:'NGR бренда',
-    seasonNote:'⚠️ Сезонность не учтена — реальные значения могут отличаться на ±20–30% в праздники и Рамадан',
+    seasonNote:'⚠️ Сезонность не учтена — реальные значения могут отличаться на ±20–30% в зависимости от периода',
     tourSkip:'Пропустить', tourNext:'Далее →', tourFinish:'Готово!',
     tourSteps:[
       {title:'👋 Добро пожаловать!', text:'Этот калькулятор покажет реальный доход с партнёрской программы lil.bet. Займёт 30 секунд. Начнём с выбора ГЕО.'},
@@ -909,7 +909,7 @@ const LANG = {
     scAHeader:'Scenario A', scBHeader:'Scenario B', scDiffHeader:'Scenario comparison',
     earn1m:'1 mo', earn3m:'3 mo', earn6m:'6 mo', earn12m:'12 mo',
     partnerEarn:'Partner', brandNgr:'Brand NGR',
-    seasonNote:'⚠️ Seasonality not included — real values may vary ±20–30% during holidays and Ramadan',
+    seasonNote:'⚠️ Seasonality not included — real values may vary ±20–30% depending on the time of year',
     tourSkip:'Skip', tourNext:'Next →', tourFinish:'Done!',
     tourSteps:[
       {title:'👋 Welcome!', text:'This calculator shows real earnings from the lil.bet affiliate program. Takes 30 seconds. Let\'s start with GEO selection.'},
@@ -1044,16 +1044,17 @@ function switchLang(lang){
 // ONBOARDING TOUR
 // ══════════════════════════════════════════════════════════════════════════════
 
-// Each step: [targetElementId or null for center, scrollIntoView?]
+// Tour target element IDs per step (null = centered intro, no spotlight)
 const TOUR_TARGETS = [null, 'geoGrid', 'srcSelect', 'btnRS', 'heroEarn'];
 
 function startTour() {
   tourStep = 0;
-  // Make sure calc tab is active so targets exist
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-calc').classList.add('active');
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-calc').classList.add('active');
+  // Show calc tab — all tour targets live here
+  switchTab('calc');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  // Lock page scroll while tour is active — we control scrolling
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
   document.getElementById('tourOverlay').style.display = '';
   showTourStep(0);
 }
@@ -1071,51 +1072,86 @@ function showTourStep(step) {
   document.getElementById('tourDots').innerHTML = steps.map((_, i) =>
     `<div class="tour-dot ${i === step ? 'active' : ''}"></div>`).join('');
 
-  // Buttons
+  // Buttons text
   document.getElementById('tourSkipBtn').textContent = L.tourSkip || 'Пропустить';
   document.getElementById('tourNextBtn').textContent =
     step >= steps.length - 1 ? (L.tourFinish || 'Готово!') : (L.tourNext || 'Далее →');
 
-  // Spotlight + tooltip positioning
   const spotlight = document.getElementById('tourSpotlight');
   const tooltip   = document.getElementById('tourTooltip');
   const targetId  = TOUR_TARGETS[step] || null;
 
-  // Reset tooltip transform
-  tooltip.style.transform = '';
-
-  if (targetId) {
-    const el = document.getElementById(targetId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      // Use setTimeout to let scroll settle
-      setTimeout(() => {
-        const r   = el.getBoundingClientRect();
-        const pad = 8;
-        spotlight.style.cssText =
-          `position:absolute;left:${r.left - pad}px;top:${r.top - pad}px;` +
-          `width:${r.width + pad*2}px;height:${r.height + pad*2}px;` +
-          `border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.65),0 0 0 3px var(--green);` +
-          `pointer-events:none;transition:all .3s ease;`;
-
-        // Place tooltip below element if space, otherwise above
-        const ttH = 200;
-        const leftPos = Math.min(Math.max(r.left, 8), window.innerWidth - 320);
-        if (r.bottom + pad + 12 + ttH < window.innerHeight) {
-          tooltip.style.cssText =
-            `position:absolute;left:${leftPos}px;top:${r.bottom + pad + 12}px;transform:none;`;
-        } else {
-          tooltip.style.cssText =
-            `position:absolute;left:${leftPos}px;top:${Math.max(r.top - ttH - pad - 12, 8)}px;transform:none;`;
-        }
-      }, 80);
-      return;
-    }
+  if (!targetId) {
+    // Intro / center step — scroll to top, no spotlight
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    spotlight.style.cssText =
+      'position:fixed;width:0;height:0;left:50%;top:30%;box-shadow:0 0 0 9999px rgba(0,0,0,.7);pointer-events:none;border-radius:0;';
+    tooltip.style.cssText =
+      'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:320px;width:90vw;';
+    return;
   }
 
-  // No target — center the tooltip, hide spotlight
-  spotlight.style.cssText = 'position:absolute;width:0;height:0;box-shadow:0 0 0 9999px rgba(0,0,0,.65);pointer-events:none;top:50%;left:50%;';
-  tooltip.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);';
+  const el = document.getElementById(targetId);
+  if (!el) { skipTour(); return; }
+
+  // Temporarily unlock scroll → instant scroll → re-lock
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
+  // Scroll so the element is in the upper-center of the viewport (leaves room for tooltip below)
+  const elRect0 = el.getBoundingClientRect();
+  const desiredTop = 120; // target: element starts 120px from top
+  window.scrollBy({ top: elRect0.top - desiredTop, behavior: 'instant' });
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
+
+  // Now measure after scroll
+  const r   = el.getBoundingClientRect();
+  const pad = 10;
+  const vw  = window.innerWidth;
+  const vh  = window.innerHeight;
+
+  // Spotlight — fixed position (stays in viewport)
+  spotlight.style.cssText =
+    `position:fixed;` +
+    `left:${Math.max(0, r.left - pad)}px;` +
+    `top:${Math.max(0, r.top - pad)}px;` +
+    `width:${Math.min(r.width + pad*2, vw)}px;` +
+    `height:${r.height + pad*2}px;` +
+    `border-radius:10px;` +
+    `box-shadow:0 0 0 9999px rgba(0,0,0,.72),0 0 0 2px var(--green);` +
+    `pointer-events:none;transition:all .25s ease;`;
+
+  // Tooltip dimensions
+  const ttW = Math.min(300, vw - 24);
+  const ttH = 220;
+
+  // Horizontal: align to element left, clamp within viewport
+  let left = Math.max(8, Math.min(r.left, vw - ttW - 8));
+
+  // Vertical: prefer below the spotlight, fallback above, always in viewport
+  let top;
+  const spaceBelow = vh - (r.bottom + pad + 12);
+  const spaceAbove = r.top - pad - 12;
+
+  if (spaceBelow >= ttH) {
+    top = r.bottom + pad + 12;
+  } else if (spaceAbove >= ttH) {
+    top = r.top - pad - 12 - ttH;
+  } else {
+    // Neither fits cleanly — use right side or max available
+    top = Math.max(8, Math.min(r.top, vh - ttH - 8));
+    // If element is in center, put tooltip to its right if space
+    if (r.right + 16 + ttW < vw) {
+      left = r.right + 16;
+      top  = Math.max(8, Math.min(r.top, vh - ttH - 8));
+    }
+  }
+  // Final clamp
+  top  = Math.max(8, Math.min(top,  vh - ttH - 8));
+  left = Math.max(8, Math.min(left, vw - ttW - 8));
+
+  tooltip.style.cssText =
+    `position:fixed;left:${left}px;top:${top}px;width:${ttW}px;transform:none;`;
 }
 
 function tourNext() {
@@ -1130,6 +1166,9 @@ function tourNext() {
 
 function skipTour() {
   document.getElementById('tourOverlay').style.display = 'none';
+  // Restore scroll
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
   localStorage.setItem('calc_tour_done', '1');
 }
 

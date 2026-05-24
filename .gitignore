@@ -1,0 +1,21 @@
+# Brandbook and design assets (keep local, don't expose on GitHub)
+*.pdf
+*.exr
+*.psd
+*.ai
+*.sketch
+*.fig
+
+# Personal photos
+telegram-peer-photo-*.jpg
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Node modules (if any future tooling)
+node_modules/
