@@ -2,7 +2,28 @@
 // TRANSLATIONS
 // ══════════════════════════════════════════════════════════════════════════════
 
-let currentLang = localStorage.getItem('calc_lang') || 'ru';
+function detectLang() {
+  // 1. User manually chose — highest priority
+  var saved = localStorage.getItem('calc_lang');
+  if (saved) return saved;
+  // 2. Telegram Mini App — phone language
+  try {
+    var tg = window.Telegram && window.Telegram.WebApp;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      var lc = (tg.initDataUnsafe.user.language_code || '').toLowerCase().split('-')[0];
+      var map = { ru:'ru', uk:'uk', ua:'uk', be:'ru', kk:'ru', de:'de', es:'es', en:'en' };
+      if (map[lc]) return map[lc];
+    }
+  } catch(e) {}
+  // 3. Browser language
+  try {
+    var bl = (navigator.language || navigator.userLanguage || '').toLowerCase().split('-')[0];
+    var bmap = { ru:'ru', uk:'uk', de:'de', es:'es' };
+    if (bmap[bl]) return bmap[bl];
+  } catch(e) {}
+  return 'ru';
+}
+let currentLang = detectLang();
 let tourStep = 0;
 
 const LANG = {

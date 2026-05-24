@@ -367,6 +367,20 @@ function switchTab(tab) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 (function init() {
+  // Telegram Mini App init
+  try {
+    var tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      // Push content above Telegram's bottom bar
+      var safeBottom = (tg.safeAreaInset && tg.safeAreaInset.bottom) || 0;
+      if (safeBottom > 0) {
+        document.body.style.paddingBottom = safeBottom + 'px';
+      }
+    }
+  } catch(e) {}
+
   // Restore language preference
   var L = LANG[currentLang] || LANG.en;
   document.getElementById('headerSub').textContent = L.headerSub;
