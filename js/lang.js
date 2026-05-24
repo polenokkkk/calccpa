@@ -192,7 +192,7 @@ const LANG = {
     payMinVal:'$30', payFreqVal:'Еженедельно (вт) или ежемесячно — на выбор', payMethodVal:'Крипто (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Тур',
-    tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарии', tabSubaffShort:'Суб-аффилейт', tabWhyShort:'Почему lil.bet',
+    tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарии', tabSubaffShort:'Суб-аффилейт', tabWhyShort:'О нас',
     promoLbl:'Промо нагрузка (бонусы игрокам):', promoOfGgr:'от GGR',
     promoSlider0:'0% (нет бонусов)', promoSlider20:'20% типично', promoSlider50:'50% агрессивно',
     statC2RLabel:'C→Рег', statC2RSub:'клик→рег', statR2DLabel:'Рег→FTD', statR2DSub:'рег→депозит',
@@ -386,7 +386,7 @@ const LANG = {
     payMinVal:'$30', payFreqVal:'Weekly (Tue) or monthly — your choice', payMethodVal:'Crypto (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Tour',
-    tabCalcShort:'Calculator', tabScenariosShort:'Scenarios', tabSubaffShort:'Sub-affiliate', tabWhyShort:'Why lil.bet',
+    tabCalcShort:'Calculator', tabScenariosShort:'Scenarios', tabSubaffShort:'Sub-affiliate', tabWhyShort:'About',
     promoLbl:'Promo load (player bonuses):', promoOfGgr:'of GGR',
     promoSlider0:'0% (no bonuses)', promoSlider20:'20% typical', promoSlider50:'50% aggressive',
     statC2RLabel:'C→Reg', statC2RSub:'click→reg', statR2DLabel:'Reg→FTD', statR2DSub:'reg→deposit',
@@ -578,7 +578,7 @@ const LANG = {
     payMinVal:'$30', payFreqVal:'Щотижня (вт) або щомісяця — на вибір', payMethodVal:'Крипто (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Тур',
-    tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарії', tabSubaffShort:'Суб-афіліат', tabWhyShort:'Чому lil.bet',
+    tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарії', tabSubaffShort:'Суб-афіліат', tabWhyShort:'Про нас',
     promoLbl:'Промо навантаження (бонуси гравцям):', promoOfGgr:'від GGR',
     promoSlider0:'0% (без бонусів)', promoSlider20:'20% типово', promoSlider50:'50% агресивно',
     statC2RLabel:'C→Рег', statC2RSub:'клік→рег', statR2DLabel:'Рег→FTD', statR2DSub:'рег→депозит',
@@ -770,7 +770,7 @@ const LANG = {
     payMinVal:'$30', payFreqVal:'Wöchentlich (Di) oder monatlich — nach Wahl', payMethodVal:'Krypto (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Tour',
-    tabCalcShort:'Rechner', tabScenariosShort:'Szenarien', tabSubaffShort:'Sub-Affiliate', tabWhyShort:'Warum lil.bet',
+    tabCalcShort:'Rechner', tabScenariosShort:'Szenarien', tabSubaffShort:'Sub-Affiliate', tabWhyShort:'Über uns',
     promoLbl:'Promo-Last (Spielerboni):', promoOfGgr:'vom GGR',
     promoSlider0:'0% (keine Boni)', promoSlider20:'20% typisch', promoSlider50:'50% aggressiv',
     statC2RLabel:'K→Reg', statC2RSub:'Klick→Reg', statR2DLabel:'Reg→FTD', statR2DSub:'Reg→Einzahlung',
@@ -962,7 +962,7 @@ const LANG = {
     payMinVal:'$30', payFreqVal:'Semanal (mar) o mensual — a elegir', payMethodVal:'Crypto (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Tour',
-    tabCalcShort:'Calculadora', tabScenariosShort:'Escenarios', tabSubaffShort:'Sub-afiliado', tabWhyShort:'Por qué lil.bet',
+    tabCalcShort:'Calculadora', tabScenariosShort:'Escenarios', tabSubaffShort:'Sub-afiliado', tabWhyShort:'Sobre',
     promoLbl:'Carga promo (bonos a jugadores):', promoOfGgr:'del GGR',
     promoSlider0:'0% (sin bonos)', promoSlider20:'20% típico', promoSlider50:'50% agresivo',
     statC2RLabel:'C→Reg', statC2RSub:'clic→reg', statR2DLabel:'Reg→FTD', statR2DSub:'reg→depósito',

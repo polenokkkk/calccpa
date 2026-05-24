@@ -383,7 +383,8 @@ function switchTab(tab) {
 
   // Restore language preference
   var L = LANG[currentLang] || LANG.en;
-  document.getElementById('headerSub').textContent = L.headerSub;
+  var headerSubEl = document.getElementById('headerSub');
+  if (headerSubEl) headerSubEl.textContent = L.headerSub;
   document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.textContent.toLowerCase() === currentLang.toLowerCase());
   });
