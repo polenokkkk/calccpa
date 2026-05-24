@@ -419,4 +419,96 @@ function switchTab(tab) {
   if (!localStorage.getItem('calc_tour_done')) {
     setTimeout(startTour, 1200);
   }
+
+  // ── Live counter ──
+  (function() {
+    var count = Math.floor(Math.random() * 10) + 18; // 18–27
+    var el = document.getElementById('liveCount');
+    if (el) el.textContent = count;
+    setInterval(function() {
+      count = Math.max(11, Math.min(41, count + Math.floor(Math.random() * 5) - 2));
+      var e = document.getElementById('liveCount');
+      if (e) e.textContent = count;
+    }, 15000);
+  })();
+
+  // ── Slot auto-popup after 5s (once per session) ──
+  if (!sessionStorage.getItem('slot_shown')) {
+    setTimeout(function() {
+      sessionStorage.setItem('slot_shown', '1');
+      openSlot();
+    }, 5000);
+  }
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SLOT MACHINE
+// ══════════════════════════════════════════════════════════════════════════════
+
+var _slotSpun = false;
+var _SLOT_EMOJIS = ['🍋','🍊','🍇','⭐','🔔','7️⃣'];
+var _SLOT_WIN_EMOJI = '💎';
+
+function openSlot() {
+  var w = document.getElementById('slotWidget');
+  if (!w) return;
+  w.style.display = 'flex';
+  // Re-apply i18n for slot texts
+  w.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    var val = t(key);
+    if (val && val !== key) el.textContent = val;
+  });
+}
+
+function closeSlot() {
+  var w = document.getElementById('slotWidget');
+  if (w) w.style.display = 'none';
+}
+
+function spinSlot() {
+  if (_slotSpun) return;
+  var btn = document.getElementById('slotSpinBtn');
+  if (btn) btn.disabled = true;
+
+  var reelIds = ['reel0','reel1','reel2'];
+  var intervals = [];
+
+  // Start spinning all reels
+  reelIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('win');
+    el.classList.add('spinning');
+    var iv = setInterval(function() {
+      el.textContent = _SLOT_EMOJIS[Math.floor(Math.random() * _SLOT_EMOJIS.length)];
+    }, 80);
+    intervals.push(iv);
+  });
+
+  // Stop reels one by one → all land on 💎
+  var stopAt = [700, 1150, 1600];
+  reelIds.forEach(function(id, i) {
+    setTimeout(function() {
+      clearInterval(intervals[i]);
+      var el = document.getElementById(id);
+      if (el) {
+        el.textContent = _SLOT_WIN_EMOJI;
+        el.classList.remove('spinning');
+        setTimeout(function() { el.classList.add('win'); }, 50);
+      }
+      // After last reel stops — show win message
+      if (i === reelIds.length - 1) {
+        _slotSpun = true;
+        setTimeout(function() {
+          var res = document.getElementById('slotResult');
+          if (res) res.textContent = t('slotWin');
+          var footer = document.getElementById('slotFooter');
+          if (footer) {
+            footer.innerHTML = '<a href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank">' + t('slotWinCta') + ' →</a>';
+          }
+        }, 350);
+      }
+    }, stopAt[i]);
+  });
+}

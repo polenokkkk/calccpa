@@ -224,6 +224,9 @@ const LANG = {
     brandChannel:'Канал бренда', affChannel:'Канал партнёрки',
     ctaReg:'🤝 Стать партнёром', regBtnShort:'🚀 Регистрация',
     footerText:'lil.bet — партнёрский калькулятор', footerManager:'Менеджер', footerAff:'Партнёрка', footerReg:'🚀 Регистрация',
+    liveNow:'сейчас считают',
+    slotTitle:'Испытай удачу', slotSub:'Покрути и узнай свой бонус', slotSpin:'🎲 Крутить!',
+    slotWin:'🎉 +5% к RS! Напиши менеджеру', slotWinCta:'💬 Написать Ивану',
     detailedTableSec:'Детальная таблица сравнения', rsWinsSec:'Почему RS выгоднее в долгосрочной перспективе',
     managerPerks:['⚡ <b>Отвечает быстро</b> — обычно в течение часа','📋 <b>Индивидуальные условия</b> — ставки, промо, сплит CPA+RS','💳 <b>Еженедельные выплаты</b> — крипто без задержек','📊 <b>Статистика в реальном времени</b>'],
     compNncoYes:'Есть', compNncoNo:'Нет ✓', compWk:'нед', compDay:'дн', compSession:'Сессия', compNa:'н/д',
@@ -418,6 +421,9 @@ const LANG = {
     brandChannel:'Brand channel', affChannel:'Affiliate channel',
     ctaReg:'🤝 Become a partner', regBtnShort:'🚀 Register',
     footerText:'lil.bet — affiliate calculator', footerManager:'Manager', footerAff:'Affiliate program', footerReg:'🚀 Register',
+    liveNow:'calculating now',
+    slotTitle:'Try your luck', slotSub:'Spin and get your bonus', slotSpin:'🎲 Spin!',
+    slotWin:'🎉 +5% to RS! Message the manager', slotWinCta:'💬 Message Ivan',
     detailedTableSec:'Detailed comparison table', rsWinsSec:'Why RS is better long-term',
     managerPerks:['⚡ <b>Fast response</b> — usually within an hour','📋 <b>Individual terms</b> — rates, promos, CPA+RS split','💳 <b>Weekly payouts</b> — crypto, no delays','📊 <b>Real-time statistics</b>'],
     compNncoYes:'Yes', compNncoNo:'No ✓', compWk:'wk', compDay:'d', compSession:'Session', compNa:'N/A',
@@ -610,6 +616,9 @@ const LANG = {
     brandChannel:'Канал бренду', affChannel:'Канал партнерки',
     ctaReg:'🤝 Стати партнером', regBtnShort:'🚀 Реєстрація',
     footerText:'lil.bet — калькулятор партнера', footerManager:'Менеджер', footerAff:'Партнерка', footerReg:'🚀 Реєстрація',
+    liveNow:'зараз рахують',
+    slotTitle:'Спробуй удачу', slotSub:'Крутни і дізнайся свій бонус', slotSpin:'🎲 Крутити!',
+    slotWin:'🎉 +5% до RS! Напиши менеджеру', slotWinCta:'💬 Написати Івану',
     detailedTableSec:'Детальна таблиця порівняння', rsWinsSec:'Чому RS вигідніше у довгостроковій перспективі',
     managerPerks:['⚡ <b>Відповідає швидко</b> — зазвичай протягом години','📋 <b>Індивідуальні умови</b> — ставки, промо, сплит CPA+RS','💳 <b>Щотижневі виплати</b> — крипто без затримок','📊 <b>Статистика в реальному часі</b>'],
     compNncoYes:'Є', compNncoNo:'Ні ✓', compWk:'тиж', compDay:'дн', compSession:'Сесія', compNa:'н/д',
@@ -802,6 +811,9 @@ const LANG = {
     brandChannel:'Markenkanal', affChannel:'Affiliate-Kanal',
     ctaReg:'🤝 Partner werden', regBtnShort:'🚀 Registrierung',
     footerText:'lil.bet — Partner-Rechner', footerManager:'Manager', footerAff:'Partnerprogramm', footerReg:'🚀 Registrierung',
+    liveNow:'rechnen gerade',
+    slotTitle:'Glück versuchen', slotSub:'Drehen und Bonus entdecken', slotSpin:'🎲 Drehen!',
+    slotWin:'🎉 +5% auf RS! Manager schreiben', slotWinCta:'💬 Ivan schreiben',
     detailedTableSec:'Detaillierte Vergleichstabelle', rsWinsSec:'Warum RS langfristig besser ist',
     managerPerks:['⚡ <b>Schnelle Antwort</b> — normalerweise innerhalb einer Stunde','📋 <b>Individuelle Konditionen</b> — Raten, Promos, CPA+RS-Split','💳 <b>Wöchentliche Auszahlungen</b> — Krypto ohne Verzögerungen','📊 <b>Statistik in Echtzeit</b>'],
     compNncoYes:'Ja', compNncoNo:'Nein ✓', compWk:'Wo', compDay:'T', compSession:'Sitzung', compNa:'k.A.',
@@ -994,6 +1006,9 @@ const LANG = {
     brandChannel:'Canal de marca', affChannel:'Canal de afiliados',
     ctaReg:'🤝 Convertirse en socio', regBtnShort:'🚀 Registro',
     footerText:'lil.bet — calculadora de afiliados', footerManager:'Manager', footerAff:'Afiliados', footerReg:'🚀 Registro',
+    liveNow:'calculando ahora',
+    slotTitle:'Prueba tu suerte', slotSub:'Gira y descubre tu bono', slotSpin:'🎲 ¡Girar!',
+    slotWin:'🎉 +5% a RS! Escribe al manager', slotWinCta:'💬 Escribir a Ivan',
     detailedTableSec:'Tabla de comparación detallada', rsWinsSec:'Por qué RS es mejor a largo plazo',
     managerPerks:['⚡ <b>Respuesta rápida</b> — normalmente en una hora','📋 <b>Condiciones individuales</b> — tasas, promos, split CPA+RS','💳 <b>Pagos semanales</b> — cripto sin demoras','📊 <b>Estadísticas en tiempo real</b>'],
     compNncoYes:'Sí', compNncoNo:'No ✓', compWk:'sem', compDay:'d', compSession:'Sesión', compNa:'n/d',
@@ -1111,7 +1126,8 @@ function switchLang(lang){
   applyI18n();
   // Update static elements
   var L = LANG[lang] || LANG.en;
-  document.getElementById('headerSub').textContent = L.headerSub;
+  var headerSubEl2 = document.getElementById('headerSub');
+  if (headerSubEl2) headerSubEl2.textContent = L.headerSub;
   // Update tour buttons if tour open
   var skipBtn = document.getElementById('tourSkipBtn');
   var nextBtn = document.getElementById('tourNextBtn');

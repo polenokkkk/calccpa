@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>lil.bet — Калькулятор партнёра</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="css/style.css?v=16">
+<link rel="stylesheet" href="css/style.css?v=17">
 </head>
 <body>
 
@@ -25,6 +25,10 @@
     <button class="tab-btn" id="tab-scenarios" onclick="switchTab('scenarios')">⚖️ <span data-i18n="tabScenariosShort">Сценарии</span></button>
     <button class="tab-btn" id="tab-subaff" onclick="switchTab('subaff')">🔗 <span data-i18n="tabSubaffShort">Суб-аф</span></button>
     <button class="tab-btn" id="tab-why" onclick="switchTab('why')">✅ <span data-i18n="tabWhyShort">О нас</span></button>
+  </div>
+  <!-- Live counter -->
+  <div class="live-counter" id="liveCounter">
+    <span class="live-dot"></span><span id="liveCount">23</span> <span data-i18n="liveNow">сейчас считают</span>
   </div>
   <!-- Row 3: lang switcher -->
   <div class="lang-switcher" id="langSwitcher">
@@ -589,10 +593,30 @@
   </div>
 </div>
 
-<script src="js/lang.js?v=16"></script>
-<script src="js/data.js?v=16"></script>
-<script src="js/calc.js?v=16"></script>
-<script src="js/render.js?v=16"></script>
-<script src="js/app.js?v=16"></script>
+<!-- Slot widget -->
+<div id="slotWidget" style="display:none;position:fixed;inset:0;z-index:9500;display:none;align-items:center;justify-content:center">
+  <div class="slot-backdrop" onclick="closeSlot()"></div>
+  <div class="slot-card">
+    <button class="slot-close" onclick="closeSlot()">✕</button>
+    <div class="slot-header">🎰 <span data-i18n="slotTitle">Испытай удачу</span></div>
+    <div class="slot-sub" data-i18n="slotSub">Покрути и узнай свой бонус</div>
+    <div class="slot-reels" id="slotReels">
+      <div class="slot-reel" id="reel0">🍋</div>
+      <div class="slot-reel" id="reel1">🍋</div>
+      <div class="slot-reel" id="reel2">🍋</div>
+    </div>
+    <div class="slot-result" id="slotResult"></div>
+    <button class="slot-spin-btn" id="slotSpinBtn" onclick="spinSlot()">
+      <span data-i18n="slotSpin">🎲 Крутить!</span>
+    </button>
+    <div class="slot-footer" id="slotFooter"></div>
+  </div>
+</div>
+
+<script src="js/lang.js?v=17"></script>
+<script src="js/data.js?v=17"></script>
+<script src="js/calc.js?v=17"></script>
+<script src="js/render.js?v=17"></script>
+<script src="js/app.js?v=17"></script>
 </body>
 </html>
