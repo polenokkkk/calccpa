@@ -5,30 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>lil.bet — Калькулятор партнёра</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 
 <div class="header">
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <div class="brand"><span>lil</span>.bet <span style="color:var(--muted);font-weight:400;font-size:15px" id="headerSub">/ калькулятор партнёра</span></div>
-    <button class="tour-start-btn" onclick="startTour()" title="Обучающий тур">💡 <span data-i18n="tourBtnLabel">Тур</span></button>
+  <!-- Row 1: brand + register button -->
+  <div class="header-top">
+    <div class="brand"><span>lil</span>.bet</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="tour-start-btn" onclick="startTour()" title="Тур">💡</button>
+      <a class="reg-btn" href="https://lil.bet/register" target="_blank" data-i18n="ctaReg">🚀 Регистрация</a>
+    </div>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <div class="tabs-nav">
-      <button class="tab-btn active" id="tab-calc" onclick="switchTab('calc')">⚡ <span data-i18n="tabCalcShort">Калькулятор</span></button>
-      <button class="tab-btn" id="tab-compare" onclick="switchTab('compare')">📊 RS vs CPA</button>
-      <button class="tab-btn" id="tab-scenarios" onclick="switchTab('scenarios')">⚖️ <span data-i18n="tabScenariosShort">Сценарии</span></button>
-      <button class="tab-btn" id="tab-subaff" onclick="switchTab('subaff')">🔗 <span data-i18n="tabSubaffShort">Суб-аффилейт</span></button>
-      <button class="tab-btn" id="tab-why" onclick="switchTab('why')">✅ <span data-i18n="tabWhyShort">Почему lil.bet</span></button>
-    </div>
-    <div class="lang-switcher" id="langSwitcher">
-      <button class="lang-btn active" onclick="switchLang('ru')">RU</button>
-      <button class="lang-btn" onclick="switchLang('en')">EN</button>
-      <button class="lang-btn" onclick="switchLang('uk')">UA</button>
-      <button class="lang-btn" onclick="switchLang('de')">DE</button>
-      <button class="lang-btn" onclick="switchLang('es')">ES</button>
-    </div>
+  <!-- Row 2: tabs -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" id="tab-calc" onclick="switchTab('calc')">⚡ <span data-i18n="tabCalcShort">Калькулятор</span></button>
+    <button class="tab-btn" id="tab-compare" onclick="switchTab('compare')">📊 RS vs CPA</button>
+    <button class="tab-btn" id="tab-scenarios" onclick="switchTab('scenarios')">⚖️ <span data-i18n="tabScenariosShort">Сценарии</span></button>
+    <button class="tab-btn" id="tab-subaff" onclick="switchTab('subaff')">🔗 <span data-i18n="tabSubaffShort">Суб-аф</span></button>
+    <button class="tab-btn" id="tab-why" onclick="switchTab('why')">✅ <span data-i18n="tabWhyShort">Почему</span></button>
+  </div>
+  <!-- Row 3: lang switcher -->
+  <div class="lang-switcher" id="langSwitcher">
+    <button class="lang-btn active" onclick="switchLang('ru')">RU</button>
+    <button class="lang-btn" onclick="switchLang('en')">EN</button>
+    <button class="lang-btn" onclick="switchLang('uk')">UA</button>
+    <button class="lang-btn" onclick="switchLang('de')">DE</button>
+    <button class="lang-btn" onclick="switchLang('es')">ES</button>
   </div>
 </div>
 
@@ -571,10 +575,10 @@
   </div>
 </div>
 
-<script src="js/lang.js?v=8"></script>
-<script src="js/data.js?v=8"></script>
-<script src="js/calc.js?v=8"></script>
-<script src="js/render.js?v=8"></script>
-<script src="js/app.js?v=8"></script>
+<script src="js/lang.js?v=9"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/calc.js?v=9"></script>
+<script src="js/render.js?v=9"></script>
+<script src="js/app.js?v=9"></script>
 </body>
 </html>

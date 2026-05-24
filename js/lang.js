@@ -114,7 +114,7 @@ const LANG = {
     hybridCpaLabel:'CPA за каждый FTD:', hybridRsLabel:'RS от NGR:',
     hybridCpaOnceNote:'CPA выплачивается', hybridCpaOnceBold:'один раз', hybridCpaOnceEnd:'при привлечении FTD.',
     hybridRsNote:'RS начисляется', hybridRsBold:'ежемесячно', hybridRsEnd:'пока игрок активен.',
-    holdDays:'Hold: 14 дней', cpaAskNote:'Ставка уточняется у менеджера. Hold: 14 дней.',
+    holdDays:'', cpaAskNote:'Ставка уточняется у менеджера.',
     egyptWarn:'⚠️ Бренд-трафик', egyptWarn2:'для Египта: RS применяется как 10% — ограничение программы. Используйте небрендовые ключи или другой источник.',
     // Compare tab
     rsByYear:'RS партнёру / год', cpaOncePay:'CPA партнёру разово', diffYear:'Разница за год',
@@ -189,7 +189,7 @@ const LANG = {
     scMoSuffix:'1 мес',
     // Payout section
     payMin:'Мин. выплата:', payFreq:'Периодичность:', payMethod:'Метод:', payHold:'Hold (CPA):',
-    payMinVal:'$30', payFreqVal:'Еженедельно (вторник)', payMethodVal:'Крипто (USDT, BTC, ETH)', payHoldVal:'14 дней',
+    payMinVal:'$30', payFreqVal:'Еженедельно (вт) или ежемесячно — на выбор', payMethodVal:'Крипто (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Тур',
     tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарии', tabSubaffShort:'Суб-аффилейт', tabWhyShort:'Почему lil.bet',
@@ -316,7 +316,7 @@ const LANG = {
     hybridCpaLabel:'CPA per FTD:', hybridRsLabel:'RS of NGR:',
     hybridCpaOnceNote:'CPA is paid', hybridCpaOnceBold:'once', hybridCpaOnceEnd:'on FTD.',
     hybridRsNote:'RS is accrued', hybridRsBold:'monthly', hybridRsEnd:'while the player is active.',
-    holdDays:'Hold: 14 days', cpaAskNote:'CPA rate is set by manager. Hold: 14 days.',
+    holdDays:'', cpaAskNote:'CPA rate is set by manager.',
     egyptWarn:'⚠️ Brand traffic', egyptWarn2:'for Egypt: RS applied as 10% — program restriction. Use non-brand keywords or another source.',
     rsByYear:'RS to partner / year', cpaOncePay:'CPA to partner (one-time)', diffYear:'Difference per year',
     rsWins:'RS better for the year', cpaWins:'CPA pays more — players don\'t stay long',
@@ -383,7 +383,7 @@ const LANG = {
     sc1mLabel:'1 mo', sc3mLabel:'3 mo', sc6mLabel:'6 mo', sc12mLabel:'12 mo',
     scMoSuffix:'1 mo',
     payMin:'Min payout:', payFreq:'Frequency:', payMethod:'Method:', payHold:'Hold (CPA):',
-    payMinVal:'$30', payFreqVal:'Weekly (Tuesday)', payMethodVal:'Crypto (USDT, BTC, ETH)', payHoldVal:'14 days',
+    payMinVal:'$30', payFreqVal:'Weekly (Tue) or monthly — your choice', payMethodVal:'Crypto (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Tour',
     tabCalcShort:'Calculator', tabScenariosShort:'Scenarios', tabSubaffShort:'Sub-affiliate', tabWhyShort:'Why lil.bet',
@@ -510,7 +510,7 @@ const LANG = {
     hybridCpaLabel:'CPA за кожен FTD:', hybridRsLabel:'RS від NGR:',
     hybridCpaOnceNote:'CPA виплачується', hybridCpaOnceBold:'один раз', hybridCpaOnceEnd:'при залученні FTD.',
     hybridRsNote:'RS нараховується', hybridRsBold:'щомісяця', hybridRsEnd:'поки гравець активний.',
-    holdDays:'Hold: 14 днів', cpaAskNote:'Ставка уточнюється у менеджера. Hold: 14 днів.',
+    holdDays:'', cpaAskNote:'Ставка уточнюється у менеджера.',
     egyptWarn:'⚠️ Бренд-трафік', egyptWarn2:'для Єгипту: RS застосовується як 10%.',
     rsByYear:'RS партнеру / рік', cpaOncePay:'CPA партнеру разово', diffYear:'Різниця за рік',
     rsWins:'RS вигідніше за рік', cpaWins:'CPA дає більше — гравці не затримуються',
@@ -575,7 +575,7 @@ const LANG = {
     scInsightEqual:'⚖️ Сценарії приблизно рівні. Спробуй змінити ГЕО або модель.',
     sc1mLabel:'1 міс', sc3mLabel:'3 міс', sc6mLabel:'6 міс', sc12mLabel:'12 міс', scMoSuffix:'1 міс',
     payMin:'Мін. виплата:', payFreq:'Періодичність:', payMethod:'Метод:', payHold:'Hold (CPA):',
-    payMinVal:'$30', payFreqVal:'Щотижня (вівторок)', payMethodVal:'Крипто (USDT, BTC, ETH)', payHoldVal:'14 днів',
+    payMinVal:'$30', payFreqVal:'Щотижня (вт) або щомісяця — на вибір', payMethodVal:'Крипто (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Тур',
     tabCalcShort:'Калькулятор', tabScenariosShort:'Сценарії', tabSubaffShort:'Суб-афіліат', tabWhyShort:'Чому lil.bet',
@@ -702,7 +702,7 @@ const LANG = {
     hybridCpaLabel:'CPA pro FTD:', hybridRsLabel:'RS von NGR:',
     hybridCpaOnceNote:'CPA wird', hybridCpaOnceBold:'einmalig', hybridCpaOnceEnd:'bei FTD gezahlt.',
     hybridRsNote:'RS wird', hybridRsBold:'monatlich', hybridRsEnd:'gutgeschrieben, solange der Spieler aktiv ist.',
-    holdDays:'Hold: 14 Tage', cpaAskNote:'Rate vom Manager. Hold: 14 Tage.',
+    holdDays:'', cpaAskNote:'Rate vom Manager.',
     egyptWarn:'⚠️ Marken-Traffic', egyptWarn2:'für Ägypten: RS wird als 10% angewendet.',
     rsByYear:'RS an Partner / Jahr', cpaOncePay:'CPA an Partner (einmalig)', diffYear:'Unterschied pro Jahr',
     rsWins:'RS besser für das Jahr', cpaWins:'CPA zahlt mehr — Spieler bleiben nicht lange',
@@ -767,7 +767,7 @@ const LANG = {
     scInsightEqual:'⚖️ Szenarien sind ungefähr gleich. Versuchen Sie GEO oder Modell zu ändern.',
     sc1mLabel:'1 Mo', sc3mLabel:'3 Mo', sc6mLabel:'6 Mo', sc12mLabel:'12 Mo', scMoSuffix:'1 Mo',
     payMin:'Min. Zahlung:', payFreq:'Häufigkeit:', payMethod:'Methode:', payHold:'Hold (CPA):',
-    payMinVal:'$30', payFreqVal:'Wöchentlich (Dienstag)', payMethodVal:'Krypto (USDT, BTC, ETH)', payHoldVal:'14 Tage',
+    payMinVal:'$30', payFreqVal:'Wöchentlich (Di) oder monatlich — nach Wahl', payMethodVal:'Krypto (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Tour',
     tabCalcShort:'Rechner', tabScenariosShort:'Szenarien', tabSubaffShort:'Sub-Affiliate', tabWhyShort:'Warum lil.bet',
@@ -894,7 +894,7 @@ const LANG = {
     hybridCpaLabel:'CPA por FTD:', hybridRsLabel:'RS de NGR:',
     hybridCpaOnceNote:'CPA se paga', hybridCpaOnceBold:'una vez', hybridCpaOnceEnd:'en FTD.',
     hybridRsNote:'RS se acumula', hybridRsBold:'mensualmente', hybridRsEnd:'mientras el jugador esté activo.',
-    holdDays:'Hold: 14 días', cpaAskNote:'Tasa por el manager. Hold: 14 días.',
+    holdDays:'', cpaAskNote:'Tasa por el manager.',
     egyptWarn:'⚠️ Tráfico de marca', egyptWarn2:'para Egipto: RS aplicado como 10%.',
     rsByYear:'RS al afiliado / año', cpaOncePay:'CPA al afiliado (único)', diffYear:'Diferencia por año',
     rsWins:'RS mejor por el año', cpaWins:'CPA paga más — jugadores no se quedan',
@@ -959,7 +959,7 @@ const LANG = {
     scInsightEqual:'⚖️ Escenarios son aproximadamente iguales. Prueba cambiar GEO o modelo.',
     sc1mLabel:'1 mes', sc3mLabel:'3 mes', sc6mLabel:'6 mes', sc12mLabel:'12 mes', scMoSuffix:'1 mes',
     payMin:'Pago mín.:', payFreq:'Frecuencia:', payMethod:'Método:', payHold:'Hold (CPA):',
-    payMinVal:'$30', payFreqVal:'Semanal (martes)', payMethodVal:'Crypto (USDT, BTC, ETH)', payHoldVal:'14 días',
+    payMinVal:'$30', payFreqVal:'Semanal (mar) o mensual — a elegir', payMethodVal:'Crypto (USDT, BTC, ETH)',
     // UI labels
     tourBtnLabel:'Tour',
     tabCalcShort:'Calculadora', tabScenariosShort:'Escenarios', tabSubaffShort:'Sub-afiliado', tabWhyShort:'Por qué lil.bet',
@@ -1069,8 +1069,7 @@ function applyI18n() {
     return [
       [t('payMin'), t('payMinVal')],
       [t('payFreq'), t('payFreqVal')],
-      [t('payMethod'), t('payMethodVal')],
-      [t('payHold'), t('payHoldVal')]
+      [t('payMethod'), t('payMethodVal')]
     ].map(function(row) {
       return '<div class="pay-row"><span class="pay-lbl">' + row[0] + '</span><span class="pay-val">' + row[1] + '</span></div>';
     }).join('');
