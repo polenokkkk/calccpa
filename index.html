@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>lil.bet — Калькулятор партнёра</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 
@@ -573,25 +573,26 @@
   <a href="https://refpa27053.com/L?tag=d_5616669m_110741c_&site=5616669&ad=110741" target="_blank" style="color:var(--green);text-decoration:none;font-weight:600" data-i18n="footerReg">🚀 Регистрация</a>
 </footer>
 
-<!-- Tour overlay -->
-<div id="tourOverlay" style="display:none;position:fixed;inset:0;z-index:9000">
-  <div class="tour-backdrop" onclick="skipTour()"></div>
-  <div class="tour-spotlight" id="tourSpotlight"></div>
-  <div class="tour-tooltip" id="tourTooltip">
+<!-- Tour system (redesigned for mobile) -->
+<div id="tourBackdrop" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.72);pointer-events:all" onclick="skipTour()"></div>
+<div id="tourSpotlight" style="display:none;position:fixed;z-index:9001;pointer-events:none;border-radius:12px;transition:all .35s cubic-bezier(.4,0,.2,1)"></div>
+<div id="tourTooltip" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9002;pointer-events:all">
+  <div class="tour-sheet">
+    <div class="tour-sheet-handle"></div>
+    <div class="tour-progress" id="tourProgress"></div>
     <h4 id="tourTitle"></h4>
     <p id="tourText"></p>
     <div class="tour-nav">
       <button class="tour-skip" onclick="skipTour()" id="tourSkipBtn">Пропустить</button>
-      <div class="tour-step-dots" id="tourDots"></div>
       <button class="tour-btn" onclick="tourNext()" id="tourNextBtn">Далее →</button>
     </div>
   </div>
 </div>
 
-<script src="js/lang.js?v=14"></script>
-<script src="js/data.js?v=14"></script>
-<script src="js/calc.js?v=14"></script>
-<script src="js/render.js?v=14"></script>
-<script src="js/app.js?v=14"></script>
+<script src="js/lang.js?v=15"></script>
+<script src="js/data.js?v=15"></script>
+<script src="js/calc.js?v=15"></script>
+<script src="js/render.js?v=15"></script>
+<script src="js/app.js?v=15"></script>
 </body>
 </html>

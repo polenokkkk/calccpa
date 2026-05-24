@@ -106,7 +106,10 @@ function startTour() {
   document.getElementById('panel-calc').classList.add('active');
   document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-calc').classList.add('active');
-  document.getElementById('tourOverlay').style.display = '';
+  // Show all tour elements
+  document.getElementById('tourBackdrop').style.display = '';
+  document.getElementById('tourSpotlight').style.display = '';
+  document.getElementById('tourTooltip').style.display = '';
   showTourStep(0);
 }
 
@@ -116,52 +119,57 @@ function showTourStep(step) {
   if (!steps || step >= steps.length) { skipTour(); return; }
   tourStep = step;
 
+  // Content
   document.getElementById('tourTitle').textContent = steps[step].title;
   document.getElementById('tourText').textContent  = steps[step].text;
-
-  document.getElementById('tourDots').innerHTML = steps.map(function(_, i) {
-    return '<div class="tour-dot ' + (i === step ? 'active' : '') + '"></div>';
-  }).join('');
-
   document.getElementById('tourSkipBtn').textContent = L.tourSkip || 'Пропустить';
   document.getElementById('tourNextBtn').textContent =
     step >= steps.length - 1 ? (L.tourFinish || 'Готово!') : (L.tourNext || 'Далее →');
 
-  var spotlight = document.getElementById('tourSpotlight');
-  var tooltip   = document.getElementById('tourTooltip');
-  var targetId  = TOUR_TARGETS[step] || null;
+  // Progress bar
+  var pct = Math.round(((step + 1) / steps.length) * 100);
+  document.getElementById('tourProgress').innerHTML =
+    '<div class="tour-progress-track"><div class="tour-progress-fill" style="width:' + pct + '%"></div></div>' +
+    '<span class="tour-progress-label">' + (step + 1) + ' / ' + steps.length + '</span>';
 
-  tooltip.style.transform = '';
+  // Remove old highlight
+  document.querySelectorAll('.tour-hl').forEach(function(e) { e.classList.remove('tour-hl'); });
+
+  var spotlight = document.getElementById('tourSpotlight');
+  var targetId  = TOUR_TARGETS[step] || null;
 
   if (targetId) {
     var el = document.getElementById(targetId);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // Scroll target to center instantly then measure
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('tour-hl');
+
       setTimeout(function() {
         var r   = el.getBoundingClientRect();
-        var pad = 8;
-        spotlight.style.cssText =
-          'position:absolute;left:' + (r.left - pad) + 'px;top:' + (r.top - pad) + 'px;' +
-          'width:' + (r.width + pad*2) + 'px;height:' + (r.height + pad*2) + 'px;' +
-          'border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.65),0 0 0 3px var(--green);' +
-          'pointer-events:none;transition:all .3s ease;';
+        var pad = 10;
+        // Clamp so spotlight doesn't go off-screen
+        var sLeft   = Math.max(r.left - pad, 0);
+        var sTop    = Math.max(r.top  - pad, 0);
+        var sWidth  = Math.min(r.width  + pad * 2, window.innerWidth);
+        var sHeight = r.height + pad * 2;
 
-        var ttH = 200;
-        var leftPos = Math.min(Math.max(r.left, 8), window.innerWidth - 320);
-        if (r.bottom + pad + 12 + ttH < window.innerHeight) {
-          tooltip.style.cssText =
-            'position:absolute;left:' + leftPos + 'px;top:' + (r.bottom + pad + 12) + 'px;transform:none;';
-        } else {
-          tooltip.style.cssText =
-            'position:absolute;left:' + leftPos + 'px;top:' + Math.max(r.top - ttH - pad - 12, 8) + 'px;transform:none;';
-        }
-      }, 80);
+        spotlight.style.cssText =
+          'display:block;position:fixed;' +
+          'left:' + sLeft + 'px;top:' + sTop + 'px;' +
+          'width:' + sWidth + 'px;height:' + sHeight + 'px;' +
+          'border-radius:12px;' +
+          'box-shadow:0 0 0 9999px rgba(0,0,0,.72),0 0 0 2.5px #00d4aa,0 0 20px rgba(0,212,170,.4);' +
+          'transition:left .35s ease,top .35s ease,width .35s ease,height .35s ease;';
+      }, 300);
       return;
     }
   }
 
-  spotlight.style.cssText = 'position:absolute;width:0;height:0;box-shadow:0 0 0 9999px rgba(0,0,0,.65);pointer-events:none;top:50%;left:50%;';
-  tooltip.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);';
+  // No target — hide spotlight, show centered
+  spotlight.style.cssText =
+    'display:block;position:fixed;left:50%;top:50%;width:0;height:0;' +
+    'box-shadow:0 0 0 9999px rgba(0,0,0,.72);border-radius:0;';
 }
 
 function tourNext() {
@@ -175,7 +183,10 @@ function tourNext() {
 }
 
 function skipTour() {
-  document.getElementById('tourOverlay').style.display = 'none';
+  document.getElementById('tourBackdrop').style.display  = 'none';
+  document.getElementById('tourSpotlight').style.display = 'none';
+  document.getElementById('tourTooltip').style.display   = 'none';
+  document.querySelectorAll('.tour-hl').forEach(function(e) { e.classList.remove('tour-hl'); });
   localStorage.setItem('calc_tour_done', '1');
 }
 
