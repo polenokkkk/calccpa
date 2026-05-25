@@ -125,7 +125,10 @@ function renderModelBlock(c) {
   var realFtd = c.ftd;
   var html = '';
 
+  var hmb = document.getElementById('hybridManualBlock');
+
   if (state.model === 'rs') {
+    if (hmb) hmb.style.display = 'none';
     var tierRate = getTierRate(geo, realFtd);
     var applied  = Math.max(tierRate, state.rsRate);
     var hasLadder = geo.rsTable.length > 1;
@@ -166,6 +169,7 @@ function renderModelBlock(c) {
       '<div id="rsTierNote">' + tierNote + '</div>';
 
   } else if (state.model === 'cpa') {
+    if (hmb) hmb.style.display = 'none';
     if (!geo.cpaAllowed) {
       html = '<div class="alert alert-red">' + t('cpaUnavail') + '</div>';
     } else if (geo.cpaRates) {
@@ -184,6 +188,7 @@ function renderModelBlock(c) {
 
   } else if (state.model === 'hybrid') {
     if (geo.hybridAllowed && geo.hybridRate) {
+      if (hmb) hmb.style.display = 'none';
       var h = geo.hybridRate;
       html = '<div class="alert alert-info" style="margin-bottom:10px">' +
         t('hybridOfficialPre') + ' <strong>$' + h.cpa + t('hybridOfficialPerFtd') + '</strong> <strong>' + h.rs + '% ' + t('hybridOfficialRs') + '</strong>' +
@@ -201,25 +206,25 @@ function renderModelBlock(c) {
           '</div>' +
         '</div>';
     } else {
-      html = '<div class="alert alert-info" style="margin-bottom:10px">' +
-        t('hybridManualPre') +
-        '</div>' +
-        '<div class="field">' +
-          '<label class="lbl">' + t('hybridCpaLabel') + ' <strong style="color:var(--red)" id="hybridCpaLbl">$' + state.hybridCpa + '</strong></label>' +
-          '<input type="range" id="hybridCpaSlider" min="5" max="100" step="1" value="' + state.hybridCpa + '"' +
-            ' oninput="state.hybridCpa=+this.value;document.getElementById(\'hybridCpaLbl\').textContent=\'$\'+this.value;renderAll()">' +
-          '<div class="slider-labels"><span>$5</span><span>$50</span><span>$100</span></div>' +
-        '</div>' +
-        '<div class="field">' +
-          '<label class="lbl">' + t('hybridRsLabel') + ' <strong style="color:var(--green)" id="hybridRsLbl">' + state.hybridRs + '%</strong></label>' +
-          '<input type="range" id="hybridRsSlider" min="5" max="40" step="1" value="' + state.hybridRs + '"' +
-            ' oninput="state.hybridRs=+this.value;document.getElementById(\'hybridRsLbl\').textContent=this.value+\'%\';renderAll()">' +
-          '<div class="slider-labels"><span>5%</span><span>20%</span><span>40%</span></div>' +
-        '</div>' +
-        '<div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5">' +
-          t('hybridCpaOnceNote') + ' <strong>' + t('hybridCpaOnceBold') + '</strong> ' + t('hybridCpaOnceEnd') +
-          ' ' + t('hybridRsNote') + ' <strong>' + t('hybridRsBold') + '</strong> ' + t('hybridRsEnd') +
-        '</div>';
+      // Manual hybrid: sliders live in static #hybridManualBlock — never rebuild, just show/hide
+      document.getElementById('modelBlock').innerHTML = '';
+      if (hmb) {
+        var wasHidden = hmb.style.display === 'none';
+        hmb.style.display = '';
+        if (wasHidden) {
+          // Switching INTO hybrid for the first time — sync slider positions to current state
+          var cpaSliderEl = document.getElementById('hybridCpaSlider');
+          var rsSliderEl  = document.getElementById('hybridRsSlider');
+          if (cpaSliderEl) cpaSliderEl.value = state.hybridCpa;
+          if (rsSliderEl)  rsSliderEl.value  = state.hybridRs;
+        }
+        // Labels are safe to update — text change doesn't affect touch events
+        var cpaLblEl = document.getElementById('hybridCpaLbl');
+        var rsLblEl  = document.getElementById('hybridRsLbl');
+        if (cpaLblEl) cpaLblEl.textContent = '$' + state.hybridCpa;
+        if (rsLblEl)  rsLblEl.textContent  = state.hybridRs + '%';
+      }
+      return;
     }
   }
 

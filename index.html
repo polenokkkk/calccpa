@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>lil.bet — Калькулятор партнёра</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="css/style.css?v=21">
+<link rel="stylesheet" href="css/style.css?v=26">
 </head>
 <body>
 
@@ -239,6 +239,24 @@
         <button class="model-btn m-hybrid" id="btnHybrid" onclick="setModel('hybrid')">Hybrid</button>
       </div>
       <div id="modelBlock"></div>
+      <!-- Hybrid manual sliders live here permanently (never rebuilt by JS) -->
+      <div id="hybridManualBlock" style="display:none">
+        <div class="alert alert-info" style="margin-bottom:10px" data-i18n="hybridManualPre">Ручной гибрид: CPA-выплата разово за FTD + RS от NGR каждый месяц</div>
+        <div class="field">
+          <label class="lbl"><span data-i18n="hybridCpaLabel">CPA за каждый FTD:</span> <strong style="color:var(--red)" id="hybridCpaLbl">$15</strong></label>
+          <input type="range" id="hybridCpaSlider" min="5" max="100" step="1" value="15" oninput="onHybridCpaSlider()">
+          <div class="slider-labels"><span>$5</span><span>$50</span><span>$100</span></div>
+        </div>
+        <div class="field">
+          <label class="lbl"><span data-i18n="hybridRsLabel">RS от NGR:</span> <strong style="color:var(--green)" id="hybridRsLbl">20%</strong></label>
+          <input type="range" id="hybridRsSlider" min="5" max="40" step="1" value="20" oninput="onHybridRsSlider()">
+          <div class="slider-labels"><span>5%</span><span>20%</span><span>40%</span></div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5">
+          <span data-i18n="hybridCpaOnceNote">CPA выплачивается</span> <strong data-i18n="hybridCpaOnceBold">один раз</strong> <span data-i18n="hybridCpaOnceEnd">при привлечении FTD.</span>
+          <span data-i18n="hybridRsNote"> RS начисляется</span> <strong data-i18n="hybridRsBold">ежемесячно</strong> <span data-i18n="hybridRsEnd">пока игрок активен.</span>
+        </div>
+      </div>
       <div id="geoAlerts" style="margin-top:10px"></div>
     </div>
 
@@ -613,10 +631,10 @@
   </div>
 </div>
 
-<script src="js/lang.js?v=21"></script>
-<script src="js/data.js?v=21"></script>
-<script src="js/calc.js?v=21"></script>
-<script src="js/render.js?v=21"></script>
-<script src="js/app.js?v=21"></script>
+<script src="js/lang.js?v=26"></script>
+<script src="js/data.js?v=26"></script>
+<script src="js/calc.js?v=26"></script>
+<script src="js/render.js?v=26"></script>
+<script src="js/app.js?v=26"></script>
 </body>
 </html>

@@ -37,7 +37,7 @@ function getSrcMetrics() {
     c2r:  sc.c2r  !== null ? sc.c2r  : s.c2r,
     r2d:  sc.r2d  !== null ? sc.r2d  : s.r2d,
     qual: sc.qual !== null ? sc.qual : s.qual,
-    isCustom: sc.c2r !== null,
+    isCustom: sc.c2r !== null || sc.r2d !== null || sc.qual !== null,
   };
 }
 

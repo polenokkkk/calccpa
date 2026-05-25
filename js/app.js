@@ -53,7 +53,7 @@ function onScSlider(ab) {
   var val = +document.getElementById('sc' + ab + 'Ftd').value;
   scState[ab].ftd = val;
   document.getElementById('sc' + ab + 'FtdLbl').textContent = val;
-  renderScenarios();
+  renderScenariosDeferred();
 }
 
 function calcScenario(sc) {
@@ -69,6 +69,10 @@ function calcScenario(sc) {
   var aNgr12m = geo.ngr12m * qual * promoFactor;
 
   var rsRate = getTierRate(geo, ftd);
+  // apply brand traffic penalty (same logic as calc())
+  if (geo.brandTrafficSources && geo.brandTrafficSources.indexOf(sc.src) !== -1) {
+    rsRate = Math.min(rsRate, 10);
+  }
   var earn1m=0, earn3m=0, earn6m=0, earn12m=0, modelLabel='';
 
   if (sc.model === 'rs') {
@@ -203,6 +207,7 @@ function buildGeoGrid() {
 
 function setGeo(k) {
   state.geo = k;
+  state.cpaRateIdx = 0; // reset so new GEO always starts at first CPA tier
   var geo = GEO_DATA[k];
   if (state.model === 'cpa' && !geo.cpaAllowed) state.model = 'rs';
   buildGeoGrid();
@@ -279,6 +284,28 @@ function resetSrcCustom() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+// RAF-THROTTLED RENDER (prevents overloading mobile browser during slider drag)
+// ══════════════════════════════════════════════════════════════════════════════
+
+var _rafRender = null;
+function renderDeferred() {
+  if (_rafRender) return; // already scheduled for this frame
+  _rafRender = requestAnimationFrame(function() {
+    _rafRender = null;
+    renderAll();
+  });
+}
+
+var _rafScenario = null;
+function renderScenariosDeferred() {
+  if (_rafScenario) return;
+  _rafScenario = requestAnimationFrame(function() {
+    _rafScenario = null;
+    renderScenarios();
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 // INPUT MODE & SLIDERS
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -303,18 +330,32 @@ function setInputMode(mode) {
 function onFtdSlider() {
   state.ftd = +document.getElementById('ftdSlider').value;
   document.getElementById('ftdLabel').textContent = state.ftd;
-  renderAll();
+  renderDeferred();
 }
 
 function onRsSlider() {
   state.rsRate = +document.getElementById('rsSlider').value;
-  renderAll();
+  renderDeferred();
 }
 
 function onPromoSlider() {
   state.promoLoad = +document.getElementById('promoSlider').value;
   document.getElementById('promoLoadLabel').textContent = state.promoLoad + '%';
-  renderAll();
+  renderDeferred();
+}
+
+function onHybridCpaSlider() {
+  state.hybridCpa = +document.getElementById('hybridCpaSlider').value;
+  var lbl = document.getElementById('hybridCpaLbl');
+  if (lbl) lbl.textContent = '$' + state.hybridCpa;
+  renderDeferred();
+}
+
+function onHybridRsSlider() {
+  state.hybridRs = +document.getElementById('hybridRsSlider').value;
+  var lbl = document.getElementById('hybridRsLbl');
+  if (lbl) lbl.textContent = state.hybridRs + '%';
+  renderDeferred();
 }
 
 function onSubSlider() {
@@ -330,7 +371,7 @@ function onSubSlider() {
 function onClicksSlider() {
   state.clicks = +document.getElementById('clicksSlider').value;
   document.getElementById('clicksLabel').textContent = fmt(state.clicks);
-  renderAll();
+  renderDeferred();
 }
 
 function onBudgetSlider() {
