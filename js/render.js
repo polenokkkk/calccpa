@@ -294,24 +294,21 @@ function renderCompare(c) {
   var rsRate = c.effectiveRS;
   var cpaRate = getCpaRate();
   var qual = c.qual;
+  // promoFactor must match calc() — Compare tab was ignoring it (inflating RS by up to +50%)
+  var promoFactor = 1 - (state.promoLoad / 100);
+  var adjFactor = qual * promoFactor; // combined multiplier
 
-  var rsC1  = ftd * geo.ngr1m  * qual * (rsRate/100);
-  var rsC3  = ftd * geo.ngr3m  * qual * (rsRate/100);
-  var rsC6  = ftd * geo.ngr6m  * qual * (rsRate/100);
-  var rsC12 = ftd * geo.ngr12m * qual * (rsRate/100);
+  // Use c.aNgr* which already has qual + promoFactor baked in
+  var rsC1  = ftd * c.aNgr1m  * (rsRate/100);
+  var rsC3  = ftd * c.aNgr3m  * (rsRate/100);
+  var rsC6  = ftd * c.aNgr6m  * (rsRate/100);
+  var rsC12 = ftd * c.aNgr12m * (rsRate/100);
 
   var cpaPaid = ftd * cpaRate;
 
-  var rsM = [0,1,3,6,12].map(function(m) {
-    var sum = 0;
-    for (var i=1;i<=m;i++) sum += rsIncomeMonth({ngr1m:geo.ngr1m*qual, ngr3m:geo.ngr3m*qual, ngr6m:geo.ngr6m*qual, ngr12m:geo.ngr12m*qual}, ftd, rsRate, i);
-    return sum;
-  });
-  var cpaM = [0,1,3,6,12].map(function(m) { return m * ftd * cpaRate; });
-
   var beMonth = null;
   for (var m=1;m<=12;m++) {
-    var rsV = ftd * cohortNgr(geo, m) * qual * (rsRate/100);
+    var rsV = ftd * cohortNgr(geo, m) * adjFactor * (rsRate/100);
     if (rsV >= cpaPaid) { beMonth = m; break; }
   }
 
@@ -335,7 +332,7 @@ function renderCompare(c) {
 
   // Chart bars
   var months = [1,2,3,4,5,6,7,8,9,10,11,12];
-  var rsVals = months.map(function(m) { return ftd * cohortNgr(geo, m) * qual * (rsRate/100); });
+  var rsVals = months.map(function(m) { return ftd * cohortNgr(geo, m) * adjFactor * (rsRate/100); });
   var cpaVals = months.map(function() { return cpaPaid; });
   var maxVal = Math.max.apply(null, rsVals.concat(cpaVals).concat([1]));
 
@@ -361,7 +358,7 @@ function renderCompare(c) {
   document.getElementById('beBox').innerHTML = beMonth
     ? '<div class="be-box">💡 ' + t('beCross') + ' <strong>' + beMonth + t('beMonth') + '</strong> ' + t('beAfter') + '</div>'
     : '<div style="margin-top:12px;padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;font-size:12px;color:#fbbf24">' +
-       t('beWarnPre') + ' ' + Math.ceil(cpaRate/geo.ngr12m/qual*100) + t('beWarnOr') + ' ' + (Math.ceil(cpaRate/geo.ngr12m/qual*100) > 35 ? '—' : '300+') + '.' +
+       t('beWarnPre') + ' ' + Math.ceil(cpaRate/geo.ngr12m/adjFactor*100) + t('beWarnOr') + ' ' + (Math.ceil(cpaRate/geo.ngr12m/adjFactor*100) > 35 ? '—' : '300+') + '.' +
      '</div>';
 
   // Table
@@ -375,9 +372,9 @@ function renderCompare(c) {
     '</tr></thead>' +
     '<tbody>' + [[1,t('earn1m')],[3,t('earn3m')],[6,t('earn6m')],[12,t('earn12m')]].map(function(pair) {
       var m=pair[0], lbl=pair[1];
-      var rs = ftd * cohortNgr(geo, m) * qual * (rsRate/100);
+      var rs = ftd * cohortNgr(geo, m) * adjFactor * (rsRate/100);
       var diff = rs - cpaPaid;
-      var ngrV = ftd * cohortNgr(geo, m) * qual;
+      var ngrV = ftd * cohortNgr(geo, m) * adjFactor;
       return '<tr>' +
         '<td>' + lbl + '</td>' +
         '<td class="' + (rs>cpaPaid?'win':'') + '" style="color:var(--green)">' + fmtU(rs) + '</td>' +
@@ -572,10 +569,11 @@ function renderRolling(c) {
   var rsMonthly = [];
   var cpaMonthly = [];
 
+  var rollPromo = 1 - (state.promoLoad / 100);
   for (var M = 1; M <= months; M++) {
     var rsSum = 0;
-    var adjGeo = {ngr1m: geo.ngr1m * qual, ngr3m: geo.ngr3m * qual,
-                  ngr6m: geo.ngr6m * qual, ngr12m: geo.ngr12m * qual};
+    var adjGeo = {ngr1m: geo.ngr1m * qual * rollPromo, ngr3m: geo.ngr3m * qual * rollPromo,
+                  ngr6m: geo.ngr6m * qual * rollPromo, ngr12m: geo.ngr12m * qual * rollPromo};
     for (var cohort = 1; cohort <= M; cohort++) {
       var age = M - cohort + 1;
       rsSum += ftd * incrNgr(adjGeo, age) * (rsRate / 100);
